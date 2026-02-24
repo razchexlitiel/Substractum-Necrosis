@@ -1,41 +1,168 @@
 plugins {
-    id 'eclipse'
-    id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.24, 6.2)'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '[6.0,6.3)'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'java-library'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-group = 'ru.razchexlitiel' // Твоя группа
-version = '0.0.1-alpha'
+group = mod_group_id
+version = mod_version
 
 base {
-    archivesName = 'substractum' // Имя файла мода на выходе
+    archivesName = mod_id
+}
+
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+    config "mixins.${mod_id}.json"
+    debug.verbose = true
+    debug.export = true
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-minecraft {
-    // Версия маппингов (названия методов в коде)
-    mappings channel: 'official', version: '1.20.1'
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
-    // Настройки запуска
+minecraft {
+    mappings channel: mapping_channel, version: mapping_version
+    copyIdeResources = true
     runs {
-        client {
+        configureEach {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
+            property 'geckolib.disable_examples', 'true'
             property 'forge.logging.console.level', 'debug'
+
+            // Фикс для маппинга GeckoLib
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+
             mods {
-                substractum { // Твой MOD_ID
+                "${mod_id}" {
                     source sourceSets.main
                 }
             }
         }
+
+        client {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            jvmArgs = ["-Xmx4G", "-Xms2G"]
+        }
+
+        server {
+            property 'forge.enabledGameTestNamespaces', mod_id
+            args '--nogui'
+            jvmArgs = ["-Xmx4G", "-Xms2G"]
+        }
+
+        data {
+            workingDirectory project.file('run-data')
+            property 'geckolib.disable_examples', 'true'
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+        }
     }
 }
 
-dependencies {
-    // Самая важная строка: подключает Forge и Minecraft
-    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url = 'https://maven.minecraftforge.net/' }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+    maven {
+        name = 'GeckoLib'
+        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
+    maven {
+        name = "CurseForge"
+        url = "https://cursemaven.com"
+        content { includeGroup "curse.maven" }
+    }
+    flatDir {
+        dir 'libs'
+    }
+    maven {
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com"
+    }
+
 }
 
-// Позволяет Java видеть ресурсы (текстуры/json)
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // GeckoLib (обычно с ним проблем меньше)
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2')
+
+    // JEI через официальный Maven (Mezz)
+    // Мы берем конкретную версию, которая ТОЧНО есть в репозитории
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.3.0.4")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.3.0.4")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.3.0.4")
+
+    // Spark
+    runtimeOnly fg.deobf("maven.modrinth:spark:1.10.53-forge")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    var replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            forge_version: forge_version, forge_version_range: forge_version_range,
+            loader_version_range: loader_version_range,
+            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license,
+            mod_version: project.version,
+            mod_authors: mod_authors, mod_description: mod_description,
+    ]
+    inputs.properties replaceProperties
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
+        expand replaceProperties + [project: project]
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.named('jar', Jar).configure {
+    manifest {
+        attributes([
+                'Specification-Title'     : mod_id,
+                'Specification-Vendor'    : mod_authors,
+                'Specification-Version'   : '1',
+                'Implementation-Title'    : project.name,
+                'Implementation-Version'  : project.version,
+                'Implementation-Vendor'   : mod_authors,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                'Implementation-Version'  : project.jar.archiveVersion
+        ])
+    }
+    finalizedBy 'reobfJar'
+}
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(JavaExec).configureEach {
+    if (it.name == 'runServer') {
+        standardInput = System.in
+    }
+}

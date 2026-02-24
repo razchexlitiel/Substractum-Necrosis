@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Substractum-Necrosis.iml" filepath="$PROJECT_DIR$/.idea/Substractum-Necrosis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Substractum-Necrosis.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Substractum-Necrosis.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Substractum-Necrosis.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Substractum-Necrosis.test.iml" />
     </modules>
   </component>
 </project>
