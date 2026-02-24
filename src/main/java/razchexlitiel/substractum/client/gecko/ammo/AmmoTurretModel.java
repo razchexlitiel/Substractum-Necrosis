@@ -26,11 +26,11 @@ public class AmmoTurretModel extends GeoModel<AmmoTurretItem> {
 
             // 2. Ищем текстуру с таким же именем в папке textures/item/
             // Пример: assets/smogline/textures/item/ammo_turret_fire.png
-            return new ResourceLocation(SubstractumMod.MOD_ID, "textures/item/" + path + ".png");
+            return new ResourceLocation(SubstractumMod.MOD_ID, "textures/item/ammo/" + path + ".png");
         }
 
         // Фолбэк на дефолт
-        return new ResourceLocation(SubstractumMod.MOD_ID, "textures/item/ammo_turret.png");
+        return new ResourceLocation(SubstractumMod.MOD_ID, "textures/item/ammo/ammo_turret.png");
     }
 
     @Override

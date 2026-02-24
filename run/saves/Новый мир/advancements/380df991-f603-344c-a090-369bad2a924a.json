@@ -191,5 +191,23 @@
     },
     "done": true
   },
+  "minecraft:adventure/root": {
+    "criteria": {
+      "killed_something": "2026-02-24 18:45:48 +0300"
+    },
+    "done": true
+  },
+  "minecraft:adventure/kill_all_mobs": {
+    "criteria": {
+      "minecraft:slime": "2026-02-24 18:45:48 +0300"
+    },
+    "done": false
+  },
+  "minecraft:adventure/kill_a_mob": {
+    "criteria": {
+      "minecraft:slime": "2026-02-24 18:45:48 +0300"
+    },
+    "done": true
+  },
   "DataVersion": 3465
 }

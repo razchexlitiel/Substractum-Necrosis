@@ -5,10 +5,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import razchexlitiel.substractum.block.basic.ModBlocks;
 import razchexlitiel.substractum.entity.ModEntities;
+import razchexlitiel.substractum.network.ModPacketHandler;
 import razchexlitiel.substractum.sound.ModSounds;
 import software.bernie.geckolib.GeckoLib;
 
@@ -28,8 +30,14 @@ public class SubstractumMod {
         ModBlocks.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         ModSounds.register(modEventBus);
+        modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
+    }
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ModPacketHandler.register();
+        });
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -46,7 +54,7 @@ public class SubstractumMod {
             event.accept(ModItems.AMMO_TURRET_FIRE);
             event.accept(ModItems.AMMO_TURRET_RADIO);
 
-            
+
 
 
 

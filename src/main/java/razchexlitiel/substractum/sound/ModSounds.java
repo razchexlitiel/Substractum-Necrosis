@@ -15,6 +15,10 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> BULLET_GROUND = registerSoundEvents("bullet_ground");
     public static final RegistryObject<SoundEvent> BULLET_IMPACT = registerSoundEvents("bullet_impact");
 
+    public static final RegistryObject<SoundEvent> TURRET_FIRE = registerSoundEvents("turret_fire");
+    public static final RegistryObject<SoundEvent> TURRET_LOCK = registerSoundEvents("turret_lock");
+
+    public static final RegistryObject<SoundEvent> DRY_FIRE = registerSoundEvents("dry_fire");
     public static final RegistryObject<SoundEvent> GUNPULL = registerSoundEvents("gunpull");
     public static final RegistryObject<SoundEvent> HEAVY_GUNCLICK = registerSoundEvents("heavy_gunclick");
     public static final RegistryObject<SoundEvent> GUNCLICK = registerSoundEvents("gunclick");

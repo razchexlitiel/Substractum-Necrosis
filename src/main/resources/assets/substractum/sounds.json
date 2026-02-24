@@ -29,7 +29,27 @@
       "substractum:impact/bullet_impact9"
     ]
   },
-
+  "turret_fire": {
+    "category": "block",
+    "subtitle": "sounds.substractum.turret_fire",
+    "sounds": [
+      "substractum:turret_fire"
+    ]
+  },
+  "turret_lock": {
+    "category": "block",
+    "subtitle": "sounds.substractum.turret_lock",
+    "sounds": [
+      "substractum:turret_lock"
+    ]
+  },
+  "dry_fire": {
+    "category": "player",
+    "sounds": [
+      "substractum:dry_fire"
+    ],
+    "subtitle": "sounds.substractum.dry_fire"
+  },
   "bullet_ground": {
     "category": "block",
     "subtitle": "substractum.subtitle.bullet_ground",

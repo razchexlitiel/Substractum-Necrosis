@@ -5,6 +5,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import razchexlitiel.substractum.item.activators.RangeDetonatorItem;
+import razchexlitiel.substractum.item.guns.MachineGunItem;
 import razchexlitiel.substractum.item.weapons.ammo.AmmoTurretItem;
 import razchexlitiel.substractum.main.SubstractumMod;
 
@@ -14,6 +15,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> RANGE_DETONATOR = ITEMS.register("range_detonator",
             () -> new RangeDetonatorItem(new Item.Properties()));
+
+    public static final RegistryObject<Item> MACHINEGUN = ITEMS.register("machinegun",
+            () -> new MachineGunItem(new Item.Properties()));
 
     public static final RegistryObject<Item> AMMO_TURRET = ITEMS.register("ammo_turret",
             () -> new AmmoTurretItem(new Item.Properties(), 4.0f, 3.0f, false));

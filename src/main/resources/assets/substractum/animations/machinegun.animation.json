@@ -451,16 +451,16 @@
 			},
 			"sound_effects": {
 				"0.4583": {
-					"effect": "smogline:gunpull",
+					"effect": "substractum:reload/gunpull",
 					"locator": "gunpull",
 					"bind_to_actor": false
 				},
 				"3.6667": {
-					"effect": "smogline:heavy_gunclick",
+					"effect": "substractum:reload/heavy_gunclick",
 					"locator": "heavy_gunclick"
 				},
 				"4.625": {
-					"effect": "smogline:gunclick",
+					"effect": "substractum:reload/gunclick",
 					"locator": "gunclick"
 				}
 			}
@@ -603,16 +603,16 @@
 			},
 			"sound_effects": {
 				"0.4167": {
-					"effect": "smogline:gunpull",
+					"effect": "substractum:reload/gunpull",
 					"locator": "gunpull",
 					"bind_to_actor": false
 				},
 				"3.6667": {
-					"effect": "smogline:heavy_gunclick",
+					"effect": "substractum:reload/heavy_gunclick",
 					"locator": "heavy_gunclick"
 				},
 				"4.625": {
-					"effect": "smogline:gunclick",
+					"effect": "substractum:reload/gunclick",
 					"locator": "gunclick"
 				}
 			}
