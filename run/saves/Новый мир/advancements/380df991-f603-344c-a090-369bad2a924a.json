@@ -131,12 +131,6 @@
     },
     "done": true
   },
-  "substractum:recipes/misc/det_miner": {
-    "criteria": {
-      "has_tnt": "2026-02-24 17:18:56 +0300"
-    },
-    "done": true
-  },
   "minecraft:recipes/redstone/iron_trapdoor": {
     "criteria": {
       "has_iron_ingot": "2026-02-24 17:18:53 +0300"
@@ -173,12 +167,6 @@
     },
     "done": true
   },
-  "minecraft:story/root": {
-    "criteria": {
-      "crafting_table": "2026-02-24 17:19:08 +0300"
-    },
-    "done": true
-  },
   "minecraft:recipes/redstone/iron_door": {
     "criteria": {
       "has_iron_ingot": "2026-02-24 17:18:53 +0300"
@@ -188,6 +176,18 @@
   "minecraft:recipes/redstone/heavy_weighted_pressure_plate": {
     "criteria": {
       "has_iron_ingot": "2026-02-24 17:18:53 +0300"
+    },
+    "done": true
+  },
+  "substractum:recipes/misc/det_miner": {
+    "criteria": {
+      "has_tnt": "2026-02-24 17:18:56 +0300"
+    },
+    "done": true
+  },
+  "minecraft:story/root": {
+    "criteria": {
+      "crafting_table": "2026-02-24 17:19:08 +0300"
     },
     "done": true
   },

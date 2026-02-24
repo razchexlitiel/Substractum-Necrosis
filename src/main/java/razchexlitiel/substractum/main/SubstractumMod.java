@@ -8,6 +8,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import razchexlitiel.substractum.block.basic.ModBlocks;
+import razchexlitiel.substractum.entity.ModEntities;
+import razchexlitiel.substractum.sound.ModSounds;
 import software.bernie.geckolib.GeckoLib;
 
 import razchexlitiel.substractum.item.ModItems;
@@ -22,8 +24,10 @@ public class SubstractumMod {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModCreativeTabs.register(modEventBus);
         GeckoLib.initialize();
+        ModEntities.ENTITY_TYPES.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
+        ModSounds.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
     }
@@ -36,9 +40,22 @@ public class SubstractumMod {
 
             event.accept(ModItems.RANGE_DETONATOR);
             event.accept(ModBlocks.DET_MINER);
+            event.accept(ModItems.AMMO_TURRET);
+            event.accept(ModItems.AMMO_TURRET_HOLLOW);
+            event.accept(ModItems.AMMO_TURRET_PIERCING);
+            event.accept(ModItems.AMMO_TURRET_FIRE);
+            event.accept(ModItems.AMMO_TURRET_RADIO);
+
+            
+
+
 
         }
 
-
     }
+
+    // Метод регистрации атрибутов (здоровье, урон и т.д.)
+    private void entityAttributeEvent(net.minecraftforge.event.entity.EntityAttributeCreationEvent event) {
+    }
+
 }
