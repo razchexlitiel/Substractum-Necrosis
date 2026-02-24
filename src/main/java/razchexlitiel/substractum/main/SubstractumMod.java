@@ -2,10 +2,12 @@ package razchexlitiel.substractum.main;
 
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import razchexlitiel.substractum.block.basic.ModBlocks;
 import software.bernie.geckolib.GeckoLib;
 
 import razchexlitiel.substractum.item.ModItems;
@@ -20,7 +22,23 @@ public class SubstractumMod {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModCreativeTabs.register(modEventBus);
         GeckoLib.initialize();
+        ModBlocks.register(modEventBus);
         ModItems.ITEMS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
+        modEventBus.addListener(this::addCreative);
+    }
+
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        // Логгирование для отладки
+        LOGGER.info("Building creative tab contents for: " + event.getTabKey());
+
+        if (event.getTab() == ModCreativeTabs.SNM_WEAPONS_TAB.get()) {
+
+            event.accept(ModItems.RANGE_DETONATOR);
+            event.accept(ModBlocks.DET_MINER);
+
+        }
+
+
     }
 }
