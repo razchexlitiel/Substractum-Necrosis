@@ -1,1 +1,9 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.minecraftforge.net' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
 rootProject.name = 'Substractum-Necrosis'

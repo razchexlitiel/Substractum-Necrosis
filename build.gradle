@@ -1,20 +1,41 @@
 plugins {
-    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id 'net.minecraftforge.gradle' version '[6.0.24, 6.2)'
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group = 'ru.razchexlitiel' // Твоя группа
+version = '0.0.1-alpha'
 
-repositories {
-    mavenCentral()
+base {
+    archivesName = 'substractum' // Имя файла мода на выходе
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    // Версия маппингов (названия методов в коде)
+    mappings channel: 'official', version: '1.20.1'
+
+    // Настройки запуска
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                substractum { // Твой MOD_ID
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Самая важная строка: подключает Forge и Minecraft
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
 }
 
-test {
-    useJUnitPlatform()
-}
+// Позволяет Java видеть ресурсы (текстуры/json)
+sourceSets.main.resources { srcDir 'src/generated/resources' }
