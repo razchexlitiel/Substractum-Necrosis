@@ -15,7 +15,7 @@ public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, SubstractumMod.MOD_ID);
 
-    // ПРИМЕР: Некротический Алтарь (если такой был в Smogline)
+    // ПРИМЕР: Некротический Алтарь (если такой был в substractum)
     // .build(null) в 1.20.1 — это стандарт для создания типа
 
     public static final RegistryObject<BlockEntityType<DepthWormNestBlockEntity>> DEPTH_WORM_NEST =

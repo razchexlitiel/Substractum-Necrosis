@@ -107,6 +107,6 @@
     }
   },
   "textures": {
-    "particle": "smogline:item/machinegun"
+    "particle": "substractum:item/machinegun"
   }
 }

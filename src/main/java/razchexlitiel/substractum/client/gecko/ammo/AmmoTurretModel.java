@@ -18,14 +18,14 @@ public class AmmoTurretModel extends GeoModel<AmmoTurretItem> {
 
     @Override
     public ResourceLocation getTextureResource(AmmoTurretItem object) {
-        // 1. Получаем ID предмета (например "smogline:ammo_turret_fire")
+        // 1. Получаем ID предмета (например "substractum:ammo_turret_fire")
         ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(object);
 
         if (registryName != null) {
             String path = registryName.getPath(); // "ammo_turret_fire"
 
             // 2. Ищем текстуру с таким же именем в папке textures/item/
-            // Пример: assets/smogline/textures/item/ammo_turret_fire.png
+            // Пример: assets/substractum/textures/item/ammo_turret_fire.png
             return new ResourceLocation(SubstractumMod.MOD_ID, "textures/item/ammo/" + path + ".png");
         }
 

@@ -125,6 +125,6 @@
     }
   },
   "textures": {
-    "particle": "smogline:item/ammo_turret_piercing"
+    "particle": "substractum:item/ammo_turret_piercing"
   }
 }

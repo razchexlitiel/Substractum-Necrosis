@@ -81,7 +81,7 @@ public class MachineGunRenderer extends GeoItemRenderer<MachineGunItem> {
             return new ResourceLocation(SubstractumMod.MOD_ID, "textures/item/gun/machinegun.png");
         }
 
-        // 3. Убираем префикс мода (smogline:), если он есть
+        // 3. Убираем префикс мода (substractum:), если он есть
         if (loadedId.contains(":")) {
             loadedId = loadedId.split(":")[1];
         }

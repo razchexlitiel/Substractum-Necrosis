@@ -43,7 +43,7 @@ public class RangeDetonatorItem extends Item {
                 // Проверяем, загружен ли чанк
                 if (!level.isLoaded(targetPos)) {
                     player.displayClientMessage(
-                            Component.translatable("message.smogline.range_detonator.pos_not_loaded")
+                            Component.translatable("message.substractum.range_detonator.pos_not_loaded")
                                     .withStyle(ChatFormatting.RED),
                             true
                     );
@@ -62,7 +62,7 @@ public class RangeDetonatorItem extends Item {
 
                     if (success) {
                         player.displayClientMessage(
-                                Component.translatable("message.smogline.range_detonator.activated")
+                                Component.translatable("message.substractum.range_detonator.activated")
                                         .withStyle(ChatFormatting.GREEN),
                                 true
                         );
@@ -70,7 +70,7 @@ public class RangeDetonatorItem extends Item {
                         return InteractionResultHolder.success(stack);
                     } else {
                         player.displayClientMessage(
-                                Component.translatable("message.smogline.range_detonator.pos_not_loaded")
+                                Component.translatable("message.substractum.range_detonator.pos_not_loaded")
                                         .withStyle(ChatFormatting.RED),
                                 true
                         );
@@ -79,7 +79,7 @@ public class RangeDetonatorItem extends Item {
                     }
                 } else {
                     player.displayClientMessage(
-                            Component.translatable("message.smogline.range_detonator.pos_not_loaded")
+                            Component.translatable("message.substractum.range_detonator.pos_not_loaded")
                                     .withStyle(ChatFormatting.RED),
                             true
                     );
@@ -115,9 +115,9 @@ public class RangeDetonatorItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level level,
                                 List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        tooltip.add(Component.translatable("tooltip.smogline.range_detonator.desc")
+        tooltip.add(Component.translatable("tooltip.substractum.range_detonator.desc")
                 .withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("tooltip.smogline.range_detonator.hint")
+        tooltip.add(Component.translatable("tooltip.substractum.range_detonator.hint")
                 .withStyle(ChatFormatting.GRAY));
     }
 }

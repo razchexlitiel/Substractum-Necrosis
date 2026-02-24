@@ -115,6 +115,6 @@
     }
   },
   "textures": {
-    "particle": "smogline:item/ammo_turret_radio"
+    "particle": "substractum:item/ammo_turret_radio"
   }
 }

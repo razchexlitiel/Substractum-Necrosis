@@ -15,9 +15,9 @@ public class TurretBulletModel extends GeoModel<TurretBulletEntity> {
 
     @Override
     public ResourceLocation getTextureResource(TurretBulletEntity object) {
-        String ammoId = object.getAmmoId(); // Например: "smogline:ammo_turret_fire"
+        String ammoId = object.getAmmoId(); // Например: "substractum:ammo_turret_fire"
 
-        // 1. Убираем префикс мода (smogline:)
+        // 1. Убираем префикс мода (substractum:)
         String path = ammoId;
         if (path.contains(":")) {
             path = path.split(":")[1];

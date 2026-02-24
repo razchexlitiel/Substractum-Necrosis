@@ -115,6 +115,6 @@
     }
   },
   "textures": {
-    "particle": "smogline:item/ammo_turret"
+    "particle": "substractum:item/ammo/ammo_turret"
   }
 }

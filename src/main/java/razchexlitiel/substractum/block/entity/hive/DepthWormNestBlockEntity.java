@@ -98,8 +98,8 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
         if (this.level == null || this.level.isClientSide) return;
 
         // ВАЖНО: Получаем ID сущности из вашего ModEntities (замените на свой, если он другой)
-        // Например: "smogline:depth_worm"
-        String entityId = "smogline:depth_worm";
+
+        String entityId = "substractum:depth_worm";
 
         for (CompoundTag wormTag : this.storedWorms) {
             // 1. Добавляем ID типа сущности, иначе loadEntityRecursive вернет null
