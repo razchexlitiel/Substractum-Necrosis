@@ -22,6 +22,15 @@ public class ModCreativeTabs {
                     })
                     .build());
 
+    public static final RegistryObject<CreativeModeTab> SNM_NATURE_TAB = CREATIVE_MODE_TABS.register("snm_nature_tab",
+            () -> CreativeModeTab.builder()
+                    .icon(() -> new ItemStack(ModItems.DEPTH_WORM_SPAWN_EGG.get())) // Иконка вкладки
+                    .title(Component.translatable("creativetab.snm_nature_tab"))
+                    .displayItems((parameters, output) -> {
+                        output.accept(ModItems.DEPTH_WORM_SPAWN_EGG.get());
+                    })
+                    .build());
+
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
     }

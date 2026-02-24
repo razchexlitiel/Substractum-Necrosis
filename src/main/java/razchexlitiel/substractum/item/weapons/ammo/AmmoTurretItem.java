@@ -40,15 +40,7 @@ public class AmmoTurretItem extends Item implements GeoItem, IAmmoItem {
 
         SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (level.isClientSide) {
-            // Отправляем через твой основной хендлер
-            ModPacketHandler.INSTANCE.sendToServer(new PacketAmmoFlip());
-        }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
-    }
+
 
     @Override
     public String getCaliber() { return "20mm_turret"; }

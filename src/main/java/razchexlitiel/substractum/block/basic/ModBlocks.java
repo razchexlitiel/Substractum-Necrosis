@@ -11,6 +11,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import razchexlitiel.substractum.block.basic.explosives.DetMinerBlock;
+import razchexlitiel.substractum.block.basic.hive.DepthWormNestBlock;
+import razchexlitiel.substractum.block.basic.hive.HiveSoilBlock;
 import razchexlitiel.substractum.main.SubstractumMod;
 import razchexlitiel.substractum.item.ModItems;
 
@@ -26,6 +28,11 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .requiresCorrectToolForDrops()));
 
+    public static final RegistryObject<Block> DEPTH_WORM_NEST = registerBlock("depth_worm_nest",
+            () -> new DepthWormNestBlock(BlockBehaviour.Properties.copy(Blocks.MUD).sound(SoundType.MUD)));
+
+    public static final RegistryObject<Block> HIVE_SOIL = registerBlock("hive_soil",
+            () -> new HiveSoilBlock(BlockBehaviour.Properties.copy(Blocks.MUD).sound(SoundType.MUD)));
 
     // Вспомогательный метод: регистрирует блок И предмет для него
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

@@ -25,9 +25,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
 
-        //СТАТИЧНИЫЕ БЛОКИ, ПРИМЕР:
-        // cubeAllWithItem(ModBlocks.GIGA_DET);
-
+        //СТАТИЧНИЫЕ БЛОКИ
+        cubeAllWithItem(ModBlocks.DEPTH_WORM_NEST);
+        cubeAllWithItem(ModBlocks.HIVE_SOIL);
 
         //СТАТИЧНИЫЕ БЛОКИ У КОТОРЫХ РАЗНОЕ ДНО/ВЕРХ, ПРИМЕР:
         // columnBlockWithItem(ModBlocks.WASTE_LOG,

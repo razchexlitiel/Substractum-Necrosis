@@ -6,6 +6,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import razchexlitiel.substractum.item.activators.RangeDetonatorItem;
 import razchexlitiel.substractum.item.guns.MachineGunItem;
+import razchexlitiel.substractum.item.mobs.DepthWormSpawnEggItem;
 import razchexlitiel.substractum.item.weapons.ammo.AmmoTurretItem;
 import razchexlitiel.substractum.main.SubstractumMod;
 
@@ -15,6 +16,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> RANGE_DETONATOR = ITEMS.register("range_detonator",
             () -> new RangeDetonatorItem(new Item.Properties()));
+
+    public static final RegistryObject<Item> DEPTH_WORM_SPAWN_EGG = ITEMS.register("depth_worm_spawn_egg",
+            () -> new DepthWormSpawnEggItem(new Item.Properties()));
 
     public static final RegistryObject<Item> MACHINEGUN = ITEMS.register("machinegun",
             () -> new MachineGunItem(new Item.Properties()));

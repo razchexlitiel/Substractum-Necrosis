@@ -9,6 +9,7 @@ import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import razchexlitiel.substractum.client.gecko.bullets.TurretBulletRenderer;
+import razchexlitiel.substractum.client.gecko.mobs.DepthWormRenderer;
 import razchexlitiel.substractum.client.overlay.OverlayAmmoHud;
 import razchexlitiel.substractum.config.ModConfigKeybindHandler;
 import razchexlitiel.substractum.entity.ModEntities;
@@ -25,7 +26,7 @@ public class ClientModEvents {
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
 
         EntityRenderers.register(ModEntities.TURRET_BULLET.get(), TurretBulletRenderer::new);
-
+        EntityRenderers.register(ModEntities.DEPTH_WORM.get(), DepthWormRenderer::new);
 
     }
 
