@@ -64,9 +64,9 @@ public class DetMinerBlock extends Block implements IDetonatable {
                                 @Nullable net.minecraft.world.level.BlockGetter level,
                                 List<Component> tooltip,
                                 TooltipFlag flag) {
-        tooltip.add(Component.translatable("tooltip.smogline.detminer.line1")
+        tooltip.add(Component.translatable("tooltip.substractum.detminer.line1")
                 .withStyle(ChatFormatting.YELLOW));
-        tooltip.add(Component.translatable("tooltip.smogline.detminer.line4")
+        tooltip.add(Component.translatable("tooltip.substractum.detminer.line2")
                 .withStyle(ChatFormatting.GRAY));
     }
     @Override
