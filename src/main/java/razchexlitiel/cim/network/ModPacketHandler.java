@@ -5,10 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import razchexlitiel.cim.main.CrustalIncursionMod;
-import razchexlitiel.cim.network.packet.PacketReloadGun;
-import razchexlitiel.cim.network.packet.PacketShoot;
-import razchexlitiel.cim.network.packet.PacketUnloadGun;
-import razchexlitiel.cim.network.packet.UpdateBatteryC2SPacket;
+import razchexlitiel.cim.network.packet.*;
 
 public class ModPacketHandler {
     private static final String PROTOCOL_VERSION = "1";
@@ -52,6 +49,20 @@ public class ModPacketHandler {
                 PacketUnloadGun::toBytes,
                 PacketUnloadGun::new,
                 PacketUnloadGun::handle
+        );
+
+        INSTANCE.registerMessage(id++,
+                PacketToggleMotor.class,
+                PacketToggleMotor::encode,
+                PacketToggleMotor::new,
+                PacketToggleMotor::handle
+        );
+
+        INSTANCE.registerMessage(id++,
+                PacketToggleMotorMode.class,
+                PacketToggleMotorMode::encode,
+                PacketToggleMotorMode::new,
+                PacketToggleMotorMode::handle
         );
 
     }

@@ -4,7 +4,7 @@ package razchexlitiel.cim.item.weapons.ammo;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import razchexlitiel.cim.client.gecko.ammo.AmmoTurretRenderer;
+import razchexlitiel.cim.client.gecko.item.ammo.AmmoTurretRenderer;
 import razchexlitiel.cim.item.tags.IAmmoItem;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;

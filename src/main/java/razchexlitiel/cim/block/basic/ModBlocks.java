@@ -17,6 +17,7 @@ import razchexlitiel.cim.block.basic.energy.WireBlock;
 import razchexlitiel.cim.block.basic.explosives.DetMinerBlock;
 import razchexlitiel.cim.block.basic.hive.DepthWormNestBlock;
 import razchexlitiel.cim.block.basic.hive.HiveSoilBlock;
+import razchexlitiel.cim.block.basic.rotation.*;
 import razchexlitiel.cim.item.fekal_electric.MachineBatteryBlockItem;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.item.ModItems;
@@ -47,6 +48,40 @@ public class ModBlocks {
     public static final RegistryObject<Block> HIVE_SOIL = registerBlock("hive_soil",
             () -> new HiveSoilBlock(BlockBehaviour.Properties.copy(Blocks.MUD).sound(SoundType.MUD)));
 
+    public static final RegistryObject<Block> MOTOR_ELECTRO = BLOCKS.register("motor_electro",
+            () -> new MotorElectroBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .strength(3.0f, 4.0f)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> WIND_GEN_FLUGER = BLOCKS.register("wind_gen_fluger",
+            () -> new WindGenFlugerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .strength(3.0f, 4.0f)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+
+    public static final RegistryObject<Block> SHAFT_IRON = BLOCKS.register("shaft_iron",
+            () -> new ShaftIronBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .strength(3.0f, 4.0f)
+                    .noOcclusion()
+                    .requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> GEAR_PORT = registerBlock("gear_port",
+            () -> new GearPortBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> STOPPER = registerBlock("stopper",
+            () -> new StopperBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> ADDER = registerBlock("adder",
+            () -> new AdderBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
+
+    public static final RegistryObject<Block> TACHOMETER = registerBlock("tachometer",
+            () -> new TachometerBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
+
+
+    public static final RegistryObject<Block> ROTATION_METER = registerBlock("rotation_meter",
+            () -> new RotationMeterBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
 
 
 

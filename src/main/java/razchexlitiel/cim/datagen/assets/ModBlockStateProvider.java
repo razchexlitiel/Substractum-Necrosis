@@ -28,8 +28,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         cubeAllWithItem(ModBlocks.DEPTH_WORM_NEST);
         cubeAllWithItem(ModBlocks.HIVE_SOIL);
         cubeAllWithItem(ModBlocks.SWITCH);
-        cubeAllWithItem(ModBlocks.WIRE_COATED);
         cubeAllWithItem(ModBlocks.CONVERTER_BLOCK);
+        cubeAllWithItem(ModBlocks.GEAR_PORT);
 
         //СТАТИЧНИЫЕ БЛОКИ У КОТОРЫХ РАЗНОЕ ДНО/ВЕРХ, ПРИМЕР:
         // columnBlockWithItem(ModBlocks.WASTE_LOG,
@@ -49,6 +49,22 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 modLoc("block/det_miner_front"),
                 modLoc("block/det_miner_top"),
                 modLoc("block/det_miner_top")
+        );
+
+        fullOrientableBlockWithItem(ModBlocks.ROTATION_METER,
+                modLoc("block/gear_port_open"),
+                modLoc("block/rotation_meter_side"),
+                modLoc("block/rotation_meter_side"),
+                modLoc("block/rotation_meter_top"),
+                modLoc("block/rotation_meter_top")
+        );
+
+        fullOrientableBlockWithItem(ModBlocks.ADDER,
+                modLoc("block/gear_port_open"),
+                modLoc("block/adder_side"),
+                modLoc("block/gear_port_open"),
+                modLoc("block/rotation_meter_top"),
+                modLoc("block/rotation_meter_top")
         );
 
         orientableBlockWithItem(

@@ -13,10 +13,11 @@ public class ModMenuTypes {
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, CrustalIncursionMod.MOD_ID);
 
 
-    // ✅ ИСПРАВЛЕНО: Правильная регистрация с IForgeMenuType
     public static final RegistryObject<MenuType<MachineBatteryMenu>> MACHINE_BATTERY_MENU =
             MENUS.register("machine_battery_menu", () -> IForgeMenuType.create(MachineBatteryMenu::new));
 
+    public static final RegistryObject<MenuType<MotorElectroMenu>> MOTOR_ELECTRO_MENU =
+            MENUS.register("motor_electro_menu", () -> IForgeMenuType.create(MotorElectroMenu::new));
 
 
     public static void register(IEventBus eventBus) {

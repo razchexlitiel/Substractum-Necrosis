@@ -13,6 +13,7 @@ import razchexlitiel.cim.block.entity.energy.SwitchBlockEntity;
 import razchexlitiel.cim.block.entity.energy.WireBlockEntity;
 import razchexlitiel.cim.block.entity.hive.DepthWormNestBlockEntity;
 import razchexlitiel.cim.block.entity.hive.HiveSoilBlockEntity;
+import razchexlitiel.cim.block.entity.rotation.*;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.block.basic.ModBlocks;
 
@@ -62,7 +63,37 @@ public class ModBlockEntities {
                             .build(null));
 
 
+    public static final RegistryObject<BlockEntityType<WindGenFlugerBlockEntity>> WIND_GEN_FLUGER_BE =
+            BLOCK_ENTITIES.register("wind_gen_fluger",
+                    () -> BlockEntityType.Builder.of(WindGenFlugerBlockEntity::new, ModBlocks.WIND_GEN_FLUGER.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<TachometerBlockEntity>> TACHOMETER_BE =
+            BLOCK_ENTITIES.register("tachometer",
+                    () -> BlockEntityType.Builder.of(TachometerBlockEntity::new, ModBlocks.TACHOMETER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<RotationMeterBlockEntity>> ROTATION_METER_BE =
+            BLOCK_ENTITIES.register("rotation_meter_be",
+                    () -> BlockEntityType.Builder.of(RotationMeterBlockEntity::new, ModBlocks.ROTATION_METER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<AdderBlockEntity>> ADDER_BE =
+            BLOCK_ENTITIES.register("adder",
+                    () -> BlockEntityType.Builder.of(AdderBlockEntity::new, ModBlocks.ADDER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<StopperBlockEntity>> STOPPER_BE =
+            BLOCK_ENTITIES.register("stopper",
+                    () -> BlockEntityType.Builder.of(StopperBlockEntity::new, ModBlocks.STOPPER.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<GearPortBlockEntity>> GEAR_PORT_BE =
+            BLOCK_ENTITIES.register("gear_port_be",
+                    () -> BlockEntityType.Builder.of(GearPortBlockEntity::new, ModBlocks.GEAR_PORT.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<MotorElectroBlockEntity>> MOTOR_ELECTRO_BE =
+            BLOCK_ENTITIES.register("motor_electro_be",
+                    () -> BlockEntityType.Builder.of(MotorElectroBlockEntity::new, ModBlocks.MOTOR_ELECTRO.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ShaftIronBlockEntity>> SHAFT_IRON_BE =
+            BLOCK_ENTITIES.register("shaft_iron_be",
+                    () -> BlockEntityType.Builder.of(ShaftIronBlockEntity::new, ModBlocks.SHAFT_IRON.get()).build(null));
 
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
