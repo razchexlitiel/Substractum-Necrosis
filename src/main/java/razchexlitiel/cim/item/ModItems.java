@@ -4,11 +4,16 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import razchexlitiel.cim.block.basic.ModBlocks;
 import razchexlitiel.cim.item.activators.RangeDetonatorItem;
 import razchexlitiel.cim.item.fekal_electric.ItemCreativeBattery;
 import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;
 import razchexlitiel.cim.item.guns.MachineGunItem;
 import razchexlitiel.cim.item.mobs.DepthWormSpawnEggItem;
+import razchexlitiel.cim.item.rotation.MotorElectroBlockItem;
+import razchexlitiel.cim.item.rotation.ScrewdriverItem;
+import razchexlitiel.cim.item.rotation.ShaftIronBlockItem;
+import razchexlitiel.cim.item.rotation.WindGenFlugerBlockItem;
 import razchexlitiel.cim.item.weapons.ammo.AmmoTurretItem;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 
@@ -44,11 +49,24 @@ public class ModItems {
             () -> new AmmoTurretItem(new Item.Properties(), 4.0f, 3.0f, false));
 
     public static final RegistryObject<Item> SCREWDRIVER = ITEMS.register("screwdriver",
-            () -> new Item(new Item.Properties()
+            () -> new ScrewdriverItem(new Item.Properties()
                     .stacksTo(1)
                     .durability(256))); // Прочность как у железных инструментов
 
 
+    public static final RegistryObject<Item> MOTOR_ELECTRO_ITEM = ITEMS.register("motor_electro",
+            () -> new MotorElectroBlockItem(ModBlocks.MOTOR_ELECTRO.get(),
+                    new Item.Properties()));
+
+    public static final RegistryObject<Item> WIND_GEN_FLUGER = ITEMS.register("wind_gen_fluger",
+            () -> new WindGenFlugerBlockItem(ModBlocks.WIND_GEN_FLUGER.get(),
+                    new Item.Properties()));
+
+
+    // ---------- ВАЛ ЖЕЛЕЗНЫЙ (с GeoItem) ----------
+    public static final RegistryObject<Item> SHAFT_IRON_ITEM = ITEMS.register("shaft_iron",
+            () -> new ShaftIronBlockItem(ModBlocks.SHAFT_IRON.get(),
+                    new Item.Properties()));
 
     //батарейки
 
