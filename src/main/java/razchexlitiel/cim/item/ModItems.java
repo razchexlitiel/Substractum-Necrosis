@@ -5,6 +5,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import razchexlitiel.cim.item.activators.RangeDetonatorItem;
+import razchexlitiel.cim.item.fekal_electric.ItemCreativeBattery;
+import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;
 import razchexlitiel.cim.item.guns.MachineGunItem;
 import razchexlitiel.cim.item.mobs.DepthWormSpawnEggItem;
 import razchexlitiel.cim.item.weapons.ammo.AmmoTurretItem;
@@ -40,5 +42,55 @@ public class ModItems {
 
     public static final RegistryObject<Item> AMMO_TURRET_RADIO = ITEMS.register("ammo_turret_radio",
             () -> new AmmoTurretItem(new Item.Properties(), 4.0f, 3.0f, false));
+
+    public static final RegistryObject<Item> SCREWDRIVER = ITEMS.register("screwdriver",
+            () -> new Item(new Item.Properties()
+                    .stacksTo(1)
+                    .durability(256))); // Прочность как у железных инструментов
+
+
+
+    //батарейки
+
+    public static final RegistryObject<Item> CREATIVE_BATTERY = ITEMS.register("battery_creative",
+            () -> new ItemCreativeBattery(
+                    new Item.Properties()
+            )
+    );
+
+    public static final RegistryObject<Item> BATTERY = ITEMS.register("battery",
+            () -> new ModBatteryItem(
+                    new Item.Properties(),
+                    5000,
+                    100,
+                    100
+            ));
+
+    public static final RegistryObject<Item> BATTERY_ADVANCED = ITEMS.register("battery_advanced",
+            () -> new ModBatteryItem(
+                    new Item.Properties(),
+                    20000,
+                    500,
+                    500
+            ));
+
+    // ========== ЛИТИЕВЫЕ БАТАРЕЙКИ (LITHIUM) ==========
+    public static final RegistryObject<Item> BATTERY_LITHIUM = ITEMS.register("battery_lithium",
+            () -> new ModBatteryItem(
+                    new Item.Properties(),
+                    250000,
+                    1000,
+                    1000
+            ));
+
+
+    public static final RegistryObject<Item> BATTERY_TRIXITE = ITEMS.register("battery_trixite",
+            () -> new ModBatteryItem(
+                    new Item.Properties(),
+                    5000000,
+                    40000,
+                    200000
+            ));
+
 
 }

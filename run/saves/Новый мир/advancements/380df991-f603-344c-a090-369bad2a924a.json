@@ -199,7 +199,9 @@
   },
   "minecraft:adventure/kill_all_mobs": {
     "criteria": {
-      "minecraft:slime": "2026-02-24 18:45:48 +0300"
+      "minecraft:creeper": "2026-02-25 20:07:24 +0300",
+      "minecraft:slime": "2026-02-24 18:45:48 +0300",
+      "minecraft:zombie": "2026-02-25 20:07:03 +0300"
     },
     "done": false
   },
@@ -212,6 +214,42 @@
   "minecraft:recipes/decorations/chest": {
     "criteria": {
       "has_lots_of_items": "2026-02-24 21:20:05 +0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/combat/bow": {
+    "criteria": {
+      "has_string": "2026-02-25 20:06:57 +0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/tools/fishing_rod": {
+    "criteria": {
+      "has_string": "2026-02-25 20:06:57 +0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/building_blocks/white_wool_from_string": {
+    "criteria": {
+      "has_string": "2026-02-25 20:06:57 +0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/redstone/tripwire_hook": {
+    "criteria": {
+      "has_string": "2026-02-25 20:06:57 +0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/candle": {
+    "criteria": {
+      "has_string": "2026-02-25 20:06:57 +0300"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/loom": {
+    "criteria": {
+      "has_string": "2026-02-25 20:06:57 +0300"
     },
     "done": true
   },

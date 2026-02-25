@@ -8,6 +8,7 @@ import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.network.packet.PacketReloadGun;
 import razchexlitiel.cim.network.packet.PacketShoot;
 import razchexlitiel.cim.network.packet.PacketUnloadGun;
+import razchexlitiel.cim.network.packet.UpdateBatteryC2SPacket;
 
 public class ModPacketHandler {
     private static final String PROTOCOL_VERSION = "1";
@@ -21,6 +22,15 @@ public class ModPacketHandler {
     public static void register() {
         int id = 0;
 
+
+        INSTANCE.registerMessage(id++, UpdateBatteryC2SPacket.class, UpdateBatteryC2SPacket::toBytes, UpdateBatteryC2SPacket::new, (msg, ctx) -> msg.handle(ctx));
+
+        INSTANCE.registerMessage(id++,
+                razchexlitiel.cim.network.packet.PacketSyncEnergy.class,
+                razchexlitiel.cim.network.packet.PacketSyncEnergy::encode,
+                razchexlitiel.cim.network.packet.PacketSyncEnergy::decode,
+                razchexlitiel.cim.network.packet.PacketSyncEnergy::handle
+        );
 
         INSTANCE.registerMessage(id++,
                 PacketReloadGun.class,

@@ -1,4 +1,9 @@
-// 1.20.1	2026-02-25T17:25:17.2408497	Loot Tables
+// 1.20.1	2026-02-25T20:03:54.4050983	Loot Tables
+7d3490f0e01ce46d11011716827adf65096c8dd1 data/cim/loot_tables/blocks/converter_block.json
 3d5531d1e95a6c2464f4917b461195a3a2a9e2cf data/cim/loot_tables/blocks/depth_worm_nest.json
 1af1e99822e57bb3b0343b1e222e31f5f2c8cb38 data/cim/loot_tables/blocks/det_miner.json
 9403ff7c88926442c2f4ed849c6c886523dbe35f data/cim/loot_tables/blocks/hive_soil.json
+5d465e7f086df14299b9a566265ef30275144a39 data/cim/loot_tables/blocks/machine_battery.json
+5f7d0f84c8b630edc0841d55be27af48a0f14127 data/cim/loot_tables/blocks/machine_battery_lithium.json
+ebaf834566abf96241fb59427bcc9c1a0acd8f43 data/cim/loot_tables/blocks/switch.json
+5faf438f04e9b2cf90faff3a10c1b86fb091fdd3 data/cim/loot_tables/blocks/wire_coated.json

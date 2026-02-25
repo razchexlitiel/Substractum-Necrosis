@@ -27,6 +27,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         //СТАТИЧНИЫЕ БЛОКИ
         cubeAllWithItem(ModBlocks.DEPTH_WORM_NEST);
         cubeAllWithItem(ModBlocks.HIVE_SOIL);
+        cubeAllWithItem(ModBlocks.SWITCH);
+        cubeAllWithItem(ModBlocks.WIRE_COATED);
+        cubeAllWithItem(ModBlocks.CONVERTER_BLOCK);
 
         //СТАТИЧНИЫЕ БЛОКИ У КОТОРЫХ РАЗНОЕ ДНО/ВЕРХ, ПРИМЕР:
         // columnBlockWithItem(ModBlocks.WASTE_LOG,
@@ -48,7 +51,19 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 modLoc("block/det_miner_top")
         );
 
+        orientableBlockWithItem(
+                ModBlocks.MACHINE_BATTERY,
+                modLoc("block/battery_side_alt"),
+                modLoc("block/battery_front_alt"),
+                modLoc("block/battery_top")
+        );
 
+        orientableBlockWithItem(
+                ModBlocks.MACHINE_BATTERY_LITHIUM,
+                modLoc("block/machine_battery_lithium_side"),
+                modLoc("block/machine_battery_lithium_front"),
+                modLoc("block/machine_battery_lithium_top")
+        );
 
         //ПОВОРОТ ДЛЯ 3Д МОДЕЛИ, ПРИМЕР:
         // customModelBlockWithItem(ModBlocks.TURRET_BASE);

@@ -2,27 +2,38 @@ package razchexlitiel.cim.main;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+import razchexlitiel.cim.api.energy.EnergyNetworkManager;
 import razchexlitiel.cim.api.hive.HiveNetworkManagerProvider;
 import razchexlitiel.cim.block.basic.ModBlocks;
 import razchexlitiel.cim.block.entity.ModBlockEntities;
 import razchexlitiel.cim.capability.ModCapabilities;
 import razchexlitiel.cim.entity.ModEntities;
 import razchexlitiel.cim.entity.mobs.DepthWormEntity;
+import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;
+import razchexlitiel.cim.menu.ModMenuTypes;
 import razchexlitiel.cim.network.ModPacketHandler;
 import razchexlitiel.cim.sound.ModSounds;
 import software.bernie.geckolib.GeckoLib;
 
 import razchexlitiel.cim.item.ModItems;
+
+import java.util.List;
 
 @Mod(CrustalIncursionMod.MOD_ID)
 public class CrustalIncursionMod {
@@ -41,6 +52,7 @@ public class CrustalIncursionMod {
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         ModEntities.ENTITY_TYPES.register(modEventBus);
         ModSounds.register(modEventBus);
+        ModMenuTypes.MENUS.register(modEventBus);
         modEventBus.addListener(this::entityAttributeEvent);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -57,9 +69,53 @@ public class CrustalIncursionMod {
         });
     }
 
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            ServerLevel level = event.getServer().overworld(); // или через все миры
+            EnergyNetworkManager.get(level).tick();
+        }
+    }
+
+    @SubscribeEvent
+    public static void onServerWorldLoad(LevelEvent.Load event) {
+        if (event.getLevel() instanceof ServerLevel serverLevel) {
+            EnergyNetworkManager.get(serverLevel).rebuildAllNetworks();
+        }
+    }
+
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         // Логгирование для отладки
         LOGGER.info("Building creative tab contents for: " + event.getTabKey());
+
+        if (event.getTab() == ModCreativeTabs.CIM_TECH_TAB.get()) {
+
+            event.accept(ModItems.CREATIVE_BATTERY);
+            event.accept(ModBlocks.MACHINE_BATTERY);
+            event.accept(ModBlocks.MACHINE_BATTERY_LITHIUM);
+            event.accept(ModBlocks.WIRE_COATED);
+            event.accept(ModBlocks.SWITCH);
+            event.accept(ModBlocks.CONVERTER_BLOCK);
+
+            List<RegistryObject<Item>> batteriesToAdd = List.of(
+                    ModItems.BATTERY,
+                    ModItems.BATTERY_ADVANCED,
+                    ModItems.BATTERY_LITHIUM,
+                    ModItems.BATTERY_TRIXITE
+            );
+
+            for (RegistryObject<Item> batteryRegObj : batteriesToAdd) {
+                Item item = batteryRegObj.get();
+                if (item instanceof ModBatteryItem batteryItem) {
+                    ItemStack emptyStack = new ItemStack(batteryItem);
+                    event.accept(emptyStack);
+                    ItemStack chargedStack = new ItemStack(batteryItem);
+                    ModBatteryItem.setEnergy(chargedStack, batteryItem.getCapacity());
+                    event.accept(chargedStack);
+                }
+            }
+        }
+
 
         if (event.getTab() == ModCreativeTabs.CIM_WEAPONS_TAB.get()) {
 

@@ -1,6 +1,11 @@
 {
   "values": [
+    "cim:machine_battery",
+    "cim:machine_battery_lithium",
     "cim:det_miner",
+    "cim:converter_block",
+    "cim:wire_coated",
+    "cim:switch",
     "cim:depth_worm_nest",
     "cim:hive_soil"
   ]

@@ -41,8 +41,18 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         // Пример ручной регистрации уникальных предметов
         // simpleItem(ModItems.NECROTIC_FRAGMENT);
+        simpleItem(ModItems.SCREWDRIVER);
         simpleItem(ModItems.RANGE_DETONATOR);
         simpleItem(ModItems.DEPTH_WORM_SPAWN_EGG);
+
+        simpleItem(ModItems.CREATIVE_BATTERY);
+        simpleItem(ModItems.BATTERY);
+        simpleItem(ModItems.BATTERY_ADVANCED);
+        simpleItem(ModItems.BATTERY_LITHIUM);
+        simpleItem(ModItems.BATTERY_TRIXITE);
+
+
+
         // Пример регистрации блоков как предметов (если это обычный куб)
         // complexBlockItem(ModBlocks.NECROTIC_ORE);
 

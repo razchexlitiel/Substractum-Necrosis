@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "cim:block/converter_block"
+    }
+  }
+}
