@@ -4,11 +4,11 @@
 Time: 2026-02-24 21:12:01
 Description: Unexpected error
 
-java.lang.NullPointerException: Registry Object not present: substractum:depth_worm_nest
+java.lang.NullPointerException: Registry Object not present: cim:depth_worm_nest
 	at java.util.Objects.requireNonNull(Objects.java:334) ~[?:?] {}
 	at net.minecraftforge.registries.RegistryObject.get(RegistryObject.java:204) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar:?] {re:classloading}
-	at razchexlitiel.substractum.block.entity.hive.DepthWormNestBlockEntity.<init>(DepthWormNestBlockEntity.java:31) ~[main/:?] {re:classloading}
-	at razchexlitiel.substractum.block.basic.hive.DepthWormNestBlock.newBlockEntity(DepthWormNestBlock.java:57) ~[main/:?] {re:classloading}
+	at razchexlitiel.cim.block.entity.hive.DepthWormNestBlockEntity.<init>(DepthWormNestBlockEntity.java:31) ~[main/:?] {re:classloading}
+	at razchexlitiel.cim.block.basic.hive.DepthWormNestBlock.newBlockEntity(DepthWormNestBlock.java:57) ~[main/:?] {re:classloading}
 	at net.minecraft.world.level.chunk.LevelChunk.setBlockState(LevelChunk.java:263) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar:?] {re:classloading}
 	at net.minecraft.world.level.Level.setBlock(Level.java:219) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar:?] {re:classloading,pl:accesstransformer:B}
 	at net.minecraft.client.multiplayer.ClientLevel.setBlock(ClientLevel.java:159) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
@@ -55,8 +55,8 @@ Thread: Render thread
 Stacktrace:
 	at java.util.Objects.requireNonNull(Objects.java:334) ~[?:?] {}
 	at net.minecraftforge.registries.RegistryObject.get(RegistryObject.java:204) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar%23190%23197!/:?] {re:classloading}
-	at razchexlitiel.substractum.block.entity.hive.DepthWormNestBlockEntity.<init>(DepthWormNestBlockEntity.java:31) ~[%23196!/:?] {re:classloading}
-	at razchexlitiel.substractum.block.basic.hive.DepthWormNestBlock.newBlockEntity(DepthWormNestBlock.java:57) ~[%23196!/:?] {re:classloading}
+	at razchexlitiel.cim.block.entity.hive.DepthWormNestBlockEntity.<init>(DepthWormNestBlockEntity.java:31) ~[%23196!/:?] {re:classloading}
+	at razchexlitiel.cim.block.basic.hive.DepthWormNestBlock.newBlockEntity(DepthWormNestBlock.java:57) ~[%23196!/:?] {re:classloading}
 	at net.minecraft.world.level.chunk.LevelChunk.setBlockState(LevelChunk.java:263) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar%23191!/:?] {re:classloading}
 	at net.minecraft.world.level.Level.setBlock(Level.java:219) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar%23191!/:?] {re:classloading,pl:accesstransformer:B}
 	at net.minecraft.client.multiplayer.ClientLevel.setBlock(ClientLevel.java:159) ~[forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar%23191!/:?] {re:classloading,pl:accesstransformer:B,pl:runtimedistcleaner:A}
@@ -160,7 +160,7 @@ Details:
 	CPU: 12x Intel(R) Core(TM) i5-10400F CPU @ 2.90GHz
 	Server Running: true
 	Player Count: 1 / 8; [ServerPlayer['Dev'/131, l='ServerLevel[Новый мир]', x=29.12, y=0.00, z=85.69]]
-	Data Packs: vanilla, mod:spark (incompatible), mod:forge, mod:geckolib, mod:substractum, mod:jei
+	Data Packs: vanilla, mod:spark (incompatible), mod:forge, mod:geckolib, mod:cim, mod:jei
 	Enabled Feature Flags: minecraft:vanilla
 	World Generation: Stable
 	ModLauncher: 10.0.9+10.0.9+main.dcd20f30
@@ -186,7 +186,7 @@ Details:
 		spark-1.10.53-forge_mapped_official_1.20.1.jar    |spark                         |spark                         |1.10.53             |DONE      |Manifest: NOSIGNATURE
 		                                                  |Forge                         |forge                         |47.2.0              |DONE      |Manifest: NOSIGNATURE
 		geckolib-forge-1.20.1-4.8.2_mapped_official_1.20.1|GeckoLib 4                    |geckolib                      |4.8.2               |DONE      |Manifest: NOSIGNATURE
-		main                                              |Substractum Necrosis          |substractum                   |0.0.1-alpha         |DONE      |Manifest: NOSIGNATURE
+		main                                              |Substractum Necrosis          |cim                   |0.0.1-alpha         |DONE      |Manifest: NOSIGNATURE
 		jei-1.20.1-forge-15.3.0.4_mapped_official_1.20.1.j|Just Enough Items             |jei                           |15.3.0.4            |DONE      |Manifest: NOSIGNATURE
 	Crash Report UUID: 1a91e118-85ef-494d-84ae-0d26d6c60835
 	FML: 47.2

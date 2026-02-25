@@ -179,7 +179,7 @@
     },
     "done": true
   },
-  "substractum:recipes/misc/det_miner": {
+  "cim:recipes/misc/det_miner": {
     "criteria": {
       "has_tnt": "2026-02-24 17:18:56 +0300"
     },

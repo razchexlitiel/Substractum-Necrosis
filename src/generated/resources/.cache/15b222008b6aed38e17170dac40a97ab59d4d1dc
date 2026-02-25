@@ -1,0 +1,10 @@
+// 1.20.1	2026-02-25T17:25:17.2388373	Block States: cim
+5380b818046e1c92436b806a3392340df06fd1c0 assets/cim/blockstates/depth_worm_nest.json
+4804e8d2ba21fd340ffb29296932ded82640e9f3 assets/cim/blockstates/det_miner.json
+83c1696f3c42d9d842ca2e50ffbe81f32f5d8023 assets/cim/blockstates/hive_soil.json
+569935b256eb51eeb952961ad9faf7da438f654c assets/cim/models/block/depth_worm_nest.json
+0c673f26c4bf109c04c09cca5154a69ef3f58143 assets/cim/models/block/det_miner.json
+f583f1655476f37d45ff4f90e142b93a60bd06aa assets/cim/models/block/hive_soil.json
+a7baf20560c9b2070ead37cbde39b406216dea1d assets/cim/models/item/depth_worm_nest.json
+cdf41327fc16b693d867c5b16bc9840013e7a290 assets/cim/models/item/det_miner.json
+3145df9bf321bf847a901631719764d686091aea assets/cim/models/item/hive_soil.json

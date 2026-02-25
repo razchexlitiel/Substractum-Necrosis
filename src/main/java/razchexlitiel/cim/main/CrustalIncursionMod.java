@@ -1,0 +1,103 @@
+package razchexlitiel.cim.main;
+
+import com.mojang.logging.LogUtils;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import org.slf4j.Logger;
+import razchexlitiel.cim.api.hive.HiveNetworkManagerProvider;
+import razchexlitiel.cim.block.basic.ModBlocks;
+import razchexlitiel.cim.block.entity.ModBlockEntities;
+import razchexlitiel.cim.capability.ModCapabilities;
+import razchexlitiel.cim.entity.ModEntities;
+import razchexlitiel.cim.entity.mobs.DepthWormEntity;
+import razchexlitiel.cim.network.ModPacketHandler;
+import razchexlitiel.cim.sound.ModSounds;
+import software.bernie.geckolib.GeckoLib;
+
+import razchexlitiel.cim.item.ModItems;
+
+@Mod(CrustalIncursionMod.MOD_ID)
+public class CrustalIncursionMod {
+    public static final String MOD_ID = "cim";
+    public static final Logger LOGGER = LogUtils.getLogger();
+
+    public CrustalIncursionMod() {
+        LOGGER.info("Initializing Crustal Incursion...");
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ModCreativeTabs.register(modEventBus);
+        GeckoLib.initialize();
+
+        ModBlocks.register(modEventBus); // 1. Сначала блоки
+        ModItems.ITEMS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        ModEntities.ENTITY_TYPES.register(modEventBus);
+        ModSounds.register(modEventBus);
+        modEventBus.addListener(this::entityAttributeEvent);
+        modEventBus.addListener(this::commonSetup);
+        MinecraftForge.EVENT_BUS.register(this);
+        modEventBus.addListener(this::addCreative);
+        registerCapabilities(modEventBus);
+    }
+    private void registerCapabilities(IEventBus modEventBus) {
+        modEventBus.addListener(ModCapabilities::register);
+    }
+
+    private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ModPacketHandler.register();
+        });
+    }
+
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        // Логгирование для отладки
+        LOGGER.info("Building creative tab contents for: " + event.getTabKey());
+
+        if (event.getTab() == ModCreativeTabs.CIM_WEAPONS_TAB.get()) {
+
+            event.accept(ModItems.RANGE_DETONATOR);
+            event.accept(ModBlocks.DET_MINER);
+            event.accept(ModItems.MACHINEGUN);
+            event.accept(ModItems.AMMO_TURRET);
+            event.accept(ModItems.AMMO_TURRET_HOLLOW);
+            event.accept(ModItems.AMMO_TURRET_PIERCING);
+            event.accept(ModItems.AMMO_TURRET_FIRE);
+            event.accept(ModItems.AMMO_TURRET_RADIO);
+
+        }
+        if (event.getTab() == ModCreativeTabs.CIM_NATURE_TAB.get()) {
+
+            event.accept(ModItems.DEPTH_WORM_SPAWN_EGG);
+            event.accept(ModBlocks.DEPTH_WORM_NEST);
+            event.accept(ModBlocks.HIVE_SOIL);
+
+        }
+
+
+
+
+    }
+
+    // Метод регистрации атрибутов (здоровье, урон и т.д.)
+    private void entityAttributeEvent(net.minecraftforge.event.entity.EntityAttributeCreationEvent event) {
+        event.put(ModEntities.DEPTH_WORM.get(), DepthWormEntity.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
+        // Проверка, чтобы не прикрепить дважды
+        if (!event.getObject().isClientSide) {
+            event.addCapability(new ResourceLocation("cim", "hive_network_manager"),
+                    new HiveNetworkManagerProvider());
+        }
+    }
+
+}

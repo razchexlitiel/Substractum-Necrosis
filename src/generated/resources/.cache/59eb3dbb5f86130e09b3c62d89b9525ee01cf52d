@@ -1,4 +1,4 @@
-// 1.20.1	2026-02-24T21:10:34.4812322	Loot Tables
-e7629ec7523fbd3a4b49beead983617493777b2e data/substractum/loot_tables/blocks/depth_worm_nest.json
-5731a27fc5acaf90c63aad85d261fc2cc455e6a0 data/substractum/loot_tables/blocks/det_miner.json
-6b8b9aa83a281aa141def31f242e50a4f267c012 data/substractum/loot_tables/blocks/hive_soil.json
+// 1.20.1	2026-02-25T17:25:17.2408497	Loot Tables
+3d5531d1e95a6c2464f4917b461195a3a2a9e2cf data/cim/loot_tables/blocks/depth_worm_nest.json
+1af1e99822e57bb3b0343b1e222e31f5f2c8cb38 data/cim/loot_tables/blocks/det_miner.json
+9403ff7c88926442c2f4ed849c6c886523dbe35f data/cim/loot_tables/blocks/hive_soil.json

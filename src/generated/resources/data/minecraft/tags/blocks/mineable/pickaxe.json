@@ -1,7 +1,7 @@
 {
   "values": [
-    "substractum:det_miner",
-    "substractum:depth_worm_nest",
-    "substractum:hive_soil"
+    "cim:det_miner",
+    "cim:depth_worm_nest",
+    "cim:hive_soil"
   ]
 }

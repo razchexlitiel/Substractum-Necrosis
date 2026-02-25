@@ -1,46 +1,46 @@
-[24февр.2026 21:49:49.510] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.2.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, substractum, --all, --output, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\main\resources, --mixin.config, mixins.substractum.json]
-[24февр.2026 21:49:49.515] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
-[24февр.2026 21:49:49.624] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[24февр.2026 21:49:49.675] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[24февр.2026 21:49:49.987] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.2.0\7f9181f85acc66547685a72020713fc8cbde98\javafmllanguage-1.20.1-47.2.0.jar is missing mods.toml file
-[24февр.2026 21:49:49.992] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.2.0\7872f5205685fdd26fae39b1be79b0e60ca5b7bd\lowcodelanguage-1.20.1-47.2.0.jar is missing mods.toml file
-[24февр.2026 21:49:49.997] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.2.0\d501d161cabed08b3c139a2c6217b02a39f3c3e9\mclanguage-1.20.1-47.2.0.jar is missing mods.toml file
-[24февр.2026 21:49:50.001] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.2.0\ffd3c6debac0a388c9e33ac43c9f5eafb91cb466\fmlcore-1.20.1-47.2.0.jar is missing mods.toml file
-[24февр.2026 21:49:50.204] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 1 dependencies adding them to mods collection
-[24февр.2026 21:49:51.358] [main/WARN] [mixin/]: Compatibility level JAVA_17 specified by mixins.substractum.json is higher than the maximum level supported by this version of mixin (JAVA_13).
-[24февр.2026 21:49:51.358] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[24февр.2026 21:49:51.367] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, substractum, --all, --output, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\main\resources]
-[24февр.2026 21:49:51.428] [main/INFO] [mixin/]: Attempting to load Fernflower decompiler (Threaded mode)
-[24февр.2026 21:49:51.429] [main/INFO] [mixin/]: Fernflower could not be loaded, exported classes will not be decompiled. NoClassDefFoundError: org/jetbrains/java/decompiler/main/extern/IResultSaver
-[24февр.2026 21:49:51.433] [main/INFO] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
-[24февр.2026 21:49:51.433] [main/INFO] [mixin/]: Selecting config mixins.substractum.json
-[24февр.2026 21:49:51.437] [main/INFO] [mixin/]: Selecting config geckolib.mixins.json
-[24февр.2026 21:49:51.699] [main/INFO] [mixin/]: Remapping refMap geckolib.refmap.json using C:\Users\Администратор\Desktop\Substractum-Necrosis/build/createSrgToMcp/output.srg
-[24февр.2026 21:49:51.700] [main/INFO] [mixin/]: Preparing mixins.substractum.json (0)
-[24февр.2026 21:49:51.700] [main/INFO] [mixin/]: Preparing geckolib.mixins.json (1)
-[24февр.2026 21:49:51.754] [main/INFO] [mixin/]: Prepared 1 mixins in 0,320 sec (320,0ms avg) (0ms load, 0ms transform, 0ms plugin)
-[24февр.2026 21:49:51.964] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [substractum]
-[24февр.2026 21:49:56.363] [modloading-worker-0/INFO] [razchexlitiel.substractum.main.SubstractumMod/]: Initializing Substractum Necrosis...
-[24февр.2026 21:49:56.386] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.2.0, for MC 1.20.1 with MCP 20230612.114412
-[24февр.2026 21:49:56.387] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.2.0 Initialized
-[24февр.2026 21:49:56.444] [modloading-worker-0/WARN] [software.bernie.geckolib.GeckoLib/]: Minecraft.getInstance() was null, could not register reload listeners
-[24февр.2026 21:49:56.514] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[24февр.2026 21:49:56.520] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 3.812 ms
-[24февр.2026 21:49:56.812] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[24февр.2026 21:49:56.812] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[24февр.2026 21:49:56.943] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: substractum
-[24февр.2026 21:49:56.956] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: substractum finished after 12 ms
-[24февр.2026 21:49:56.956] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: substractum
-[24февр.2026 21:49:57.112] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: substractum finished after 155 ms
-[24февр.2026 21:49:57.113] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: en_us
-[24февр.2026 21:49:57.113] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: en_us finished after 0 ms
-[24февр.2026 21:49:57.113] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: ru_ru
-[24февр.2026 21:49:57.114] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: ru_ru finished after 0 ms
-[24февр.2026 21:49:57.114] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id substractum
-[24февр.2026 21:49:57.197] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id substractum finished after 83 ms
-[24февр.2026 21:49:57.197] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[24февр.2026 21:49:57.227] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 30 ms
-[24февр.2026 21:49:57.228] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[24февр.2026 21:49:57.242] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 13 ms
-[24февр.2026 21:49:57.242] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 298 ms
-[24февр.2026 21:49:57.247] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 20, old count: 20, new count: 21, removed stale: 0, written: 0
+[25февр.2026 17:25:10.055] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Администратор\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.2.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, cim, --all, --output, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\main\resources, --mixin.config, mixins.cim.json]
+[25февр.2026 17:25:10.065] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[25февр.2026 17:25:10.165] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[25февр.2026 17:25:10.217] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Администратор/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[25февр.2026 17:25:10.518] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.2.0\7f9181f85acc66547685a72020713fc8cbde98\javafmllanguage-1.20.1-47.2.0.jar is missing mods.toml file
+[25февр.2026 17:25:10.518] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.2.0\7872f5205685fdd26fae39b1be79b0e60ca5b7bd\lowcodelanguage-1.20.1-47.2.0.jar is missing mods.toml file
+[25февр.2026 17:25:10.526] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.2.0\d501d161cabed08b3c139a2c6217b02a39f3c3e9\mclanguage-1.20.1-47.2.0.jar is missing mods.toml file
+[25февр.2026 17:25:10.528] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.2.0\ffd3c6debac0a388c9e33ac43c9f5eafb91cb466\fmlcore-1.20.1-47.2.0.jar is missing mods.toml file
+[25февр.2026 17:25:10.691] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 1 dependencies adding them to mods collection
+[25февр.2026 17:25:11.975] [main/WARN] [mixin/]: Compatibility level JAVA_17 specified by mixins.cim.json is higher than the maximum level supported by this version of mixin (JAVA_13).
+[25февр.2026 17:25:11.975] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[25февр.2026 17:25:11.979] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Администратор\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, cim, --all, --output, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Substractum-Necrosis\src\main\resources]
+[25февр.2026 17:25:12.045] [main/INFO] [mixin/]: Attempting to load Fernflower decompiler (Threaded mode)
+[25февр.2026 17:25:12.045] [main/INFO] [mixin/]: Fernflower could not be loaded, exported classes will not be decompiled. NoClassDefFoundError: org/jetbrains/java/decompiler/main/extern/IResultSaver
+[25февр.2026 17:25:12.049] [main/INFO] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
+[25февр.2026 17:25:12.049] [main/INFO] [mixin/]: Selecting config mixins.cim.json
+[25февр.2026 17:25:12.055] [main/INFO] [mixin/]: Selecting config geckolib.mixins.json
+[25февр.2026 17:25:12.355] [main/INFO] [mixin/]: Remapping refMap geckolib.refmap.json using C:\Users\Администратор\Desktop\Substractum-Necrosis/build/createSrgToMcp/output.srg
+[25февр.2026 17:25:12.355] [main/INFO] [mixin/]: Preparing mixins.cim.json (0)
+[25февр.2026 17:25:12.365] [main/INFO] [mixin/]: Preparing geckolib.mixins.json (1)
+[25февр.2026 17:25:12.405] [main/INFO] [mixin/]: Prepared 1 mixins in 0,356 sec (356,0ms avg) (0ms load, 0ms transform, 0ms plugin)
+[25февр.2026 17:25:12.609] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [cim]
+[25февр.2026 17:25:16.449] [modloading-worker-0/INFO] [razchexlitiel.cim.main.CrustalIncursionMod/]: Initializing Crustal Incursion...
+[25февр.2026 17:25:16.470] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.2.0, for MC 1.20.1 with MCP 20230612.114412
+[25февр.2026 17:25:16.470] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.2.0 Initialized
+[25февр.2026 17:25:16.520] [modloading-worker-0/WARN] [software.bernie.geckolib.GeckoLib/]: Minecraft.getInstance() was null, could not register reload listeners
+[25февр.2026 17:25:16.588] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[25февр.2026 17:25:16.588] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 3.804 ms
+[25февр.2026 17:25:16.865] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Администратор/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[25февр.2026 17:25:16.865] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Администратор/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[25февр.2026 17:25:17.017] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: cim
+[25февр.2026 17:25:17.055] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: cim finished after 34 ms
+[25февр.2026 17:25:17.055] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: cim
+[25февр.2026 17:25:17.165] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: cim finished after 113 ms
+[25февр.2026 17:25:17.165] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: en_us
+[25февр.2026 17:25:17.165] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: en_us finished after 1 ms
+[25февр.2026 17:25:17.165] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: ru_ru
+[25февр.2026 17:25:17.165] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: ru_ru finished after 1 ms
+[25февр.2026 17:25:17.165] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id cim
+[25февр.2026 17:25:17.185] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id cim finished after 12 ms
+[25февр.2026 17:25:17.185] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[25февр.2026 17:25:17.222] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 35 ms
+[25февр.2026 17:25:17.222] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[25февр.2026 17:25:17.238] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 15 ms
+[25февр.2026 17:25:17.238] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 217 ms
+[25февр.2026 17:25:17.258] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 41, old count: 7, new count: 21, removed stale: 21, written: 20

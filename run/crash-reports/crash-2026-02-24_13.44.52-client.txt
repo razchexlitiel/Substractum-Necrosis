@@ -294,7 +294,7 @@ Details:
 		spark-1.10.53-forge_mapped_official_1.20.1.jar    |spark                         |spark                         |1.10.53             |COMMON_SET|Manifest: NOSIGNATURE
 		                                                  |Forge                         |forge                         |47.2.0              |COMMON_SET|Manifest: NOSIGNATURE
 		geckolib-forge-1.20.1-4.8.2_mapped_official_1.20.1|GeckoLib 4                    |geckolib                      |4.8.2               |COMMON_SET|Manifest: NOSIGNATURE
-		main                                              |Substractum Necrosis          |substractum                   |0.0.1-alpha         |COMMON_SET|Manifest: NOSIGNATURE
+		main                                              |Substractum Necrosis          |cim                   |0.0.1-alpha         |COMMON_SET|Manifest: NOSIGNATURE
 		jei-1.20.1-forge-15.3.0.4_mapped_official_1.20.1.j|Just Enough Items             |jei                           |15.3.0.4            |COMMON_SET|Manifest: NOSIGNATURE
 	Crash Report UUID: 78373d23-3589-4d44-b1fd-8dbda62779e7
 	FML: 47.2
