@@ -91,6 +91,10 @@ repositories {
         name = "Jared's maven"
         url = "https://maven.blamejared.com"
     }
+    maven {
+        name = "TerraBlender"
+        url = 'https://maven.neoforged.net/releases'
+    }
 
 }
 
@@ -99,6 +103,8 @@ dependencies {
 
     // GeckoLib (обычно с ним проблем меньше)
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2')
+
+    implementation fg.deobf("com.github.glitchfiend:TerraBlender-forge:${terrablender_version}")
 
     // JEI через официальный Maven (Mezz)
     // Мы берем конкретную версию, которая ТОЧНО есть в репозитории
