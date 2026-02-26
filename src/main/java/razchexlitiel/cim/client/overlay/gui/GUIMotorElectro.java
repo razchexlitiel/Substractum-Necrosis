@@ -6,12 +6,13 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.menu.MotorElectroMenu;
 import razchexlitiel.cim.network.packet.PacketToggleMotor;
 import razchexlitiel.cim.network.packet.PacketToggleMotorMode;
 
 public class GUIMotorElectro extends AbstractContainerScreen<MotorElectroMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("cim", "textures/gui/machine/motor_electro_gui.png");
+    private static final ResourceLocation TEXTURE =  new ResourceLocation(CrustalIncursionMod.MOD_ID, "textures/gui/machine/motor_electro_gui.png");
 
     public GUIMotorElectro(MotorElectroMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);

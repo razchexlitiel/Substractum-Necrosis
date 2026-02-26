@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import razchexlitiel.cim.block.entity.ModBlockEntities;
@@ -21,6 +22,7 @@ import razchexlitiel.cim.client.loader.ProceduralWireLoader;
 import razchexlitiel.cim.client.overlay.gui.GUIMotorElectro;
 import razchexlitiel.cim.client.overlay.hud.OverlayAmmoHud;
 import razchexlitiel.cim.client.overlay.gui.GUIMachineBattery;
+import razchexlitiel.cim.client.renderer.ClientRenderHandler;
 import razchexlitiel.cim.config.ModConfigKeybindHandler;
 import razchexlitiel.cim.entity.ModEntities;
 import razchexlitiel.cim.main.CrustalIncursionMod;
@@ -31,10 +33,12 @@ public class ClientModEvents {
 
     @SubscribeEvent
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
+
+        MinecraftForge.EVENT_BUS.register(ClientRenderHandler.class);
+
+
         MenuScreens.register(ModMenuTypes.MACHINE_BATTERY_MENU.get(), GUIMachineBattery::new);
         MenuScreens.register(ModMenuTypes.MOTOR_ELECTRO_MENU.get(), GUIMotorElectro::new);
-
-
         BlockEntityRenderers.register(ModBlockEntities.MOTOR_ELECTRO_BE.get(), MotorElectroRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.SHAFT_IRON_BE.get(), ShaftIronRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.WIND_GEN_FLUGER_BE.get(), WindGenFlugerRenderer::new);
