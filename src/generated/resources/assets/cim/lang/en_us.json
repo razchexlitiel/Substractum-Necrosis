@@ -1,0 +1,7 @@
+{
+  "block.cim.det_miner": "Mining Charge",
+  "creativetab.snm_weapons_tab": "Substractum: Arsenal",
+  "item.cim.range_detonator": "Long-Range Detonator",
+  "tooltip.cim.detminer.line1": "Mines blocks in explosion radius",
+  "tooltip.cim.detminer.line2": "Completely harmless to entities"
+}

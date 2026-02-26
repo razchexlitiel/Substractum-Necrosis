@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "cim:block/machine_battery_lithium_front",
+    "particle": "cim:block/machine_battery_lithium_front",
+    "side": "cim:block/machine_battery_lithium_side",
+    "top": "cim:block/machine_battery_lithium_top"
+  }
+}

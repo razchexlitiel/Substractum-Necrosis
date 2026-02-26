@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "cim:block/det_miner",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cim:block/det_miner"
+    },
+    "facing=south": {
+      "model": "cim:block/det_miner",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "cim:block/det_miner",
+      "y": 270
+    }
+  }
+}

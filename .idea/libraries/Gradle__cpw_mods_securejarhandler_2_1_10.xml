@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: cpw.mods:securejarhandler:2.1.10" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="cpw.mods" artifactId="securejarhandler" version="2.1.10" baseVersion="2.1.10" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../.gradle/caches/modules-2/files-2.1/cpw.mods/securejarhandler/2.1.10/51e6a22c6c716beb11e244bf5b8be480f51dd6b5/securejarhandler-2.1.10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../../.gradle/caches/modules-2/files-2.1/cpw.mods/securejarhandler/2.1.10/96331802dca7d09fd109500a708200ae758ff412/securejarhandler-2.1.10-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

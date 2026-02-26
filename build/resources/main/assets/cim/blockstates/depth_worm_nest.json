@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "cim:block/depth_worm_nest"
+    }
+  }
+}

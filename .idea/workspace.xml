@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="dc24eee4-c096-4177-9855-5e5d23d56894" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Crustal-Incursion" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="3A6qWbOVZq5BDFAVF1IIsOKQHDb" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "Gradle.C:/Users/Администратор/Desktop/Crustal Incursion [createMcpToSrg].executor": "Run",
+    "Gradle.Crustal Incursion [createMcpToSrg].executor": "Run",
+    "Gradle.Substractum-Necrosis [createMcpToSrg].executor": "Run",
+    "Gradle.Substractum-Necrosis [genIntellijRuns].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Администратор/Desktop/Crustal Incursion/gradle/wrapper",
+    "onboarding.tips.debug.path": "C:/Users/Администратор/Desktop/Substractum-Necrosis/src/main/java/org/example/Main.java",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Администратор\Desktop\Crustal Incursion\gradle\wrapper" />
+      <recent name="C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources\assets\cim\models\item" />
+      <recent name="C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources\assets\cim\blockstates" />
+      <recent name="C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources\assets\cim\models\block" />
+      <recent name="C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources\assets\cim\textures\block" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Администратор\Desktop\Crustal Incursion" />
+      <recent name="C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources\assets\cim\textures\gui\" />
+      <recent name="C:\Users\Администратор\Desktop\Substractum-Necrosis\src\main\resources\assets\cim\blockstates" />
+      <recent name="C:\Users\Администратор\Desktop\Substractum-Necrosis\src\main\resources\assets\cim\textures\gui" />
+      <recent name="C:\Users\Администратор\Desktop\Substractum-Necrosis\src\main\resources\assets\substractum\textures\block\" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="razchexlitiel.cim.client.model" />
+      <recent name="razchexlitiel.cim.item.rotation" />
+      <recent name="razchexlitiel.cim.client.overlay.gui" />
+      <recent name="razchexlitiel.cim.menu" />
+      <recent name="razchexlitiel.cim.network.packet" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Crustal Incursion" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="genIntellijRuns" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.Crustal Incursion" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="dc24eee4-c096-4177-9855-5e5d23d56894" name="Changes" comment="" />
+      <created>1771923404425</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1771923404425</updated>
+    </task>
+    <servers />
+  </component>
+</project>

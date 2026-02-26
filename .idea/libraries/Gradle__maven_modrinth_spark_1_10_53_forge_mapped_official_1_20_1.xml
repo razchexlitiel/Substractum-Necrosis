@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: maven.modrinth:spark:1.10.53-forge_mapped_official_1.20.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="maven.modrinth" artifactId="spark" version="1.10.53-forge_mapped_official_1.20.1" baseVersion="1.10.53-forge_mapped_official_1.20.1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../../.gradle/caches/forge_gradle/deobf_dependencies/maven/modrinth/spark/1.10.53-forge_mapped_official_1.20.1/spark-1.10.53-forge_mapped_official_1.20.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

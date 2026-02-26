@@ -1,0 +1,17 @@
+// 1.20.1	2026-02-26T18:21:18.8012937	Loot Tables
+c9d6f786e3b5a1cf0e441b7b973aed1fff051799 data/cim/loot_tables/blocks/adder.json
+7d3490f0e01ce46d11011716827adf65096c8dd1 data/cim/loot_tables/blocks/converter_block.json
+3d5531d1e95a6c2464f4917b461195a3a2a9e2cf data/cim/loot_tables/blocks/depth_worm_nest.json
+1af1e99822e57bb3b0343b1e222e31f5f2c8cb38 data/cim/loot_tables/blocks/det_miner.json
+4ee1b228069b3112616dae6d70df71bf07f17e59 data/cim/loot_tables/blocks/gear_port.json
+9403ff7c88926442c2f4ed849c6c886523dbe35f data/cim/loot_tables/blocks/hive_soil.json
+5d465e7f086df14299b9a566265ef30275144a39 data/cim/loot_tables/blocks/machine_battery.json
+5f7d0f84c8b630edc0841d55be27af48a0f14127 data/cim/loot_tables/blocks/machine_battery_lithium.json
+466b9dc54a421b89a61b5b777db39ffe39213e9f data/cim/loot_tables/blocks/motor_electro.json
+95817545728d1e0c49089590bb364c47f4cc6cef data/cim/loot_tables/blocks/rotation_meter.json
+59190c2db97d298acdebbf05ba0c39d52f5f6c7c data/cim/loot_tables/blocks/shaft_iron.json
+a22ed2f64be6bca1f96c51dc25cf78b199e49ac0 data/cim/loot_tables/blocks/stopper.json
+ebaf834566abf96241fb59427bcc9c1a0acd8f43 data/cim/loot_tables/blocks/switch.json
+cf2e24b188c98c55fec03f97fbecde9ef7037f14 data/cim/loot_tables/blocks/tachometer.json
+5696f058413b5eb20bc15e98cea8d4136ee3c380 data/cim/loot_tables/blocks/wind_gen_fluger.json
+5faf438f04e9b2cf90faff3a10c1b86fb091fdd3 data/cim/loot_tables/blocks/wire_coated.json

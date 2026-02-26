@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Specification-Title: substractum
+Specification-Vendor: Razchexlitiel
+Specification-Version: 1
+Implementation-Title: Substractum-Necrosis
+Implementation-Version: 0.0.1-alpha
+Implementation-Vendor: Razchexlitiel
+Implementation-Timestamp: 2026-02-24T14:40:17+0300
+MixinConfigs: mixins.substractum.json
+
