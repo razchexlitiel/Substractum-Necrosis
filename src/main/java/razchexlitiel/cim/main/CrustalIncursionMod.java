@@ -23,6 +23,7 @@ import razchexlitiel.cim.api.hive.HiveNetworkManagerProvider;
 import razchexlitiel.cim.block.basic.ModBlocks;
 import razchexlitiel.cim.block.entity.ModBlockEntities;
 import razchexlitiel.cim.capability.ModCapabilities;
+import razchexlitiel.cim.client.config.ModConfigKeybindHandler;
 import razchexlitiel.cim.entity.ModEntities;
 import razchexlitiel.cim.entity.mobs.DepthWormEntity;
 import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;

@@ -1,4 +1,4 @@
-package razchexlitiel.cim.client;
+package razchexlitiel.cim.client.config;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;

@@ -1,49 +1,46 @@
-[26февр.2026 18:21:10.591] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Администратор\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.2.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, cim, --all, --output, C:\Users\Администратор\Desktop\Crustal Incursion\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources, --mixin.config, mixins.cim.json]
-[26февр.2026 18:21:10.596] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
-[26февр.2026 18:21:10.686] [main/WARN] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Configuration file C:\Users\Администратор\Desktop\Crustal Incursion\run-data\config\fml.toml is not correct. Correcting
-[26февр.2026 18:21:10.688] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
-[26февр.2026 18:21:10.689] [main/INFO] [net.minecraftforge.fml.loading.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false
-[26февр.2026 18:21:10.709] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[26февр.2026 18:21:10.761] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Администратор/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[26февр.2026 18:21:11.139] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.2.0\7f9181f85acc66547685a72020713fc8cbde98\javafmllanguage-1.20.1-47.2.0.jar is missing mods.toml file
-[26февр.2026 18:21:11.142] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.2.0\7872f5205685fdd26fae39b1be79b0e60ca5b7bd\lowcodelanguage-1.20.1-47.2.0.jar is missing mods.toml file
-[26февр.2026 18:21:11.146] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.2.0\d501d161cabed08b3c139a2c6217b02a39f3c3e9\mclanguage-1.20.1-47.2.0.jar is missing mods.toml file
-[26февр.2026 18:21:11.149] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.2.0\ffd3c6debac0a388c9e33ac43c9f5eafb91cb466\fmlcore-1.20.1-47.2.0.jar is missing mods.toml file
-[26февр.2026 18:21:11.398] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 1 dependencies adding them to mods collection
-[26февр.2026 18:21:12.800] [main/WARN] [mixin/]: Compatibility level JAVA_17 specified by mixins.cim.json is higher than the maximum level supported by this version of mixin (JAVA_13).
-[26февр.2026 18:21:12.801] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
-[26февр.2026 18:21:12.809] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Администратор\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, cim, --all, --output, C:\Users\Администратор\Desktop\Crustal Incursion\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources]
-[26февр.2026 18:21:12.873] [main/INFO] [mixin/]: Attempting to load Fernflower decompiler (Threaded mode)
-[26февр.2026 18:21:12.875] [main/INFO] [mixin/]: Fernflower could not be loaded, exported classes will not be decompiled. NoClassDefFoundError: org/jetbrains/java/decompiler/main/extern/IResultSaver
-[26февр.2026 18:21:12.879] [main/INFO] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
-[26февр.2026 18:21:12.879] [main/INFO] [mixin/]: Selecting config mixins.cim.json
-[26февр.2026 18:21:12.882] [main/INFO] [mixin/]: Selecting config geckolib.mixins.json
-[26февр.2026 18:21:13.127] [main/INFO] [mixin/]: Remapping refMap geckolib.refmap.json using C:\Users\Администратор\Desktop\Crustal Incursion/build/createSrgToMcp/output.srg
-[26февр.2026 18:21:13.128] [main/INFO] [mixin/]: Preparing mixins.cim.json (0)
-[26февр.2026 18:21:13.129] [main/INFO] [mixin/]: Preparing geckolib.mixins.json (1)
-[26февр.2026 18:21:13.188] [main/INFO] [mixin/]: Prepared 1 mixins in 0,308 sec (308,0ms avg) (0ms load, 0ms transform, 0ms plugin)
-[26февр.2026 18:21:13.419] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [cim]
-[26февр.2026 18:21:17.695] [modloading-worker-0/INFO] [razchexlitiel.cim.main.CrustalIncursionMod/]: Initializing Crustal Incursion...
-[26февр.2026 18:21:17.717] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.2.0, for MC 1.20.1 with MCP 20230612.114412
-[26февр.2026 18:21:17.717] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.2.0 Initialized
-[26февр.2026 18:21:17.784] [modloading-worker-0/WARN] [software.bernie.geckolib.GeckoLib/]: Minecraft.getInstance() was null, could not register reload listeners
-[26февр.2026 18:21:17.873] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[26февр.2026 18:21:17.883] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 5.871 ms
-[26февр.2026 18:21:18.320] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Администратор/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[26февр.2026 18:21:18.320] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Администратор/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[26февр.2026 18:21:18.543] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: cim
-[26февр.2026 18:21:18.561] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: cim finished after 17 ms
-[26февр.2026 18:21:18.561] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: cim
-[26февр.2026 18:21:18.696] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: cim finished after 134 ms
-[26февр.2026 18:21:18.696] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: en_us
-[26февр.2026 18:21:18.698] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: en_us finished after 1 ms
-[26февр.2026 18:21:18.698] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: ru_ru
-[26февр.2026 18:21:18.700] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: ru_ru finished after 1 ms
-[26февр.2026 18:21:18.700] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id cim
-[26февр.2026 18:21:18.715] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id cim finished after 15 ms
-[26февр.2026 18:21:18.716] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
-[26февр.2026 18:21:18.764] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 49 ms
-[26февр.2026 18:21:18.766] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
-[26февр.2026 18:21:18.795] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 29 ms
-[26февр.2026 18:21:18.796] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 252 ms
-[26февр.2026 18:21:18.818] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 56, old count: 0, new count: 57, removed stale: 0, written: 56
+[26февр.2026 20:06:42.999] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\Администратор\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.2.0, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, cim, --all, --output, C:\Users\Администратор\Desktop\Crustal Incursion\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources, --mixin.config, mixins.cim.json]
+[26февр.2026 20:06:43.002] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.12 by Oracle Corporation; OS Windows 11 arch amd64 version 10.0
+[26февр.2026 20:06:43.096] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[26февр.2026 20:06:43.136] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/Администратор/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[26февр.2026 20:06:43.474] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.2.0\7f9181f85acc66547685a72020713fc8cbde98\javafmllanguage-1.20.1-47.2.0.jar is missing mods.toml file
+[26февр.2026 20:06:43.476] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.2.0\7872f5205685fdd26fae39b1be79b0e60ca5b7bd\lowcodelanguage-1.20.1-47.2.0.jar is missing mods.toml file
+[26февр.2026 20:06:43.480] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.2.0\d501d161cabed08b3c139a2c6217b02a39f3c3e9\mclanguage-1.20.1-47.2.0.jar is missing mods.toml file
+[26февр.2026 20:06:43.484] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\Администратор\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.2.0\ffd3c6debac0a388c9e33ac43c9f5eafb91cb466\fmlcore-1.20.1-47.2.0.jar is missing mods.toml file
+[26февр.2026 20:06:43.626] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: Found 1 dependencies adding them to mods collection
+[26февр.2026 20:06:44.968] [main/WARN] [mixin/]: Compatibility level JAVA_17 specified by mixins.cim.json is higher than the maximum level supported by this version of mixin (JAVA_13).
+[26февр.2026 20:06:44.968] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[26февр.2026 20:06:44.976] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\Администратор\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, cim, --all, --output, C:\Users\Администратор\Desktop\Crustal Incursion\src\generated\resources, --existing, C:\Users\Администратор\Desktop\Crustal Incursion\src\main\resources]
+[26февр.2026 20:06:45.036] [main/INFO] [mixin/]: Attempting to load Fernflower decompiler (Threaded mode)
+[26февр.2026 20:06:45.039] [main/INFO] [mixin/]: Fernflower could not be loaded, exported classes will not be decompiled. NoClassDefFoundError: org/jetbrains/java/decompiler/main/extern/IResultSaver
+[26февр.2026 20:06:45.044] [main/INFO] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
+[26февр.2026 20:06:45.044] [main/INFO] [mixin/]: Selecting config mixins.cim.json
+[26февр.2026 20:06:45.047] [main/INFO] [mixin/]: Selecting config geckolib.mixins.json
+[26февр.2026 20:06:45.297] [main/INFO] [mixin/]: Remapping refMap geckolib.refmap.json using C:\Users\Администратор\Desktop\Crustal Incursion/build/createSrgToMcp/output.srg
+[26февр.2026 20:06:45.297] [main/INFO] [mixin/]: Preparing mixins.cim.json (0)
+[26февр.2026 20:06:45.297] [main/INFO] [mixin/]: Preparing geckolib.mixins.json (1)
+[26февр.2026 20:06:45.356] [main/INFO] [mixin/]: Prepared 1 mixins in 0,312 sec (312,0ms avg) (0ms load, 0ms transform, 0ms plugin)
+[26февр.2026 20:06:45.562] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [cim]
+[26февр.2026 20:06:49.808] [modloading-worker-0/INFO] [razchexlitiel.cim.main.CrustalIncursionMod/]: Initializing Crustal Incursion...
+[26февр.2026 20:06:49.826] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.2.0, for MC 1.20.1 with MCP 20230612.114412
+[26февр.2026 20:06:49.828] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.2.0 Initialized
+[26февр.2026 20:06:49.885] [modloading-worker-0/WARN] [software.bernie.geckolib.GeckoLib/]: Minecraft.getInstance() was null, could not register reload listeners
+[26февр.2026 20:06:49.957] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[26февр.2026 20:06:49.963] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 4.211 ms
+[26февр.2026 20:06:50.293] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Администратор/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[26февр.2026 20:06:50.293] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/Администратор/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.2.0_mapped_official_1.20.1/forge-1.20.1-47.2.0_mapped_official_1.20.1.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[26февр.2026 20:06:50.446] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: cim
+[26февр.2026 20:06:50.461] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: cim finished after 14 ms
+[26февр.2026 20:06:50.461] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: cim
+[26февр.2026 20:06:50.570] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: cim finished after 108 ms
+[26февр.2026 20:06:50.571] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: en_us
+[26февр.2026 20:06:50.572] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: en_us finished after 0 ms
+[26февр.2026 20:06:50.572] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Languages: ru_ru
+[26февр.2026 20:06:50.572] [main/INFO] [net.minecraft.data.DataGenerator/]: Languages: ru_ru finished after 0 ms
+[26февр.2026 20:06:50.572] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id cim
+[26февр.2026 20:06:50.596] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id cim finished after 23 ms
+[26февр.2026 20:06:50.596] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Loot Tables
+[26февр.2026 20:06:50.630] [main/INFO] [net.minecraft.data.DataGenerator/]: Loot Tables finished after 33 ms
+[26февр.2026 20:06:50.630] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Recipes
+[26февр.2026 20:06:50.645] [main/INFO] [net.minecraft.data.DataGenerator/]: Recipes finished after 14 ms
+[26февр.2026 20:06:50.645] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 198 ms
+[26февр.2026 20:06:50.653] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 56, old count: 56, new count: 57, removed stale: 0, written: 0
