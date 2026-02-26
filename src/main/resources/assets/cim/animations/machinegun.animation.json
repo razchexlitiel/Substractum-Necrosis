@@ -451,16 +451,16 @@
 			},
 			"sound_effects": {
 				"0.4583": {
-					"effect": "cim:reload/gunpull",
+					"effect": "cim:gunpull",
 					"locator": "gunpull",
 					"bind_to_actor": false
 				},
 				"3.6667": {
-					"effect": "cim:reload/heavy_gunclick",
+					"effect": "cim:heavy_gunclick",
 					"locator": "heavy_gunclick"
 				},
 				"4.625": {
-					"effect": "cim:reload/gunclick",
+					"effect": "cim:gunclick",
 					"locator": "gunclick"
 				}
 			}
@@ -603,16 +603,16 @@
 			},
 			"sound_effects": {
 				"0.4167": {
-					"effect": "cim:reload/gunpull",
+					"effect": "cim:gunpull",
 					"locator": "gunpull",
 					"bind_to_actor": false
 				},
 				"3.6667": {
-					"effect": "cim:reload/heavy_gunclick",
+					"effect": "cim:heavy_gunclick",
 					"locator": "heavy_gunclick"
 				},
 				"4.625": {
-					"effect": "cim:reload/gunclick",
+					"effect": "cim:gunclick",
 					"locator": "gunclick"
 				}
 			}

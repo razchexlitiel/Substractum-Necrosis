@@ -1,4 +1,4 @@
-package razchexlitiel.cim.client;
+package razchexlitiel.cim.client.handler;
 
 
 import net.minecraft.client.Minecraft;

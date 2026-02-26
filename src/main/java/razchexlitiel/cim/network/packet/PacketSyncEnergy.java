@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
+import razchexlitiel.cim.client.handler.ClientEnergySyncHandler;
 
 import java.util.function.Supplier;
 
@@ -40,7 +41,7 @@ public class PacketSyncEnergy {
         ctx.get().enqueueWork(() -> {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
                 // Вызываем обновленный хендлер
-                razchexlitiel.cim.client.ClientEnergySyncHandler.handle(
+                ClientEnergySyncHandler.handle(
                         msg.containerId,
                         msg.energy,
                         msg.maxEnergy,
