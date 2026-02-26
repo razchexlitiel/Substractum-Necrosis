@@ -71,7 +71,7 @@ public class HiveNetwork {
         wormCounts.merge(nestPos, delta, Integer::sum);
     }
 
-    // для сериализации
+    
     public CompoundTag toNBT() {
         CompoundTag tag = new CompoundTag();
         tag.putUUID("Id", id);
