@@ -31,7 +31,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import razchexlitiel.cim.client.ModKeyBindings;
-import razchexlitiel.cim.client.gecko.guns.MachineGunRenderer;
+import razchexlitiel.cim.client.gecko.item.guns.MachineGunRenderer;
 import razchexlitiel.cim.entity.weapons.bullets.TurretBulletEntity;
 import razchexlitiel.cim.item.tags.AmmoRegistry;
 import razchexlitiel.cim.main.CrustalIncursionMod;

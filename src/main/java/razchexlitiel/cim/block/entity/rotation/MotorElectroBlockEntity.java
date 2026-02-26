@@ -1,0 +1,304 @@
+package razchexlitiel.cim.block.entity.rotation;
+
+import razchexlitiel.cim.api.energy.IEnergyConnector;
+import razchexlitiel.cim.api.energy.IEnergyReceiver;
+import razchexlitiel.cim.api.energy.LongEnergyWrapper;
+import razchexlitiel.cim.api.rotation.RotationNetworkHelper;
+import razchexlitiel.cim.api.rotation.RotationSource;
+import razchexlitiel.cim.api.rotation.Rotational;
+import razchexlitiel.cim.api.rotation.RotationalNode;
+import razchexlitiel.cim.block.basic.rotation.MotorElectroBlock;
+import razchexlitiel.cim.block.entity.ModBlockEntities;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
+import org.jetbrains.annotations.Nullable;
+import razchexlitiel.cim.capability.ModCapabilities;
+import software.bernie.geckolib.animatable.GeoBlockEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
+
+public class MotorElectroBlockEntity extends BlockEntity implements
+        GeoBlockEntity, Rotational, RotationalNode, IEnergyReceiver, IEnergyConnector {
+
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+// ========== Стандартные методы IEnergyReceiver ==========
+
+    @Override
+    public IEnergyReceiver.Priority getPriority() {
+        return IEnergyReceiver.Priority.NORMAL;
+    }
+
+
+    private long speed = 0;
+    private long torque = 0;
+    private static final long MAX_SPEED = 100;
+    private static final long MAX_TORQUE = 50;
+
+    private RotationSource cachedSource;
+    private long cacheTimestamp;
+    private static final long CACHE_LIFETIME = 10;
+
+    private float currentAnimationSpeed = 0f;
+    private static final float ACCELERATION = 0.1f;
+    private static final float DECELERATION = 0.05f;
+    private static final int STOP_DELAY_TICKS = 5;
+    private static final float MIN_ANIM_SPEED = 0.01f;
+    private int ticksWithoutPower = 0;
+
+    private long energyStored = 0;
+    private final long MAX_ENERGY = 50000;
+    private final long MAX_RECEIVE = 1000;
+    private final long ENERGY_PER_TICK = 25; // 500 / 20
+
+    private boolean isGeneratorMode = false;
+    private long lastReceivedRotation = 0;
+    private static final double GEN_EFFICIENCY = 0.75;
+
+    private boolean isSwitchedOn = false;
+    private int bootTimer = 0;
+
+    private final LazyOptional<IEnergyReceiver> hbmReceiverOptional = LazyOptional.of(() -> this);
+    private final LazyOptional<IEnergyConnector> hbmConnectorOptional = LazyOptional.of(() -> this);
+    private final LazyOptional<IEnergyStorage> forgeEnergyOptional = LazyOptional.of(() -> new LongEnergyWrapper(this, LongEnergyWrapper.BitMode.LOW));
+
+    public MotorElectroBlockEntity(BlockPos pos, BlockState state) {
+        super(ModBlockEntities.MOTOR_ELECTRO_BE.get(), pos, state);
+    }
+
+    // ========== Управление ==========
+
+    public void togglePower() {
+        this.isSwitchedOn = !this.isSwitchedOn;
+        if (this.isSwitchedOn) {
+            this.bootTimer = 60;
+        } else {
+            stopMotor();
+        }
+        updateState();
+    }
+
+    public void toggleGeneratorMode() {
+        this.isGeneratorMode = !this.isGeneratorMode;
+        stopMotor();
+        this.lastReceivedRotation = 0;
+        updateState();
+    }
+
+    private void updateState() {
+        setChanged();
+        sync();
+        // Критически важно для Create: уведомляем сеть об изменениях источника
+        invalidateNeighborCaches();
+    }
+
+    private void stopMotor() {
+        this.speed = 0;
+        this.torque = 0;
+        this.bootTimer = 0;
+    }
+
+    // ========== Тик (Логика) ==========
+
+    public static void tick(Level level, BlockPos pos, BlockState state, MotorElectroBlockEntity be) {
+        if (level.isClientSide) return;
+
+        if (!be.isSwitchedOn) {
+            if (be.speed != 0) {
+                be.stopMotor();
+                be.updateState();
+            }
+            be.lastReceivedRotation = 0;
+            return;
+        }
+
+        if (be.isGeneratorMode) {
+            be.speed = 0;
+            be.torque = 0;
+
+            RotationSource src = RotationNetworkHelper.findSource(be, null);
+            if (src != null && src.speed() > 0) {
+                be.lastReceivedRotation = Math.abs(src.speed() * src.torque());
+                long generated = (long) ((be.lastReceivedRotation / 20.0) * GEN_EFFICIENCY);
+                be.energyStored = Math.min(be.MAX_ENERGY, be.energyStored + generated);
+            } else {
+                be.lastReceivedRotation = 0;
+            }
+
+            if (be.energyStored > 0) be.pushEnergyToNeighbors();
+        } else {
+            // Режим МОТОРА
+            if (be.bootTimer > 0) {
+                be.bootTimer--;
+                return;
+            }
+
+            if (be.energyStored >= be.ENERGY_PER_TICK) {
+                be.energyStored -= be.ENERGY_PER_TICK;
+                if (be.speed != MAX_SPEED) {
+                    be.speed = MAX_SPEED;
+                    be.torque = MAX_TORQUE;
+                    be.updateState();
+                }
+            } else {
+                // Энергия кончилась — плавно выключаемся, чтобы не стопорить валы
+                be.stopMotor();
+                be.updateState();
+            }
+        }
+    }
+
+    private void pushEnergyToNeighbors() {
+        for (Direction dir : Direction.values()) {
+            if (this.energyStored <= 0) break;
+            BlockEntity neighbor = level.getBlockEntity(worldPosition.relative(dir));
+            if (neighbor != null) {
+                neighbor.getCapability(ModCapabilities.ENERGY_RECEIVER, dir.getOpposite()).ifPresent(receiver -> {
+                    long toPush = Math.min(this.energyStored, 1000);
+                    long accepted = receiver.receiveEnergy(toPush, false);
+                    this.energyStored -= accepted;
+                    if (accepted > 0) setChanged();
+                });
+            }
+        }
+    }
+
+    // ========== Rotational Node (Связь с Create) ==========
+
+    @Override
+    public boolean canProvideSource(@Nullable Direction fromDir) {
+        // Мы источник только если: ВКЛ + МОТОР + ЕСТЬ ЭНЕРГИЯ + ЛИЦЕВАЯ СТОРОНА
+        boolean canWork = isSwitchedOn && !isGeneratorMode && energyStored > 0 && bootTimer <= 0;
+        return canWork && fromDir == getBlockState().getValue(MotorElectroBlock.FACING);
+    }
+
+    @Override
+    public void invalidateCache() {
+        // Оставляем пустым или вызываем обновление, если мотор зависит от других источников
+    }
+
+    private void invalidateNeighborCaches() {
+        if (level == null || level.isClientSide) return;
+        for (Direction dir : Direction.values()) {
+            BlockEntity neighbor = level.getBlockEntity(worldPosition.relative(dir));
+            if (neighbor instanceof RotationalNode node) {
+                node.invalidateCache();
+            }
+        }
+    }
+
+    // ========== Стандартные методы ==========
+
+    @Override public long getEnergyStored() { return energyStored; }
+    @Override public long getMaxEnergyStored() { return MAX_ENERGY; }
+    @Override public void setEnergyStored(long energy) { this.energyStored = Math.max(0, Math.min(energy, MAX_ENERGY)); setChanged(); }
+    @Override public long getReceiveSpeed() { return MAX_RECEIVE; }
+    @Override public boolean canReceive() { return !isGeneratorMode && energyStored < MAX_ENERGY; }
+    @Override public boolean canConnectEnergy(Direction side) { return side == getBlockState().getValue(MotorElectroBlock.FACING).getOpposite(); }
+
+    @Override
+    public long receiveEnergy(long maxReceive, boolean simulate) {
+        if (!canReceive()) return 0;
+        long energyReceived = Math.min(MAX_ENERGY - energyStored, Math.min(MAX_RECEIVE, maxReceive));
+        if (!simulate && energyReceived > 0) {
+            energyStored += energyReceived;
+            setChanged();
+        }
+        return energyReceived;
+    }
+
+    @Override public long getSpeed() { return speed; }
+    @Override public long getTorque() { return torque; }
+    @Override public void setSpeed(long speed) { this.speed = Math.min(speed, MAX_SPEED); updateState(); }
+    @Override public void setTorque(long torque) { this.torque = Math.min(torque, MAX_TORQUE); updateState(); }
+    @Override public long getMaxSpeed() { return MAX_SPEED; }
+    @Override public long getMaxTorque() { return MAX_TORQUE; }
+
+    @Override public @Nullable RotationSource getCachedSource() { return cachedSource; }
+    @Override public void setCachedSource(@Nullable RotationSource source, long gameTime) { this.cachedSource = source; this.cacheTimestamp = gameTime; }
+    @Override public boolean isCacheValid(long currentTime) { return cachedSource != null && (currentTime - cacheTimestamp) <= CACHE_LIFETIME; }
+
+    @Override
+    public Direction[] getPropagationDirections(@Nullable Direction fromDir) {
+        return new Direction[]{getBlockState().getValue(MotorElectroBlock.FACING)};
+    }
+
+    @Override
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        isGeneratorMode = tag.getBoolean("IsGeneratorMode");
+        energyStored = tag.getLong("Energy");
+        isSwitchedOn = tag.getBoolean("IsSwitchedOn");
+        speed = tag.getLong("Speed");
+        torque = tag.getLong("Torque");
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+        tag.putBoolean("IsGeneratorMode", isGeneratorMode);
+        tag.putLong("Energy", energyStored);
+        tag.putBoolean("IsSwitchedOn", isSwitchedOn);
+        tag.putLong("Speed", speed);
+        tag.putLong("Torque", torque);
+    }
+
+    private void sync() {
+        if (level != null && !level.isClientSide) {
+            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
+        }
+    }
+
+    @Override public CompoundTag getUpdateTag() { return saveWithoutMetadata(); }
+    @Override public Packet<ClientGamePacketListener> getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
+
+    protected final ContainerData data = new ContainerData() {
+        @Override
+        public int get(int index) {
+            return switch (index) {
+                case 0 -> (int) Math.min(energyStored, Integer.MAX_VALUE);
+                case 1 -> (int) Math.min(MAX_ENERGY, Integer.MAX_VALUE);
+                case 2 -> isSwitchedOn ? 1 : 0;
+                case 3 -> bootTimer;
+                case 4 -> (int) Math.min(isGeneratorMode ? lastReceivedRotation : speed * torque, 100000);
+                case 5 -> isGeneratorMode ? 1 : 0;
+                default -> 0;
+            };
+        }
+        @Override
+        public void set(int index, int value) {
+            switch (index) {
+                case 0 -> energyStored = value;
+                case 2 -> isSwitchedOn = value == 1;
+                case 3 -> bootTimer = value;
+                case 5 -> isGeneratorMode = value == 1;
+            }
+        }
+        @Override public int getCount() { return 6; }
+    };
+
+    public ContainerData getDataAccess() { return data; }
+
+    @Override public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
+    @Override public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "rotation", 5, state -> {
+            if (isSwitchedOn && (isGeneratorMode ? lastReceivedRotation > 0 : speed > 0)) {
+                return state.setAndContinue(RawAnimation.begin().thenLoop("rotation"));
+            }
+            return PlayState.STOP;
+        }));
+    }
+}

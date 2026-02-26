@@ -90,6 +90,16 @@ public class CrustalIncursionMod {
 
         if (event.getTab() == ModCreativeTabs.CIM_TECH_TAB.get()) {
 
+            event.accept(ModItems.SCREWDRIVER.get());
+            event.accept(ModBlocks.SHAFT_IRON);
+            event.accept(ModBlocks.MOTOR_ELECTRO);
+            event.accept(ModBlocks.WIND_GEN_FLUGER);
+            event.accept(ModBlocks.GEAR_PORT);
+            event.accept(ModBlocks.ADDER);
+            event.accept(ModBlocks.STOPPER);
+            event.accept(ModBlocks.TACHOMETER);
+            event.accept(ModBlocks.ROTATION_METER);
+
             event.accept(ModItems.CREATIVE_BATTERY);
             event.accept(ModBlocks.MACHINE_BATTERY);
             event.accept(ModBlocks.MACHINE_BATTERY_LITHIUM);
