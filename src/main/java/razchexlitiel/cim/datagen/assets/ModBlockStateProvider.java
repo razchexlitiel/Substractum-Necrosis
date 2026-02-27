@@ -25,6 +25,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
 
         //СТАТИЧНИЫЕ БЛОКИ
+
+        cubeAllWithItem(ModBlocks.SEQUOIA_BARK);
+        cubeAllWithItem(ModBlocks.SEQUOIA_HEARTWOOD);
+
         cubeAllWithItem(ModBlocks.DEPTH_WORM_NEST);
         cubeAllWithItem(ModBlocks.HIVE_SOIL);
         cubeAllWithItem(ModBlocks.SWITCH);
