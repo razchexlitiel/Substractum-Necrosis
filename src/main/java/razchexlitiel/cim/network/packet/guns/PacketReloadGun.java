@@ -1,4 +1,5 @@
-package razchexlitiel.cim.network.packet;
+// PacketReloadGun.java
+package razchexlitiel.cim.network.packet.guns;
 
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,11 +10,9 @@ import razchexlitiel.cim.item.guns.MachineGunItem;
 
 import java.util.function.Supplier;
 
-public class PacketUnloadGun {
-
-    public PacketUnloadGun() {}
-
-    public PacketUnloadGun(FriendlyByteBuf buf) {}
+public class PacketReloadGun {
+    public PacketReloadGun() {}
+    public PacketReloadGun(FriendlyByteBuf buf) {}
 
     public void toBytes(FriendlyByteBuf buf) {}
 
@@ -24,8 +23,8 @@ public class PacketUnloadGun {
             if (player != null) {
                 ItemStack stack = player.getMainHandItem();
                 if (stack.getItem() instanceof MachineGunItem gun) {
-                    gun.unloadGun(player, stack); // Вызываем метод разрядки
-                    player.inventoryMenu.broadcastChanges(); // Обновляем инвентарь на клиенте
+                    gun.reloadGun(player, stack);
+                    player.inventoryMenu.broadcastChanges();
                 }
             }
         });

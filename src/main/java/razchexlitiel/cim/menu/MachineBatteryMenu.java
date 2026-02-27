@@ -18,7 +18,7 @@ import razchexlitiel.cim.api.energy.ILongEnergyMenu;
 import razchexlitiel.cim.block.basic.energy.MachineBatteryBlock;
 import razchexlitiel.cim.block.entity.energy.MachineBatteryBlockEntity;
 import razchexlitiel.cim.network.ModPacketHandler;
-import razchexlitiel.cim.network.packet.PacketSyncEnergy;
+import razchexlitiel.cim.network.packet.energy.PacketSyncEnergy;
 
 import java.util.Optional;
 

@@ -51,7 +51,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.BATTERY_LITHIUM);
         simpleItem(ModItems.BATTERY_TRIXITE);
 
-
+        simpleItem(ModItems.TURRET_CHIP);
+        simpleItem(ModItems.TURRET_LIGHT_CREATIVE_PLACER);
 
         // Пример регистрации блоков как предметов (если это обычный куб)
         // complexBlockItem(ModBlocks.NECROTIC_ORE);
