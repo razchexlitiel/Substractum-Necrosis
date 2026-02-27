@@ -22,7 +22,9 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.RegistryObject;
+import razchexlitiel.cim.block.entity.weapons.TurretLightPlacerBlockEntity;
 import razchexlitiel.cim.entity.ModEntities;
+import razchexlitiel.cim.entity.weapons.turrets.TurretLightLinkedEntity;
 import razchexlitiel.cim.item.tags.AmmoRegistry;
 import razchexlitiel.cim.sound.ModSounds;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -547,12 +549,15 @@ public class TurretBulletEntity extends AbstractArrow implements GeoEntity, IEnt
         }
     }
 
-    // --- Метод для засчитывания фрага ---
     private void checkAndCountKill(LivingEntity target) {
-        // Если цель умерла или при смерти
         if (target.isDeadOrDying()) {
             Entity owner = this.getOwner();
-
+            if (owner instanceof TurretLightLinkedEntity turret) {
+                net.minecraft.core.BlockPos pos = turret.getParentBlock();
+                if (pos != null && this.level().getBlockEntity(pos) instanceof TurretLightPlacerBlockEntity be) {
+                    be.incrementKills();
+                }
+            }
         }
     }
 

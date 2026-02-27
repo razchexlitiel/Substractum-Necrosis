@@ -26,6 +26,7 @@ import razchexlitiel.cim.capability.ModCapabilities;
 import razchexlitiel.cim.client.config.ModConfigKeybindHandler;
 import razchexlitiel.cim.entity.ModEntities;
 import razchexlitiel.cim.entity.mobs.DepthWormEntity;
+import razchexlitiel.cim.entity.weapons.turrets.TurretLightEntity;
 import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;
 import razchexlitiel.cim.menu.ModMenuTypes;
 import razchexlitiel.cim.network.ModPacketHandler;
@@ -132,7 +133,10 @@ public class CrustalIncursionMod {
 
             event.accept(ModItems.RANGE_DETONATOR);
             event.accept(ModBlocks.DET_MINER);
+            event.accept(ModItems.TURRET_CHIP);
+            event.accept(ModItems.TURRET_LIGHT_CREATIVE_PLACER);
             event.accept(ModItems.MACHINEGUN);
+            event.accept(ModBlocks.TURRET_LIGHT_PLACER);
             event.accept(ModItems.AMMO_TURRET);
             event.accept(ModItems.AMMO_TURRET_HOLLOW);
             event.accept(ModItems.AMMO_TURRET_PIERCING);
@@ -147,15 +151,13 @@ public class CrustalIncursionMod {
             event.accept(ModBlocks.HIVE_SOIL);
 
         }
-
-
-
-
     }
 
     // Метод регистрации атрибутов (здоровье, урон и т.д.)
     private void entityAttributeEvent(net.minecraftforge.event.entity.EntityAttributeCreationEvent event) {
         event.put(ModEntities.DEPTH_WORM.get(), DepthWormEntity.createAttributes().build());
+        event.put(ModEntities.TURRET_LIGHT.get(), TurretLightEntity.createAttributes().build());
+        event.put(ModEntities.TURRET_LIGHT_LINKED.get(), TurretLightEntity.createAttributes().build());
     }
 
     @SubscribeEvent

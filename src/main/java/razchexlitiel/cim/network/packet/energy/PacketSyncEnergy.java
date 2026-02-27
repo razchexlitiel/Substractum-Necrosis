@@ -1,4 +1,4 @@
-package razchexlitiel.cim.network.packet;
+package razchexlitiel.cim.network.packet.energy;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

@@ -3,7 +3,7 @@ package razchexlitiel.cim.client.config;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import razchexlitiel.cim.network.ModPacketHandler;
-import razchexlitiel.cim.network.packet.PacketUnloadGun;
+import razchexlitiel.cim.network.packet.guns.PacketUnloadGun;
 
 // УДАЛИЛИ АННОТАЦИЮ @Mod.EventBusSubscriber
 public class ModConfigKeybindHandler {

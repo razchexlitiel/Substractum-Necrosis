@@ -1,4 +1,4 @@
-package razchexlitiel.cim.network.packet;
+package razchexlitiel.cim.network.packet.energy;
 
 
 import net.minecraft.core.BlockPos;

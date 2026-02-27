@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.menu.MachineBatteryMenu;
 import razchexlitiel.cim.network.ModPacketHandler;
-import razchexlitiel.cim.network.packet.UpdateBatteryC2SPacket;
+import razchexlitiel.cim.network.packet.energy.UpdateBatteryC2SPacket;
 import razchexlitiel.cim.util.EnergyFormatter;
 
 import java.util.ArrayList;
