@@ -2,13 +2,14 @@ package razchexlitiel.cim.block.basic;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import razchexlitiel.cim.block.basic.direction.FullOBlock;
 import razchexlitiel.cim.block.basic.energy.ConverterBlock;
 import razchexlitiel.cim.block.basic.energy.MachineBatteryBlock;
 import razchexlitiel.cim.block.basic.energy.SwitchBlock;
