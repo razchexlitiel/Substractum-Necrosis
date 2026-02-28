@@ -206,6 +206,9 @@ public class CrustalIncursionMod {
             event.accept(ModItems.DEPTH_WORM_SPAWN_EGG);
             event.accept(ModBlocks.DEPTH_WORM_NEST);
             event.accept(ModBlocks.HIVE_SOIL);
+            event.accept(ModBlocks.SEQUOIA_PLANKS.get());
+            event.accept(ModBlocks.SEQUOIA_BARK.get());
+            event.accept(ModBlocks.SEQUOIA_HEARTWOOD.get());
             event.accept(ModBlocks.WASTE_LOG.get());
             event.accept(ModBlocks.NECROSIS_TEST.get());
 
