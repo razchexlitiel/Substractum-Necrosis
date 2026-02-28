@@ -23,7 +23,6 @@ import razchexlitiel.cim.api.hive.HiveNetworkManagerProvider;
 import razchexlitiel.cim.block.basic.ModBlocks;
 import razchexlitiel.cim.block.entity.ModBlockEntities;
 import razchexlitiel.cim.capability.ModCapabilities;
-import razchexlitiel.cim.client.config.ModConfigKeybindHandler;
 import razchexlitiel.cim.entity.ModEntities;
 import razchexlitiel.cim.entity.mobs.DepthWormEntity;
 import razchexlitiel.cim.entity.weapons.turrets.TurretLightEntity;
@@ -32,9 +31,13 @@ import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;
 import razchexlitiel.cim.menu.ModMenuTypes;
 import razchexlitiel.cim.network.ModPacketHandler;
 import razchexlitiel.cim.sound.ModSounds;
+import razchexlitiel.cim.worldgen.biome.terrablender.ModOverworldRegion;
+import razchexlitiel.cim.worldgen.tree.custom.ModFoliagePlacerTypes;
+import razchexlitiel.cim.worldgen.tree.custom.ModTrunkPlacerTypes;
 import software.bernie.geckolib.GeckoLib;
 
 import razchexlitiel.cim.item.ModItems;
+import terrablender.api.Regions;
 
 import java.util.List;
 
@@ -62,6 +65,9 @@ public class CrustalIncursionMod {
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
         registerCapabilities(modEventBus);
+        ModTrunkPlacerTypes.register(modEventBus);
+        ModFoliagePlacerTypes.register(modEventBus);
+
     }
     private void registerCapabilities(IEventBus modEventBus) {
         modEventBus.addListener(ModCapabilities::register);
@@ -70,6 +76,7 @@ public class CrustalIncursionMod {
     private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             ModPacketHandler.register();
+            Regions.register(new ModOverworldRegion(new ResourceLocation(MOD_ID, "overworld"), 5));
         });
     }
 
