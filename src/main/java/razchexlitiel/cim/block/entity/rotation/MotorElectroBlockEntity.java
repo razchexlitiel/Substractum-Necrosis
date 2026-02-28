@@ -1,14 +1,5 @@
 package razchexlitiel.cim.block.entity.rotation;
 
-import razchexlitiel.cim.api.energy.IEnergyConnector;
-import razchexlitiel.cim.api.energy.IEnergyReceiver;
-import razchexlitiel.cim.api.energy.LongEnergyWrapper;
-import razchexlitiel.cim.api.rotation.RotationNetworkHelper;
-import razchexlitiel.cim.api.rotation.RotationSource;
-import razchexlitiel.cim.api.rotation.Rotational;
-import razchexlitiel.cim.api.rotation.RotationalNode;
-import razchexlitiel.cim.block.basic.rotation.MotorElectroBlock;
-import razchexlitiel.cim.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,9 +10,20 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import razchexlitiel.cim.api.energy.IEnergyConnector;
+import razchexlitiel.cim.api.energy.IEnergyReceiver;
+import razchexlitiel.cim.api.energy.LongEnergyWrapper;
+import razchexlitiel.cim.api.rotation.RotationNetworkHelper;
+import razchexlitiel.cim.api.rotation.RotationSource;
+import razchexlitiel.cim.api.rotation.Rotational;
+import razchexlitiel.cim.api.rotation.RotationalNode;
+import razchexlitiel.cim.block.basic.rotation.MotorElectroBlock;
+import razchexlitiel.cim.block.entity.ModBlockEntities;
 import razchexlitiel.cim.capability.ModCapabilities;
 import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -35,13 +37,12 @@ public class MotorElectroBlockEntity extends BlockEntity implements
         GeoBlockEntity, Rotational, RotationalNode, IEnergyReceiver, IEnergyConnector {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-// ========== Стандартные методы IEnergyReceiver ==========
 
+    // ========== Стандартные методы IEnergyReceiver ==========
     @Override
     public IEnergyReceiver.Priority getPriority() {
         return IEnergyReceiver.Priority.NORMAL;
     }
-
 
     private long speed = 0;
     private long torque = 0;
@@ -72,7 +73,7 @@ public class MotorElectroBlockEntity extends BlockEntity implements
     private int bootTimer = 0;
 
     private final LazyOptional<IEnergyReceiver> hbmReceiverOptional = LazyOptional.of(() -> this);
-    private final LazyOptional<IEnergyConnector> hbmConnectorOptional = LazyOptional.of(() -> this);
+    private final LazyOptional<IEnergyConnector> hbmConnectorOptional = LazyOptional.of(() -> this); // <-- добавлено
     private final LazyOptional<IEnergyStorage> forgeEnergyOptional = LazyOptional.of(() -> new LongEnergyWrapper(this, LongEnergyWrapper.BitMode.LOW));
 
     public MotorElectroBlockEntity(BlockPos pos, BlockState state) {
@@ -101,7 +102,6 @@ public class MotorElectroBlockEntity extends BlockEntity implements
     private void updateState() {
         setChanged();
         sync();
-        // Критически важно для Create: уведомляем сеть об изменениях источника
         invalidateNeighborCaches();
     }
 
@@ -109,6 +109,10 @@ public class MotorElectroBlockEntity extends BlockEntity implements
         this.speed = 0;
         this.torque = 0;
         this.bootTimer = 0;
+        // Принудительно уведомить соседей об остановке
+        if (level != null && !level.isClientSide) {
+            invalidateNeighborCaches();
+        }
     }
 
     // ========== Тик (Логика) ==========
@@ -180,7 +184,6 @@ public class MotorElectroBlockEntity extends BlockEntity implements
 
     @Override
     public boolean canProvideSource(@Nullable Direction fromDir) {
-        // Мы источник только если: ВКЛ + МОТОР + ЕСТЬ ЭНЕРГИЯ + ЛИЦЕВАЯ СТОРОНА
         boolean canWork = isSwitchedOn && !isGeneratorMode && energyStored > 0 && bootTimer <= 0;
         return canWork && fromDir == getBlockState().getValue(MotorElectroBlock.FACING);
     }
@@ -207,7 +210,12 @@ public class MotorElectroBlockEntity extends BlockEntity implements
     @Override public void setEnergyStored(long energy) { this.energyStored = Math.max(0, Math.min(energy, MAX_ENERGY)); setChanged(); }
     @Override public long getReceiveSpeed() { return MAX_RECEIVE; }
     @Override public boolean canReceive() { return !isGeneratorMode && energyStored < MAX_ENERGY; }
-    @Override public boolean canConnectEnergy(Direction side) { return side == getBlockState().getValue(MotorElectroBlock.FACING).getOpposite(); }
+
+    // ИСПРАВЛЕНО: Разрешаем подключение со всех сторон, кроме лицевой
+    @Override
+    public boolean canConnectEnergy(Direction side) {
+        return side != getBlockState().getValue(MotorElectroBlock.FACING);
+    }
 
     @Override
     public long receiveEnergy(long maxReceive, boolean simulate) {
@@ -235,6 +243,39 @@ public class MotorElectroBlockEntity extends BlockEntity implements
     public Direction[] getPropagationDirections(@Nullable Direction fromDir) {
         return new Direction[]{getBlockState().getValue(MotorElectroBlock.FACING)};
     }
+
+    // ========== Capabilities ==========
+
+    @Override
+    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        // Проверка на энергетические capabilities
+        if (cap == ModCapabilities.ENERGY_RECEIVER || cap == ModCapabilities.ENERGY_CONNECTOR) {
+            // Возвращаем capability только если сторона разрешена (или side == null для внутренних вызовов)
+            if (side == null || canConnectEnergy(side)) {
+                if (cap == ModCapabilities.ENERGY_RECEIVER) {
+                    return hbmReceiverOptional.cast();
+                } else {
+                    return hbmConnectorOptional.cast();
+                }
+            } else {
+                return LazyOptional.empty();
+            }
+        }
+        if (cap == net.minecraftforge.common.capabilities.ForgeCapabilities.ENERGY) {
+            return forgeEnergyOptional.cast();
+        }
+        return super.getCapability(cap, side);
+    }
+
+    @Override
+    public void invalidateCaps() {
+        super.invalidateCaps();
+        hbmReceiverOptional.invalidate();
+        hbmConnectorOptional.invalidate();
+        forgeEnergyOptional.invalidate();
+    }
+
+    // ========== NBT и синхронизация ==========
 
     @Override
     public void load(CompoundTag tag) {
@@ -265,6 +306,8 @@ public class MotorElectroBlockEntity extends BlockEntity implements
     @Override public CompoundTag getUpdateTag() { return saveWithoutMetadata(); }
     @Override public Packet<ClientGamePacketListener> getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
 
+    // ========== GUI Data ==========
+
     protected final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
@@ -291,6 +334,8 @@ public class MotorElectroBlockEntity extends BlockEntity implements
     };
 
     public ContainerData getDataAccess() { return data; }
+
+    // ========== GeckoLib ==========
 
     @Override public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
     @Override public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {

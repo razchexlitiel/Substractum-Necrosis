@@ -14,7 +14,8 @@ public class DepthWormJumpGoal extends Goal {
     private final double speedModifier;
     private final float jumpRangeMin, jumpRangeMax;
     private int jumpTimer;
-    private final int PREPARE_TIME = 30; // 1.5 сек
+    private boolean jumpPerformed;         // новый флаг
+    private final int PREPARE_TIME = 30;
 
     public DepthWormJumpGoal(DepthWormEntity worm, double speedModifier, float jumpRangeMin, float jumpRangeMax) {
         this.worm = worm;
@@ -33,62 +34,73 @@ public class DepthWormJumpGoal extends Goal {
     }
 
     @Override
-    public boolean canContinueToUse() { return this.canUse() || this.jumpTimer > 0; }
+    public boolean canContinueToUse() {
+        // продолжаем, пока не выполнили прыжок и таймер ещё идёт
+        return !jumpPerformed && jumpTimer > 0;
+    }
 
     @Override
     public void start() {
-        this.jumpTimer = 30; // 1.5 сек
-        this.worm.setAttacking(true); // Открывает рот
+        this.jumpTimer = PREPARE_TIME;
+        this.jumpPerformed = false;
+        this.worm.setAttacking(true);
         this.worm.getNavigation().stop();
-        // Принудительно посылаем пакет на клиент, чтобы обновить флаги
         this.worm.hasImpulse = true;
     }
-
-
-
 
     @Override
     public void stop() {
         this.target = null;
         this.worm.setAttacking(false);
+        this.jumpPerformed = false;
     }
 
     @Override
     public void tick() {
         if (this.target == null || !this.target.isAlive()) {
+            // цель умерла – прерываем гол
             this.worm.setAttacking(false);
+            this.jumpTimer = 0;
+            this.jumpPerformed = true;  // чтобы гол завершился
             return;
         }
-        double dist = this.worm.distanceTo(this.target);
 
+        double dist = this.worm.distanceTo(this.target);
         if (dist > this.jumpRangeMax + 2.0F) {
             this.worm.setAttacking(false);
             this.jumpTimer = 0;
+            this.jumpPerformed = true;
             return;
         }
 
         this.worm.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 
-        if (--this.jumpTimer <= 0) {
+        if (--this.jumpTimer <= 0 && !jumpPerformed) {
             doJump();
-            // ВНИМАНИЕ: setAttacking(false) ТЕПЕРЬ УДАЛЕН ОТСЮДА!
-            // Он сработает либо в stop(), либо при ударе в классе Entity.
+            jumpPerformed = true;
             this.worm.ignoreFallDamageTicks = 30;
+            // после прыжка гол завершится на следующем тике (canContinueToUse → false)
         }
     }
 
     private void doJump() {
         Vec3 targetPos = this.target.position().add(0, this.target.getBbHeight() * 0.5, 0);
-        Vec3 jumpVector = targetPos.subtract(this.worm.position());
-        double horizontalDist = Math.sqrt(jumpVector.x * jumpVector.x + jumpVector.z * jumpVector.z);
+        Vec3 toTarget = targetPos.subtract(this.worm.position());
+
+        // Поворачиваем червя мордой к цели
+        double yaw = Math.atan2(toTarget.z, toTarget.x) * (180 / Math.PI) - 90;
+        this.worm.setYRot((float) yaw);
+        this.worm.yHeadRot = (float) yaw;
+        this.worm.yBodyRot = (float) yaw;
+        this.worm.getLookControl().setLookAt(targetPos.x, targetPos.y, targetPos.z, 30.0F, 30.0F);
+
+        double horizontalDist = Math.sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
         double speed = 0.8 + (horizontalDist * 0.1);
-        Vec3 velocity = jumpVector.normalize().scale(speed);
+        Vec3 velocity = toTarget.normalize().scale(speed);
         double verticalBoost = 0.15 + (horizontalDist * 0.04);
         this.worm.setDeltaMovement(velocity.x, verticalBoost, velocity.z);
         this.worm.setFlying(true);
-        this.worm.setAttacking(false);   // <-- добавить
+        this.worm.ignoreFallDamageTicks = 30;
     }
-
-
 
 }

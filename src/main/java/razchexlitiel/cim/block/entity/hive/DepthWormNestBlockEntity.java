@@ -1,6 +1,5 @@
 package razchexlitiel.cim.block.entity.hive;
 
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import razchexlitiel.cim.api.hive.HiveNetworkManager;
 import razchexlitiel.cim.api.hive.HiveNetworkMember;
 import razchexlitiel.cim.block.entity.ModBlockEntities;
@@ -25,13 +25,11 @@ import java.util.UUID;
 public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetworkMember {
     private UUID networkId;
     private final List<CompoundTag> storedWorms = new ArrayList<>();
-    private int releaseCooldown = 0;
 
     public DepthWormNestBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DEPTH_WORM_NEST.get(), pos, state);
     }
 
-    // === HiveNetworkMember ===
     @Override
     public UUID getNetworkId() {
         return networkId;
@@ -44,8 +42,9 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
     }
 
     public boolean isFull() {
-        return storedWorms.size() >= 3; // лимит только по количеству червей
+        return storedWorms.size() >= 3;
     }
+
     public void addWorm(DepthWormEntity worm) {
         if (isFull()) return;
         CompoundTag tag = new CompoundTag();
@@ -68,19 +67,31 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
     public static void tick(Level level, BlockPos pos, BlockState state, DepthWormNestBlockEntity blockEntity) {
         if (level.isClientSide) return;
 
-        if (blockEntity.releaseCooldown > 0) blockEntity.releaseCooldown--;
-
         if (level.getGameTime() % 20 == 0 && !blockEntity.storedWorms.isEmpty()) {
-            boolean hasEnemy = !level.getEntitiesOfClass(LivingEntity.class,
-                    new AABB(pos).inflate(10), // было 20
-                    e -> e.isAlive() && e.deathTime <= 0 &&
-                            !(e instanceof DepthWormEntity) &&
-                            !(e instanceof Player p && (p.isCreative() || p.isSpectator()))
-            ).isEmpty();
+            AABB searchArea = new AABB(pos).inflate(10);
+            List<LivingEntity> enemies = level.getEntitiesOfClass(LivingEntity.class, searchArea,
+                    e -> e.isAlive() && e.deathTime <= 0 && !(e instanceof DepthWormEntity) &&
+                            !(e instanceof Player p && (p.isCreative() || p.isSpectator())));
 
-            if (hasEnemy && blockEntity.releaseCooldown <= 0) {
-                blockEntity.releaseWormsAndNotify();
-                blockEntity.releaseCooldown = 400;
+            if (!enemies.isEmpty()) {
+                LivingEntity target = enemies.get(0);
+                Vec3 targetPos = target.position();
+
+                HiveNetworkManager manager = HiveNetworkManager.get(level);
+                if (manager != null && blockEntity.networkId != null) {
+                    BlockPos spawnNode = manager.findNearestNode(blockEntity.networkId, targetPos, level);
+                    if (spawnNode != null) {
+                        blockEntity.releaseWorms(spawnNode, target);
+                    } else {
+                        blockEntity.releaseWorms(blockEntity.worldPosition, target);
+                    }
+                } else {
+                    blockEntity.releaseWorms(blockEntity.worldPosition, target);
+                }
+
+                if (blockEntity.networkId != null) {
+                    manager.updateWormCount(blockEntity.networkId, blockEntity.worldPosition, -blockEntity.storedWorms.size());
+                }
             }
         }
     }
@@ -91,55 +102,71 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
             HiveNetworkManager manager = HiveNetworkManager.get(level);
             if (manager != null) manager.updateWormCount(networkId, worldPosition, -count);
         }
-        releaseWorms();
+        releaseWorms(this.worldPosition, null);
     }
 
-    public void releaseWorms() {
+    private BlockPos findSpawnPos(BlockPos center) {
+        // Проверяем шесть направлений
+        for (Direction dir : Direction.values()) {
+            BlockPos relative = center.relative(dir);
+            if (level.getBlockState(relative).isAir()) {
+                return relative;
+            }
+        }
+        // Ищем в радиусе 2 блоков
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -2; y <= 2; y++) {
+                for (int z = -2; z <= 2; z++) {
+                    if (x == 0 && y == 0 && z == 0) continue;
+                    BlockPos check = center.offset(x, y, z);
+                    if (level.getBlockState(check).isAir()) {
+                        return check;
+                    }
+                }
+            }
+        }
+        // Ищем вверх до 10 блоков
+        for (int y = 1; y <= 10; y++) {
+            BlockPos above = center.above(y);
+            if (level.getBlockState(above).isAir()) {
+                return above;
+            }
+        }
+        // Ничего не нашли — спавним прямо в блоке
+        return center;
+    }
+
+    public void releaseWorms(BlockPos spawnPos, LivingEntity target) {
         if (this.level == null || this.level.isClientSide) return;
-
-        // ВАЖНО: Получаем ID сущности из вашего ModEntities (замените на свой, если он другой)
-
         String entityId = "cim:depth_worm";
 
         for (CompoundTag wormTag : this.storedWorms) {
-            // 1. Добавляем ID типа сущности, иначе loadEntityRecursive вернет null
             wormTag.putString("id", entityId);
-
-            // 2. Очищаем старый UUID, чтобы не было конфликтов при спавне
             wormTag.remove("UUID");
             wormTag.remove("UUIDMost");
             wormTag.remove("UUIDLeast");
 
             Entity entity = EntityType.loadEntityRecursive(wormTag, level, (e) -> {
-                // Устанавливаем позицию (центр блока, где было гнездо)
-                BlockPos spawnPos = findSpawnPos(this.worldPosition);
-                e.moveTo(spawnPos.getX() + 0.5, spawnPos.getY(), spawnPos.getZ() + 0.5,
+                BlockPos actualSpawn = findSpawnPos(spawnPos);
+                e.moveTo(actualSpawn.getX() + 0.5, actualSpawn.getY(), actualSpawn.getZ() + 0.5,
                         level.random.nextFloat() * 360F, 0);
-
-                // Генерируем абсолютно новый UUID для "новой" жизни червя
                 e.setUUID(UUID.randomUUID());
 
+                if (e instanceof DepthWormEntity worm) {
+                    worm.setHomePos(actualSpawn);
+                    if (target != null) {
+                        worm.setTarget(target);
+                    }
+                }
                 return e;
             });
 
             if (entity != null) {
-                // Добавляем в мир
                 level.addFreshEntity(entity);
             }
         }
-
         this.storedWorms.clear();
         this.setChanged();
-    }
-
-    private BlockPos findSpawnPos(BlockPos nestPos) {
-        for (Direction direction : Direction.values()) {
-            BlockPos relative = nestPos.relative(direction);
-            if (level.getBlockState(relative).isAir()) {
-                return relative;
-            }
-        }
-        return nestPos.above();
     }
 
     @Override
@@ -151,22 +178,15 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
         tag.put("StoredWorms", list);
     }
 
-    // В классе DepthWormNestBlockEntity
-    // В DepthWormNestBlockEntity
     @Override
     public void onLoad() {
         super.onLoad();
         if (this.level != null && !this.level.isClientSide) {
             if (this.networkId == null) {
-                this.networkId = UUID.randomUUID(); // Ядро генерирует ID
+                this.networkId = UUID.randomUUID();
                 this.setChanged();
             }
-            // Обязательно регистрируем ядро в менеджере!
             HiveNetworkManager.get(this.level).addNode(this.networkId, this.worldPosition);
         }
     }
-
-
-
-
 }
