@@ -35,7 +35,9 @@ public class ModItems {
 
     //ИНСТРУМЕНТЫ
     public static final RegistryObject<Item> SCREWDRIVER = ITEMS.register("screwdriver",
-            () -> new ScrewdriverItem(new Item.Properties().stacksTo(1).durability(256))); // Прочность как у железных инструментов
+            () -> new ScrewdriverItem(new Item.Properties().stacksTo(1).durability(256)));
+    public static final RegistryObject<Item> CROWBAR = ITEMS.register("crowbar",
+            () -> new Item(new Item.Properties().stacksTo(1).durability(256)));// Прочность как у железных инструментов
     public static final RegistryObject<Item> RANGE_DETONATOR = ITEMS.register("range_detonator",
             () -> new RangeDetonatorItem(new Item.Properties()));
     public static final RegistryObject<Item> MULTI_DETONATOR = ITEMS.register("multi_detonator",

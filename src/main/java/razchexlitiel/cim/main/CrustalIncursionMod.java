@@ -27,6 +27,7 @@ import razchexlitiel.cim.client.config.ModConfigKeybindHandler;
 import razchexlitiel.cim.entity.ModEntities;
 import razchexlitiel.cim.entity.mobs.DepthWormEntity;
 import razchexlitiel.cim.entity.weapons.turrets.TurretLightEntity;
+import razchexlitiel.cim.event.CrateBreaker;
 import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;
 import razchexlitiel.cim.menu.ModMenuTypes;
 import razchexlitiel.cim.network.ModPacketHandler;
@@ -52,6 +53,7 @@ public class CrustalIncursionMod {
         ModBlocks.register(modEventBus); // 1. Сначала блоки
         ModItems.ITEMS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(new CrateBreaker());
         ModEntities.ENTITY_TYPES.register(modEventBus);
         ModSounds.register(modEventBus);
         ModMenuTypes.MENUS.register(modEventBus);
@@ -90,9 +92,47 @@ public class CrustalIncursionMod {
         // Логгирование для отладки
         LOGGER.info("Building creative tab contents for: " + event.getTabKey());
 
+        if (event.getTab() == ModCreativeTabs.CIM_BUILD_TAB.get()) {
+            // Concrete (обычный)
+            event.accept(ModBlocks.CONCRETE.get());
+            event.accept(ModBlocks.CONCRETE_SLAB.get());
+            event.accept(ModBlocks.CONCRETE_STAIRS.get());
+
+            // Concrete Red
+            event.accept(ModBlocks.CONCRETE_RED.get());
+            event.accept(ModBlocks.CONCRETE_RED_SLAB.get());
+            event.accept(ModBlocks.CONCRETE_RED_STAIRS.get());
+
+            // Concrete Blue
+            event.accept(ModBlocks.CONCRETE_BLUE.get());
+            event.accept(ModBlocks.CONCRETE_BLUE_SLAB.get());
+            event.accept(ModBlocks.CONCRETE_BLUE_STAIRS.get());
+
+            // Concrete Green
+            event.accept(ModBlocks.CONCRETE_GREEN.get());
+            event.accept(ModBlocks.CONCRETE_GREEN_SLAB.get());
+            event.accept(ModBlocks.CONCRETE_GREEN_STAIRS.get());
+
+            // Concrete Hazard New
+            event.accept(ModBlocks.CONCRETE_HAZARD_NEW.get());
+            event.accept(ModBlocks.CONCRETE_HAZARD_NEW_SLAB.get());
+            event.accept(ModBlocks.CONCRETE_HAZARD_NEW_STAIRS.get());
+
+            // Concrete Hazard Old
+            event.accept(ModBlocks.CONCRETE_HAZARD_OLD.get());
+            event.accept(ModBlocks.CONCRETE_HAZARD_OLD_SLAB.get());
+            event.accept(ModBlocks.CONCRETE_HAZARD_OLD_STAIRS.get());
+
+            // Другие строительные блоки
+            event.accept(ModBlocks.CRATE.get());
+            event.accept(ModBlocks.CRATE_AMMO.get());
+            event.accept(ModBlocks.WASTE_LOG.get());
+        }
+
+
         if (event.getTab() == ModCreativeTabs.CIM_TECH_TAB.get()) {
 
-            event.accept(ModItems.SCREWDRIVER.get());
+
             event.accept(ModBlocks.SHAFT_IRON);
             event.accept(ModBlocks.MOTOR_ELECTRO);
             event.accept(ModBlocks.WIND_GEN_FLUGER);
@@ -131,9 +171,6 @@ public class CrustalIncursionMod {
 
         if (event.getTab() == ModCreativeTabs.CIM_WEAPONS_TAB.get()) {
 
-            event.accept(ModItems.DETONATOR);
-            event.accept(ModItems.MULTI_DETONATOR);
-            event.accept(ModItems.RANGE_DETONATOR);
             event.accept(ModBlocks.DET_MINER);
             event.accept(ModItems.TURRET_CHIP);
             event.accept(ModItems.TURRET_LIGHT_PORTATIVE_PLACER);
@@ -146,6 +183,18 @@ public class CrustalIncursionMod {
             event.accept(ModItems.AMMO_TURRET_RADIO);
 
         }
+
+        if (event.getTab() == ModCreativeTabs.CIM_TOOLS_TAB.get()) {
+
+            event.accept(ModItems.SCREWDRIVER.get());
+            event.accept(ModItems.CROWBAR.get());
+
+            event.accept(ModItems.DETONATOR);
+            event.accept(ModItems.MULTI_DETONATOR);
+            event.accept(ModItems.RANGE_DETONATOR);
+
+        }
+
         if (event.getTab() == ModCreativeTabs.CIM_NATURE_TAB.get()) {
 
             event.accept(ModItems.DEPTH_WORM_SPAWN_EGG);
