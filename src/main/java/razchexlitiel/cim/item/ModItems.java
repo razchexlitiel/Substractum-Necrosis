@@ -18,7 +18,7 @@ import razchexlitiel.cim.item.rotation.ShaftIronBlockItem;
 import razchexlitiel.cim.item.rotation.WindGenFlugerBlockItem;
 import razchexlitiel.cim.item.weapons.ammo.AmmoTurretItem;
 import razchexlitiel.cim.item.weapons.turrets.TurretChipItem;
-import razchexlitiel.cim.item.weapons.turrets.TurretLightCreativePlacer;
+import razchexlitiel.cim.item.weapons.turrets.TurretLightPortativePlacer;
 import razchexlitiel.cim.item.weapons.turrets.TurretLightPlacerBlockItem;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 
@@ -48,8 +48,8 @@ public class ModItems {
             () -> new MachineGunItem(new Item.Properties()));
     public static final RegistryObject<Item> TURRET_CHIP = ITEMS.register("turret_chip",
             () -> new TurretChipItem(new Item.Properties()));
-    public static final RegistryObject<Item> TURRET_LIGHT_CREATIVE_PLACER = ITEMS.register("turret_light_creative_placer",
-            () -> new TurretLightCreativePlacer(new Item.Properties()));
+    public static final RegistryObject<Item> TURRET_LIGHT_PORTATIVE_PLACER = ITEMS.register("turret_light_portative_placer",
+            () -> new TurretLightPortativePlacer(new Item.Properties().stacksTo(1)));
 
     //БЛОК-АЙТЕМЫ
     public static final RegistryObject<Item> MOTOR_ELECTRO_ITEM = ITEMS.register("motor_electro",
@@ -64,15 +64,15 @@ public class ModItems {
 
     //ПАТОРОНЫ
     public static final RegistryObject<Item> AMMO_TURRET = ITEMS.register("ammo_turret",
-            () -> new AmmoTurretItem(new Item.Properties(), 4.0f, 3.0f, false));
+            () -> new AmmoTurretItem(new Item.Properties(), 8.0f, 3.0f, false));
     public static final RegistryObject<Item> AMMO_TURRET_PIERCING = ITEMS.register("ammo_turret_piercing",
-            () -> new AmmoTurretItem(new Item.Properties(), 5.0f, 3.0f, true));
+            () -> new AmmoTurretItem(new Item.Properties(), 12.0f, 3.0f, true));
     public static final RegistryObject<Item> AMMO_TURRET_HOLLOW = ITEMS.register("ammo_turret_hollow",
-            () -> new AmmoTurretItem(new Item.Properties(), 4.0f, 3.0f, false));
+            () -> new AmmoTurretItem(new Item.Properties(), 8.0f, 3.0f, false));
     public static final RegistryObject<Item> AMMO_TURRET_FIRE = ITEMS.register("ammo_turret_fire",
-            () -> new AmmoTurretItem(new Item.Properties(), 3.0f, 3.0f, false)); // Урон 3.0, не пробивает
+            () -> new AmmoTurretItem(new Item.Properties(), 6.0f, 3.0f, false));
     public static final RegistryObject<Item> AMMO_TURRET_RADIO = ITEMS.register("ammo_turret_radio",
-            () -> new AmmoTurretItem(new Item.Properties(), 4.0f, 3.0f, false));
+            () -> new AmmoTurretItem(new Item.Properties(), 9.0f, 3.0f, false));
 
 
     //БАТАРЕИ

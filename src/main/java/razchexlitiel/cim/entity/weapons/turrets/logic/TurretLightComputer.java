@@ -46,7 +46,7 @@ public class TurretLightComputer {
     }
 
     private final Mob turret; // Владелец компьютера (сама турель)
-    private final Config config;
+    public final Config config;
     private final Level level;
 
     // === WAR THUNDER TRACKING DATA ===

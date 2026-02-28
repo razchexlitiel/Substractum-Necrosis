@@ -5,12 +5,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.player.Player;
 import razchexlitiel.cim.entity.ModEntities;
-import razchexlitiel.cim.entity.mobs.DepthWormEntity;
 import razchexlitiel.cim.entity.weapons.turrets.TurretLightEntity;
 
-public class TurretLightCreativePlacer extends Item {
-    public TurretLightCreativePlacer(Properties properties) {
+public class TurretLightPortativePlacer extends Item {
+    public TurretLightPortativePlacer(Properties properties) {
         super(properties);
     }
 
@@ -22,8 +22,19 @@ public class TurretLightCreativePlacer extends Item {
             TurretLightEntity turret = ModEntities.TURRET_LIGHT.get().create(level);
             if (turret != null) {
                 turret.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+
+                // Устанавливаем владельца
+                Player player = context.getPlayer();
+                if (player != null) {
+                    turret.setOwner(player);
+                }
+
+                // Задаём время жизни (3 минуты) и боезапас (20 патронов)
+                turret.setLifetime(3600);
+                turret.setAmmo(250);
+
                 level.addFreshEntity(turret);
-                context.getItemInHand().shrink(1); // Тратим предмет
+                context.getItemInHand().shrink(1);
                 return InteractionResult.SUCCESS;
             }
         }
