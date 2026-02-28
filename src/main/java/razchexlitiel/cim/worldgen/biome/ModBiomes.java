@@ -1,5 +1,6 @@
-package razchexlitiel.cim.worldgen;
+package razchexlitiel.cim.worldgen.biome;
 
+import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import net.minecraft.core.registries.Registries;
@@ -11,8 +12,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
 import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import razchexlitiel.cim.worldgen.ModPlacedFeatures;
 
-// Размещать в: src/main/java/com/smogline/worldgen/biome/ModBiomes.java
 public class ModBiomes {
 
     // 1. Уникальный ключ для нашей красивой рощи
@@ -32,6 +33,13 @@ public class ModBiomes {
         BiomeGenerationSettings.Builder biomeBuilder =
                 new BiomeGenerationSettings.Builder(context.lookup(Registries.PLACED_FEATURE), context.lookup(Registries.CONFIGURED_CARVER));
 
+        BiomeDefaultFeatures.addDefaultCarversAndLakes(biomeBuilder); // Пещеры и каньоны
+        BiomeDefaultFeatures.addDefaultCrystalFormations(biomeBuilder); // Аметисты
+        BiomeDefaultFeatures.addDefaultMonsterRoom(biomeBuilder); // Спавнеры
+        BiomeDefaultFeatures.addDefaultUndergroundVariety(biomeBuilder); // Диорит, андезит, гранит
+        BiomeDefaultFeatures.addDefaultOres(biomeBuilder); // ВСЕ РУДЫ (уголь, железо, алмазы и т.д.)
+        BiomeDefaultFeatures.addDefaultSoftDisks(biomeBuilder); // Глина и песок в воде
+
         biomeBuilder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.GIANT_SEQUOIA_PLACED_KEY);
 
         return new Biome.BiomeBuilder()
@@ -41,12 +49,12 @@ public class ModBiomes {
 
                 // Визуальные эффекты: Делаем красиво
                 .specialEffects(new BiomeSpecialEffects.Builder()
-                        .waterColor(0x3F76E4)         // Классическая чистая вода
-                        .waterFogColor(0x050533)      // Глубокий цвет под водой
+                        .waterColor(3579307)
+                        .waterFogColor(336947)
                         .skyColor(0x78A7FF)           // Ясное, чистое голубое небо
                         .fogColor(0xC0D8FF)           // Легкий, свежий утренний туман
                         .grassColorOverride(0x3E8E38) // Насыщенный, сочный зеленый цвет травы
-                        .foliageColorOverride(0x3E8E38)// Такой же цвет для ванильной листвы
+                        .foliageColorOverride(0x334C15)
                         // Добавляем спокойную музыку из тайги для атмосферы
                         .backgroundMusic(Musics.createGameMusic(net.minecraft.sounds.SoundEvents.MUSIC_BIOME_OLD_GROWTH_TAIGA))
                         .build())
