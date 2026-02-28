@@ -12,6 +12,8 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, CrustalIncursionMod.MOD_ID);
 
+    public static final RegistryObject<SoundEvent> CRATE_BREAK = registerSoundEvents("crate_break");
+
     public static final RegistryObject<SoundEvent> BULLET_GROUND = registerSoundEvents("bullet_ground");
     public static final RegistryObject<SoundEvent> BULLET_IMPACT = registerSoundEvents("bullet_impact");
 

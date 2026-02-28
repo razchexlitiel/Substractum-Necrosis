@@ -42,6 +42,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         // Пример ручной регистрации уникальных предметов
         // simpleItem(ModItems.NECROTIC_FRAGMENT);
         simpleItem(ModItems.SCREWDRIVER);
+        simpleItem(ModItems.CROWBAR);
         simpleItem(ModItems.RANGE_DETONATOR);
         simpleItem(ModItems.DEPTH_WORM_SPAWN_EGG);
         simpleItem(ModItems.DETONATOR);
