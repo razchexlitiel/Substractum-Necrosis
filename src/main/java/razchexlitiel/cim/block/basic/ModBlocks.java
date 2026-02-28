@@ -2,14 +2,14 @@ package razchexlitiel.cim.block.basic;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import razchexlitiel.cim.block.basic.direction.FullOBlock;
 import razchexlitiel.cim.block.basic.energy.ConverterBlock;
 import razchexlitiel.cim.block.basic.energy.MachineBatteryBlock;
 import razchexlitiel.cim.block.basic.energy.SwitchBlock;
@@ -123,6 +123,18 @@ public class ModBlocks {
     public static final RegistryObject<SlabBlock> CONCRETE_HAZARD_OLD_SLAB = registerBlock("concrete_hazard_old_slab",
             () -> new SlabBlock(BlockBehaviour.Properties.copy(CONCRETE_HAZARD_OLD.get())));
 
+
+    // ДВЕРИ
+    public static final RegistryObject<Block> SEQUOIA_DOOR = registerBlock("sequoia_door",
+            () -> new net.minecraft.world.level.block.DoorBlock(
+                    BlockBehaviour.Properties.copy(Blocks.DARK_OAK_DOOR).sound(SoundType.WOOD).noOcclusion(),
+                    BlockSetType.DARK_OAK));
+
+    // ЛЮКИ
+    public static final RegistryObject<Block> SEQUOIA_TRAPDOOR = registerBlock("sequoia_trapdoor",
+            () -> new net.minecraft.world.level.block.TrapDoorBlock( // <--- ВОТ ТУТ ИСПРАВЬ
+                    BlockBehaviour.Properties.copy(Blocks.DARK_OAK_DOOR).sound(SoundType.WOOD).noOcclusion(),
+                    BlockSetType.DARK_OAK));
 
 
     //БЛОКИ-ВРАЩЕНИЯ
