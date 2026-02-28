@@ -1,23 +1,21 @@
 package razchexlitiel.cim.api.hive;
 
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import razchexlitiel.cim.block.entity.hive.DepthWormNestBlockEntity;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class HiveNetworkManager {
-    // Новое: Хранилище всех узлов для AI червей и слияния сетей
     private final Map<UUID, Set<BlockPos>> networkNodes = new HashMap<>();
-
-    // Старое: Для совместимости с твоей системой HiveNetwork и сохранениями
     private final Map<UUID, HiveNetwork> networks = new HashMap<>();
     private final Map<BlockPos, UUID> posToNetwork = new HashMap<>();
 
@@ -26,12 +24,10 @@ public class HiveNetworkManager {
         return net != null && !net.wormCounts.isEmpty();
     }
 
-    // Регистрация узла (почвы или гнезда)
     public void addNode(UUID networkId, BlockPos pos) {
         networkNodes.computeIfAbsent(networkId, k -> new HashSet<>()).add(pos.immutable());
     }
 
-    // Слияние сетей: masterId поглощает targetId
     public void mergeNetworks(UUID masterId, UUID targetId, Level level) {
         if (masterId.equals(targetId)) return;
 
@@ -47,15 +43,12 @@ public class HiveNetworkManager {
             }
         }
 
-        // Слияние в старой системе networks (если используется для логики)
         HiveNetwork targetNet = networks.remove(targetId);
         if (targetNet != null) {
-            HiveNetwork masterNet = networks.computeIfAbsent(masterId, HiveNetwork::new);
-            // Здесь должна быть логика переноса данных из targetNet в masterNet
+            networks.computeIfAbsent(masterId, HiveNetwork::new);
         }
     }
 
-    // Удаление узла с проверкой уровня для валидации
     public void removeNode(UUID networkId, BlockPos pos, Level level) {
         Set<BlockPos> nodes = networkNodes.get(networkId);
         if (nodes != null) {
@@ -64,14 +57,12 @@ public class HiveNetworkManager {
                 networkNodes.remove(networkId);
                 networks.remove(networkId);
             } else {
-                // Если узлы остались, проверяем, не нужно ли распустить сеть
                 validateNetwork(networkId, level);
             }
         }
         posToNetwork.remove(pos);
     }
 
-    // Проверка: если в сети нет ни одного Ядра, вся почва обнуляется
     public void validateNetwork(UUID networkId, Level level) {
         if (level == null) return;
         Set<BlockPos> nodes = networkNodes.get(networkId);
@@ -91,6 +82,22 @@ public class HiveNetworkManager {
             networkNodes.remove(networkId);
             networks.remove(networkId);
         }
+    }
+
+    @Nullable
+    public BlockPos findNearestNode(UUID networkId, Vec3 pos, Level level) {
+        Set<BlockPos> nodes = networkNodes.get(networkId);
+        if (nodes == null) return null;
+        BlockPos best = null;
+        double bestDistSq = Double.MAX_VALUE;
+        for (BlockPos nodePos : nodes) {
+            double distSq = pos.distanceToSqr(nodePos.getX() + 0.5, nodePos.getY() + 0.5, nodePos.getZ() + 0.5);
+            if (distSq < bestDistSq) {
+                bestDistSq = distSq;
+                best = nodePos;
+            }
+        }
+        return best;
     }
 
     public boolean hasFreeNest(UUID networkId, Level level) {
@@ -125,7 +132,6 @@ public class HiveNetworkManager {
         if (net != null) net.updateWormCount(nestPos, delta);
     }
 
-    // === СЕРИАЛИЗАЦИЯ (Исправлено: теперь восстанавливает networkNodes) ===
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
         ListTag networksList = new ListTag();
@@ -146,7 +152,6 @@ public class HiveNetworkManager {
             networks.put(net.id, net);
             for (BlockPos p : net.members) {
                 posToNetwork.put(p, net.id);
-                // Восстанавливаем узлы для работы AI
                 this.addNode(net.id, p);
             }
         }

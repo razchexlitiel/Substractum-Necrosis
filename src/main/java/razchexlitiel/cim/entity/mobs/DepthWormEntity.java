@@ -2,6 +2,7 @@ package razchexlitiel.cim.entity.mobs;
 
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -39,6 +40,33 @@ public class DepthWormEntity extends Monster implements GeoEntity {
 
     public int ignoreFallDamageTicks = 0;
     public BlockPos nestPos;
+    private BlockPos homePos;
+
+    public void setHomePos(BlockPos pos) {
+        this.homePos = pos;
+    }
+
+    public BlockPos getHomePos() {
+        return this.homePos;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        if (homePos != null) {
+            tag.putLong("HomePos", homePos.asLong());
+        }
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("HomePos")) {
+            homePos = BlockPos.of(tag.getLong("HomePos"));
+        } else {
+            homePos = null;
+        }
+    }
 
     public DepthWormEntity(EntityType<? extends Monster> entityType, Level level) {
         super(entityType, level);

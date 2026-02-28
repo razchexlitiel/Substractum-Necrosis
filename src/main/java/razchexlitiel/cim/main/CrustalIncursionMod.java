@@ -126,7 +126,6 @@ public class CrustalIncursionMod {
             // Другие строительные блоки
             event.accept(ModBlocks.CRATE.get());
             event.accept(ModBlocks.CRATE_AMMO.get());
-            event.accept(ModBlocks.WASTE_LOG.get());
         }
 
 
@@ -200,6 +199,8 @@ public class CrustalIncursionMod {
             event.accept(ModItems.DEPTH_WORM_SPAWN_EGG);
             event.accept(ModBlocks.DEPTH_WORM_NEST);
             event.accept(ModBlocks.HIVE_SOIL);
+            event.accept(ModBlocks.WASTE_LOG.get());
+            event.accept(ModBlocks.NECROSIS_TEST.get());
 
         }
     }
