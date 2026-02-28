@@ -5,6 +5,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import razchexlitiel.cim.main.CrustalIncursionMod;
+import razchexlitiel.cim.network.packet.activators.ClearPointPacket;
+import razchexlitiel.cim.network.packet.activators.DetonateAllPacket;
+import razchexlitiel.cim.network.packet.activators.SetActivePointPacket;
+import razchexlitiel.cim.network.packet.activators.SyncPointPacket;
 import razchexlitiel.cim.network.packet.energy.PacketSyncEnergy;
 import razchexlitiel.cim.network.packet.energy.UpdateBatteryC2SPacket;
 import razchexlitiel.cim.network.packet.guns.PacketReloadGun;
@@ -102,6 +106,35 @@ public class ModPacketHandler {
                 PacketToggleTurret::new,
                 PacketToggleTurret::handle
         );
+
+        INSTANCE.registerMessage(id++,
+                DetonateAllPacket.class,
+                DetonateAllPacket::encode,
+                DetonateAllPacket::decode,
+                DetonateAllPacket::handle
+        );
+
+        INSTANCE.registerMessage(id++,
+                SetActivePointPacket.class,
+                SetActivePointPacket::encode,
+                SetActivePointPacket::decode,
+                SetActivePointPacket::handle
+        );
+
+        INSTANCE.registerMessage(id++,
+                ClearPointPacket.class,
+                ClearPointPacket::encode,
+                ClearPointPacket::decode,
+                ClearPointPacket::handle
+        );
+
+        INSTANCE.registerMessage(id++,
+                SyncPointPacket.class,
+                SyncPointPacket::encode,
+                SyncPointPacket::decode,
+                SyncPointPacket::handle
+        );
+
 
     }
 }

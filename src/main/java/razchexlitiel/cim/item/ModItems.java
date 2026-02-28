@@ -5,6 +5,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import razchexlitiel.cim.block.basic.ModBlocks;
+import razchexlitiel.cim.item.activators.DetonatorItem;
+import razchexlitiel.cim.item.activators.MultiDetonatorItem;
 import razchexlitiel.cim.item.activators.RangeDetonatorItem;
 import razchexlitiel.cim.item.fekal_electric.ItemCreativeBattery;
 import razchexlitiel.cim.item.fekal_electric.ModBatteryItem;
@@ -36,7 +38,10 @@ public class ModItems {
             () -> new ScrewdriverItem(new Item.Properties().stacksTo(1).durability(256))); // Прочность как у железных инструментов
     public static final RegistryObject<Item> RANGE_DETONATOR = ITEMS.register("range_detonator",
             () -> new RangeDetonatorItem(new Item.Properties()));
-
+    public static final RegistryObject<Item> MULTI_DETONATOR = ITEMS.register("multi_detonator",
+            () -> new MultiDetonatorItem(new Item.Properties()));
+    public static final RegistryObject<Item> DETONATOR = ITEMS.register("detonator",
+            () -> new DetonatorItem(new Item.Properties()));
 
     //ОРУЖИЕ
     public static final RegistryObject<Item> MACHINEGUN = ITEMS.register("machinegun",

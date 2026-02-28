@@ -131,6 +131,8 @@ public class CrustalIncursionMod {
 
         if (event.getTab() == ModCreativeTabs.CIM_WEAPONS_TAB.get()) {
 
+            event.accept(ModItems.DETONATOR);
+            event.accept(ModItems.MULTI_DETONATOR);
             event.accept(ModItems.RANGE_DETONATOR);
             event.accept(ModBlocks.DET_MINER);
             event.accept(ModItems.TURRET_CHIP);
