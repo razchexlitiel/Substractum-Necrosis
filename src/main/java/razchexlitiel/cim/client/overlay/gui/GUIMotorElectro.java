@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.menu.MotorElectroMenu;
+import razchexlitiel.cim.network.ModPacketHandler;
 import razchexlitiel.cim.network.packet.rotation.PacketToggleMotor;
 import razchexlitiel.cim.network.packet.rotation.PacketToggleMotorMode;
 
@@ -118,14 +119,14 @@ public class GUIMotorElectro extends AbstractContainerScreen<MotorElectroMenu> {
             if (relX >= 47 && relX < 57 && relY >= 35 && relY < 67) {
                 playClickSound();
                 PacketToggleMotor packet = new PacketToggleMotor(menu.getPos());
-                razchexlitiel.cim.network.ModPacketHandler.INSTANCE.sendToServer(packet);
+                ModPacketHandler.INSTANCE.sendToServer(packet);
                 return true;
             }
 
             // Клик по кнопке РЕЖИМА (x47, y69)
             if (relX >= 47 && relX < 57 && relY >= 69 && relY < 86) {
                 playClickSound();
-                razchexlitiel.cim.network.ModPacketHandler.INSTANCE.sendToServer(new PacketToggleMotorMode(menu.getPos()));
+                ModPacketHandler.INSTANCE.sendToServer(new PacketToggleMotorMode(menu.getPos()));
                 return true;
             }
         }

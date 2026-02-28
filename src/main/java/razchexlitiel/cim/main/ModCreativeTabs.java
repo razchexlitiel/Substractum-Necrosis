@@ -7,6 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import razchexlitiel.cim.block.basic.ModBlocks;
 import razchexlitiel.cim.item.ModItems;
 
 public class ModCreativeTabs {
@@ -16,7 +17,7 @@ public class ModCreativeTabs {
     public static final RegistryObject<CreativeModeTab> CIM_TECH_TAB = CREATIVE_MODE_TABS.register("cim_tech_tab",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup." + CrustalIncursionMod.MOD_ID + ".cim_tech_tab"))
-                    .icon(() -> new ItemStack(ModItems.BATTERY.get()))
+                    .icon(() -> new ItemStack(ModBlocks.STOPPER.get()))
                     .build());
 
     public static final RegistryObject<CreativeModeTab> CIM_WEAPONS_TAB = CREATIVE_MODE_TABS.register("cim_weapons_tab",
