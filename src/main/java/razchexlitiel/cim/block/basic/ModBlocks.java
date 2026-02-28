@@ -152,7 +152,15 @@ public class ModBlocks {
             () -> new RotationMeterBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
 
+    public static final RegistryObject<Block> SEQUOIA_BARK = registerBlock("sequoia_bark",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
 
+    // 2. Блок Сердцевины (Самый обычный блок для теста)
+    public static final RegistryObject<Block> SEQUOIA_HEARTWOOD = registerBlock("sequoia_heartwood",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
+
+    public static final RegistryObject<Block> SEQUOIA_PLANKS  = registerBlock("sequoia_planks",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).strength(0.5f, 4.0f).requiresCorrectToolForDrops()));
 
 
     // Вспомогательный метод: регистрирует блок И предмет для него
