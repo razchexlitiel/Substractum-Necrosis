@@ -42,8 +42,11 @@ public class ModItemModelProvider extends ItemModelProvider {
         // Пример ручной регистрации уникальных предметов
         // simpleItem(ModItems.NECROTIC_FRAGMENT);
         simpleItem(ModItems.SCREWDRIVER);
+        simpleItem(ModItems.CROWBAR);
         simpleItem(ModItems.RANGE_DETONATOR);
         simpleItem(ModItems.DEPTH_WORM_SPAWN_EGG);
+        simpleItem(ModItems.DETONATOR);
+        simpleItem(ModItems.MULTI_DETONATOR);
 
         simpleItem(ModItems.CREATIVE_BATTERY);
         simpleItem(ModItems.BATTERY);
@@ -51,7 +54,8 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.BATTERY_LITHIUM);
         simpleItem(ModItems.BATTERY_TRIXITE);
 
-
+        simpleItem(ModItems.TURRET_CHIP);
+        simpleItem(ModItems.TURRET_LIGHT_PORTATIVE_PLACER);
 
         // Пример регистрации блоков как предметов (если это обычный куб)
         // complexBlockItem(ModBlocks.NECROTIC_ORE);

@@ -1,4 +1,4 @@
-package razchexlitiel.cim.network.packet;
+package razchexlitiel.cim.network.packet.guns;
 
 
 import net.minecraft.network.FriendlyByteBuf;

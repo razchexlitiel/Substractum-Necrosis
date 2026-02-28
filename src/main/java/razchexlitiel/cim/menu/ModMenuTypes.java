@@ -19,6 +19,11 @@ public class ModMenuTypes {
     public static final RegistryObject<MenuType<MotorElectroMenu>> MOTOR_ELECTRO_MENU =
             MENUS.register("motor_electro_menu", () -> IForgeMenuType.create(MotorElectroMenu::new));
 
+    public static final RegistryObject<MenuType<TurretLightMenu>> TURRET_AMMO_MENU =
+            MENUS.register("turret_ammo", () -> IForgeMenuType.create((windowId, inv, data) -> {
+                // Вызываем конструктор: TurretLightMenu(int, Inventory, FriendlyByteBuf)
+                return new TurretLightMenu(windowId, inv, data);
+            }));
 
     public static void register(IEventBus eventBus) {
         MENUS.register(eventBus);

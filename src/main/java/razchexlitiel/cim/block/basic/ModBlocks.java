@@ -2,14 +2,13 @@ package razchexlitiel.cim.block.basic;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import razchexlitiel.cim.block.basic.direction.FullOBlock;
 import razchexlitiel.cim.block.basic.energy.ConverterBlock;
 import razchexlitiel.cim.block.basic.energy.MachineBatteryBlock;
 import razchexlitiel.cim.block.basic.energy.SwitchBlock;
@@ -18,6 +17,7 @@ import razchexlitiel.cim.block.basic.explosives.DetMinerBlock;
 import razchexlitiel.cim.block.basic.hive.DepthWormNestBlock;
 import razchexlitiel.cim.block.basic.hive.HiveSoilBlock;
 import razchexlitiel.cim.block.basic.rotation.*;
+import razchexlitiel.cim.block.basic.weapons.TurretLightPlacerBlock;
 import razchexlitiel.cim.item.fekal_electric.MachineBatteryBlockItem;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.item.ModItems;
@@ -30,12 +30,12 @@ public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =
             DeferredRegister.create(ForgeRegistries.BLOCKS, CrustalIncursionMod.MOD_ID);
 
-
+    //ЭНЕРГОСЕТЬ
     public static final List<RegistryObject<Block>> BATTERY_BLOCKS = new ArrayList<>();
-    public static final RegistryObject<Block> MACHINE_BATTERY = registerBattery("machine_battery", 1_000_000L);
-    public static final RegistryObject<Block> MACHINE_BATTERY_LITHIUM = registerBattery("machine_battery_lithium", 50_000_000L);
-    public static final RegistryObject<Block> DET_MINER = registerBlock("det_miner",
-            () -> new DetMinerBlock(BlockBehaviour.Properties.of().strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> MACHINE_BATTERY = registerBattery
+            ("machine_battery", 1_000_000L);
+    public static final RegistryObject<Block> MACHINE_BATTERY_LITHIUM = registerBattery
+            ("machine_battery_lithium", 50_000_000L);
     public static final RegistryObject<Block> CONVERTER_BLOCK = registerBlock("converter_block",
             () -> new ConverterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
     public static final RegistryObject<Block> WIRE_COATED = registerBlock("wire_coated",
@@ -43,48 +43,114 @@ public class ModBlocks {
     public static final RegistryObject<Block> SWITCH = registerBlock("switch",
             () -> new SwitchBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
 
+    //ВЗРЫВЧАТКА
+    public static final RegistryObject<Block> DET_MINER = registerBlock("det_miner",
+            () -> new DetMinerBlock(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+
+    //ТУРЕЛИ
+    public static final RegistryObject<Block> TURRET_LIGHT_PLACER = BLOCKS.register("turret_light_placer",
+            () -> new TurretLightPlacerBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .strength(5.0f, 4.0f).noOcclusion().requiresCorrectToolForDrops()));
+
+    //БЛОКИ УЛЬЯ
     public static final RegistryObject<Block> DEPTH_WORM_NEST = registerBlock("depth_worm_nest",
             () -> new DepthWormNestBlock(BlockBehaviour.Properties.copy(Blocks.MUD).sound(SoundType.MUD)));
     public static final RegistryObject<Block> HIVE_SOIL = registerBlock("hive_soil",
             () -> new HiveSoilBlock(BlockBehaviour.Properties.copy(Blocks.MUD).sound(SoundType.MUD)));
 
+
+    //ОБЫЧНЫЕ БЛОКИ
+    public static final RegistryObject<Block> CRATE = registerBlock("crate",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.BARREL).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> CRATE_AMMO = registerBlock("crate_ammo",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.BARREL).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> CONCRETE = registerBlock("concrete",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> CONCRETE_RED = registerBlock("concrete_red",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> CONCRETE_BLUE = registerBlock("concrete_blue",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> CONCRETE_GREEN = registerBlock("concrete_green",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> CONCRETE_HAZARD_NEW = registerBlock("concrete_hazard_new",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> CONCRETE_HAZARD_OLD = registerBlock("concrete_hazard_old",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> WASTE_LOG = registerBlock("waste_log",
+            () -> new FullOBlock(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK).sound(SoundType.CORAL_BLOCK)));
+
+
+    //СТУПЕНИ И ПОЛУБЛОКИ
+    public static final RegistryObject<StairBlock> CONCRETE_STAIRS = registerBlock("concrete_stairs",
+            () -> new StairBlock(CONCRETE.get().defaultBlockState(),
+                    BlockBehaviour.Properties.copy(CONCRETE.get())));
+    public static final RegistryObject<SlabBlock> CONCRETE_SLAB = registerBlock("concrete_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(CONCRETE.get())));
+
+    public static final RegistryObject<StairBlock> CONCRETE_RED_STAIRS = registerBlock("concrete_red_stairs",
+            () -> new StairBlock(CONCRETE_RED.get().defaultBlockState(),
+                    BlockBehaviour.Properties.copy(CONCRETE_RED.get())));
+    public static final RegistryObject<SlabBlock> CONCRETE_RED_SLAB = registerBlock("concrete_red_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(CONCRETE_RED.get())));
+
+    public static final RegistryObject<StairBlock> CONCRETE_BLUE_STAIRS = registerBlock("concrete_blue_stairs",
+            () -> new StairBlock(CONCRETE_BLUE.get().defaultBlockState(),
+                    BlockBehaviour.Properties.copy(CONCRETE_BLUE.get())));
+    public static final RegistryObject<SlabBlock> CONCRETE_BLUE_SLAB = registerBlock("concrete_blue_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(CONCRETE_BLUE.get())));
+
+    public static final RegistryObject<StairBlock> CONCRETE_GREEN_STAIRS = registerBlock("concrete_green_stairs",
+            () -> new StairBlock(CONCRETE_GREEN.get().defaultBlockState(),
+                    BlockBehaviour.Properties.copy(CONCRETE_GREEN.get())));
+    public static final RegistryObject<SlabBlock> CONCRETE_GREEN_SLAB = registerBlock("concrete_green_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(CONCRETE_GREEN.get())));
+
+    public static final RegistryObject<StairBlock> CONCRETE_HAZARD_NEW_STAIRS = registerBlock("concrete_hazard_new_stairs",
+            () -> new StairBlock(CONCRETE_HAZARD_NEW.get().defaultBlockState(),
+                    BlockBehaviour.Properties.copy(CONCRETE_HAZARD_NEW.get())));
+    public static final RegistryObject<SlabBlock> CONCRETE_HAZARD_NEW_SLAB = registerBlock("concrete_hazard_new_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(CONCRETE_HAZARD_NEW.get())));
+
+    public static final RegistryObject<StairBlock> CONCRETE_HAZARD_OLD_STAIRS = registerBlock("concrete_hazard_old_stairs",
+            () -> new StairBlock(CONCRETE_HAZARD_OLD.get().defaultBlockState(),
+                    BlockBehaviour.Properties.copy(CONCRETE_HAZARD_OLD.get())));
+    public static final RegistryObject<SlabBlock> CONCRETE_HAZARD_OLD_SLAB = registerBlock("concrete_hazard_old_slab",
+            () -> new SlabBlock(BlockBehaviour.Properties.copy(CONCRETE_HAZARD_OLD.get())));
+
+
+
+    //БЛОКИ-ВРАЩЕНИЯ
     public static final RegistryObject<Block> MOTOR_ELECTRO = BLOCKS.register("motor_electro",
             () -> new MotorElectroBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
-                    .strength(3.0f, 4.0f)
-                    .noOcclusion()
-                    .requiresCorrectToolForDrops()));
-
+                    .strength(3.0f, 4.0f).noOcclusion().requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> WIND_GEN_FLUGER = BLOCKS.register("wind_gen_fluger",
             () -> new WindGenFlugerBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
-                    .strength(3.0f, 4.0f)
-                    .noOcclusion()
-                    .requiresCorrectToolForDrops()));
-
-
+                    .strength(3.0f, 4.0f).noOcclusion().requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> SHAFT_IRON = BLOCKS.register("shaft_iron",
             () -> new ShaftIronBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
-                    .strength(3.0f, 4.0f)
-                    .noOcclusion()
-                    .requiresCorrectToolForDrops()));
-
+                    .strength(3.0f, 4.0f).noOcclusion().requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> GEAR_PORT = registerBlock("gear_port",
-            () -> new GearPortBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
-
+            () -> new GearPortBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> STOPPER = registerBlock("stopper",
-            () -> new StopperBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
-
+            () -> new StopperBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> ADDER = registerBlock("adder",
-            () -> new AdderBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
-
+            () -> new AdderBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> TACHOMETER = registerBlock("tachometer",
-            () -> new TachometerBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
-
-
+            () -> new TachometerBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> ROTATION_METER = registerBlock("rotation_meter",
-            () -> new RotationMeterBlock(BlockBehaviour.Properties.copy(Blocks.STONE).strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
-
-
-
+            () -> new RotationMeterBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .strength(5.0f, 4.0f).requiresCorrectToolForDrops()));
 
     public static final RegistryObject<Block> SEQUOIA_BARK = registerBlock("sequoia_bark",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)));
@@ -95,8 +161,6 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> SEQUOIA_PLANKS  = registerBlock("sequoia_planks",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS).strength(0.5f, 4.0f).requiresCorrectToolForDrops()));
-
-
 
 
     // Вспомогательный метод: регистрирует блок И предмет для него

@@ -3,15 +3,18 @@ package razchexlitiel.cim.datagen.assets;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.block.basic.ModBlocks;
-
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
 public class ModBlockStateProvider extends BlockStateProvider {
 
     private final ExistingFileHelper existingFileHelper;
@@ -34,12 +37,23 @@ public class ModBlockStateProvider extends BlockStateProvider {
         cubeAllWithItem(ModBlocks.SWITCH);
         cubeAllWithItem(ModBlocks.CONVERTER_BLOCK);
         cubeAllWithItem(ModBlocks.GEAR_PORT);
+        cubeAllWithItem(ModBlocks.CONCRETE);
+        cubeAllWithItem(ModBlocks.CONCRETE_RED);
+        cubeAllWithItem(ModBlocks.CONCRETE_BLUE);
+        cubeAllWithItem(ModBlocks.CONCRETE_GREEN);
+        cubeAllWithItem(ModBlocks.CONCRETE_HAZARD_NEW);
+        cubeAllWithItem(ModBlocks.CONCRETE_HAZARD_OLD);
+        cubeAllWithItem(ModBlocks.CRATE);
+        cubeAllWithItem(ModBlocks.CRATE_AMMO);
         simpleBlockWithItem(ModBlocks.WIRE_COATED.get(), models().getExistingFile(modLoc("block/wire_coated")));
+
+
+
         //СТАТИЧНИЫЕ БЛОКИ У КОТОРЫХ РАЗНОЕ ДНО/ВЕРХ, ПРИМЕР:
-        // columnBlockWithItem(ModBlocks.WASTE_LOG,
-        // modLoc("block/waste_log_side")
-        // modLoc("block/waste_log_side"),
-        // modLoc("block/waste_log_side"));
+       columnBlockWithItem(ModBlocks.WASTE_LOG,
+         modLoc("block/waste_log_side"),
+         modLoc("block/waste_log_top"),
+         modLoc("block/waste_log_top"));
 
 
         //СТАТИЧНИЫЕ ПРОЗРАЧНЫЕ БЛОКИ, ПРИМЕР:
@@ -73,6 +87,16 @@ public class ModBlockStateProvider extends BlockStateProvider {
         //ПОВОРОТ ДЛЯ 3Д МОДЕЛИ, ПРИМЕР:
         // customModelBlockWithItem(ModBlocks.TURRET_BASE);
 
+
+
+
+
+        stairsAndSlabs(ModBlocks.CONCRETE.get(), ModBlocks.CONCRETE_STAIRS.get(), ModBlocks.CONCRETE_SLAB.get());
+        stairsAndSlabs(ModBlocks.CONCRETE_RED.get(), ModBlocks.CONCRETE_RED_STAIRS.get(), ModBlocks.CONCRETE_RED_SLAB.get());
+        stairsAndSlabs(ModBlocks.CONCRETE_BLUE.get(), ModBlocks.CONCRETE_BLUE_STAIRS.get(), ModBlocks.CONCRETE_BLUE_SLAB.get());
+        stairsAndSlabs(ModBlocks.CONCRETE_GREEN.get(), ModBlocks.CONCRETE_GREEN_STAIRS.get(), ModBlocks.CONCRETE_GREEN_SLAB.get());
+        stairsAndSlabs(ModBlocks.CONCRETE_HAZARD_NEW.get(), ModBlocks.CONCRETE_HAZARD_NEW_STAIRS.get(), ModBlocks.CONCRETE_HAZARD_NEW_SLAB.get());
+        stairsAndSlabs(ModBlocks.CONCRETE_HAZARD_OLD.get(), ModBlocks.CONCRETE_HAZARD_OLD_STAIRS.get(), ModBlocks.CONCRETE_HAZARD_OLD_SLAB.get());
 
     }
 
@@ -135,6 +159,20 @@ public class ModBlockStateProvider extends BlockStateProvider {
         horizontalBlock(block.get(), model);
         simpleBlockItem(block.get(), model);
     }
+    private void stairsAndSlabs(Block fullBlock, StairBlock stairs, SlabBlock slab) {
+        ResourceLocation texture = blockTexture(fullBlock);
+        stairsBlock(stairs, texture);
+        slabBlock(slab, texture, texture);
+
+        ResourceLocation stairsId = ForgeRegistries.BLOCKS.getKey(stairs);
+        ResourceLocation slabId = ForgeRegistries.BLOCKS.getKey(slab);
+        if (stairsId != null) {
+            simpleBlockItem(stairs, models().getExistingFile(modLoc("block/" + stairsId.getPath())));
+        }
+        if (slabId != null) {
+            simpleBlockItem(slab, models().getExistingFile(modLoc("block/" + slabId.getPath())));
+        }
+    }
 
 
     private void registerSnowLayerBlock(RegistryObject<Block> block, String baseName) {
@@ -190,5 +228,25 @@ public class ModBlockStateProvider extends BlockStateProvider {
         simpleBlock(block, model);
         simpleBlockItem(block, model);
     }
+
+    // Для FullOBlock (вращение во все 6 сторон: Up, Down, North, South, East, West)
+    public void fullBlockWithItem(RegistryObject<Block> block, ResourceLocation side, ResourceLocation front, ResourceLocation top) {
+        // Создаем модель с "лицом" (front)
+        ModelFile model = models().orientable(block.getId().getPath(), side, front, top);
+
+        // directionalBlock сам привяжет модель к свойству FACING и пропишет углы X и Y в JSON
+        directionalBlock(block.get(), model);
+        simpleBlockItem(block.get(), model);
+    }
+
+    // Для SideOBlock (только горизонтальное вращение)
+    public void sideBlockWithItem(RegistryObject<Block> block, ResourceLocation side, ResourceLocation front, ResourceLocation top) {
+        ModelFile model = models().orientable(block.getId().getPath(), side, front, top);
+
+        // horizontalBlock привяжет модель к HORIZONTAL_FACING (только повороты по Y)
+        horizontalBlock(block.get(), model);
+        simpleBlockItem(block.get(), model);
+    }
+
 
 }

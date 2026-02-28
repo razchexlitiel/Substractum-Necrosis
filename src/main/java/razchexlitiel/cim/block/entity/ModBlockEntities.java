@@ -14,6 +14,7 @@ import razchexlitiel.cim.block.entity.energy.WireBlockEntity;
 import razchexlitiel.cim.block.entity.hive.DepthWormNestBlockEntity;
 import razchexlitiel.cim.block.entity.hive.HiveSoilBlockEntity;
 import razchexlitiel.cim.block.entity.rotation.*;
+import razchexlitiel.cim.block.entity.weapons.TurretLightPlacerBlockEntity;
 import razchexlitiel.cim.main.CrustalIncursionMod;
 import razchexlitiel.cim.block.basic.ModBlocks;
 
@@ -34,6 +35,11 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(HiveSoilBlockEntity::new, ModBlocks.HIVE_SOIL.get())
                             .build(null)
             );
+
+    public static final RegistryObject<BlockEntityType<TurretLightPlacerBlockEntity>> TURRET_LIGHT_PLACER_BE =
+            BLOCK_ENTITIES.register("turret_light_placer",
+                    () -> BlockEntityType.Builder.of(TurretLightPlacerBlockEntity::new, ModBlocks.TURRET_LIGHT_PLACER.get()).build(null));
+
 
     public static final RegistryObject<BlockEntityType<MachineBatteryBlockEntity>> MACHINE_BATTERY_BE =
             BLOCK_ENTITIES.register("machine_battery_be", () -> {

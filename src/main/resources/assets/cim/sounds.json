@@ -29,6 +29,14 @@
       "cim:impact/bullet_impact9"
     ]
   },
+  "crate_break": {
+    "category": "block",
+    "subtitle": "cim.subtitle.crate_break",
+    "sounds": [
+      "cim:break/break1",
+      "cim:break/break2"
+    ]
+  },
   "turret_fire": {
     "category": "block",
     "subtitle": "sounds.cim.turret_fire",
