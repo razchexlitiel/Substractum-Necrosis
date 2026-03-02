@@ -37,7 +37,6 @@ public class MediumSequoiaTrunkPlacer extends TrunkPlacer {
 
     @Override
     public List<FoliagePlacer.FoliageAttachment> placeTrunk(LevelSimulatedReader level, BiConsumer<BlockPos, BlockState> blockSetter, RandomSource random, int height, BlockPos pos, TreeConfiguration config) {
-        // Устанавливаем землю под ВСЕМ стволом 2x2
         setDirtAt(level, blockSetter, random, pos.below(), config);
         setDirtAt(level, blockSetter, random, pos.below().east(), config);
         setDirtAt(level, blockSetter, random, pos.below().south(), config);
@@ -75,24 +74,28 @@ public class MediumSequoiaTrunkPlacer extends TrunkPlacer {
             float progress = (float) (y - branchStart) / (height - branchStart);
             int branchLength = Math.round(5 - (4 * progress));
 
-            // Строим 4 ветки
+            // Строим 4 основные ветки мельницы
             buildBranch(level, blockSetter, random, config, pos.offset(0, y, 0), Direction.NORTH, branchLength, foliage);
             buildBranch(level, blockSetter, random, config, pos.offset(1, y, 0), Direction.EAST, branchLength, foliage);
             buildBranch(level, blockSetter, random, config, pos.offset(1, y, 1), Direction.SOUTH, branchLength, foliage);
             buildBranch(level, blockSetter, random, config, pos.offset(0, y, 1), Direction.WEST, branchLength, foliage);
 
-            // === 3. ПУЗАТЫЕ ШАПКИ ДЛЯ ЗАПОЛНЕНИЯ УГЛОВ (ИСПРАВЛЕНО!) ===
+            // === 3. ДИАГОНАЛЬНЫЕ ВЕТОЧКИ ДЛЯ ЗАПОЛНЕНИЯ УГЛОВ ===
+            // Ставим их на блок выше (где у тебя был редстоун)
             BlockPos gapFillerPos = pos.above(y + 1);
 
-            // МАГИЯ ОБЪЕМА: Чем длиннее ветки (внизу), тем огромнее будет шапка в углу!
-            // Внизу она будет расширяться на +2 блока, а на макушке сузится до +0.
-            int cornerRadiusOffset = branchLength / 2;
+            // Длина диагонали будет чуть короче основной ветки
+            int diagLength = Math.max(1, branchLength - 2);
 
-            // ИДЕАЛЬНЫЕ координаты пустот для ствола 2х2 (больше не пересекаются с ветками):
-            foliage.add(new FoliagePlacer.FoliageAttachment(gapFillerPos.offset(1, 0, -1), cornerRadiusOffset, true)); // NE
-            foliage.add(new FoliagePlacer.FoliageAttachment(gapFillerPos.offset(2, 0, 1), cornerRadiusOffset, true));  // SE
-            foliage.add(new FoliagePlacer.FoliageAttachment(gapFillerPos.offset(0, 0, 2), cornerRadiusOffset, true));  // SW
-            foliage.add(new FoliagePlacer.FoliageAttachment(gapFillerPos.offset(-1, 0, 0), cornerRadiusOffset, true)); // NW
+            // Направляем веточки ровно в те углы, где был редстоун:
+            // Северо-Восток (идет по осям +X, -Z)
+            buildDiagonalBranch(level, blockSetter, random, config, gapFillerPos.offset(1, 0, -1), 1, -1, diagLength, foliage);
+            // Юго-Восток (идет по осям +X, +Z)
+            buildDiagonalBranch(level, blockSetter, random, config, gapFillerPos.offset(2, 0, 1), 1, 1, diagLength, foliage);
+            // Юго-Запад (идет по осям -X, +Z)
+            buildDiagonalBranch(level, blockSetter, random, config, gapFillerPos.offset(0, 0, 2), -1, 1, diagLength, foliage);
+            // Северо-Запад (идет по осям -X, -Z)
+            buildDiagonalBranch(level, blockSetter, random, config, gapFillerPos.offset(-1, 0, 0), -1, -1, diagLength, foliage);
         }
 
         return foliage;
@@ -103,9 +106,22 @@ public class MediumSequoiaTrunkPlacer extends TrunkPlacer {
         for (int i = 1; i <= length; i++) {
             current = current.relative(dir);
             placeLog(level, blockSetter, random, current, config);
-
-            // Ставим якорь листвы на КАЖДОЙ верхней грани ветки!
             foliage.add(new FoliagePlacer.FoliageAttachment(current.above(), 0, false));
+        }
+    }
+
+    // НОВЫЙ МЕТОД: Строит диагональную ветку и вешает на нее шапки листвы
+    private void buildDiagonalBranch(LevelSimulatedReader level, BiConsumer<BlockPos, BlockState> blockSetter, RandomSource random, TreeConfiguration config, BlockPos startPos, int dx, int dz, int length, List<FoliagePlacer.FoliageAttachment> foliage) {
+        BlockPos current = startPos;
+        for (int i = 0; i < length; i++) {
+            // Ставим физический блок ствола в углу (и дальше по диагонали)
+            placeLog(level, blockSetter, random, current, config);
+
+            // Вешаем нашу стандартную 5-блочную шапку листвы ПРЯМО НА НЕГО
+            foliage.add(new FoliagePlacer.FoliageAttachment(current.above(), 0, false));
+
+            // Сдвигаемся по диагонали
+            current = current.offset(dx, 0, dz);
         }
     }
 }
