@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import razchexlitiel.cim.api.rotation.RotationSource;
 import razchexlitiel.cim.api.rotation.RotationalNode;
+import razchexlitiel.cim.block.basic.rotation.MiningPortBlock;
 import razchexlitiel.cim.block.entity.ModBlockEntities;
 
 public class MiningPortBlockEntity extends BlockEntity implements RotationalNode {
@@ -75,8 +76,15 @@ public class MiningPortBlockEntity extends BlockEntity implements RotationalNode
             }
         }
     }
+
     @Override
     public Direction[] getPropagationDirections(@Nullable Direction fromDir) {
+        Direction facing = getBlockState().getValue(MiningPortBlock.FACING);
+        // Пропускаем сигнал ТОЛЬКО вдоль основной оси (вперед-назад)
+        if (fromDir == null) return new Direction[]{facing, facing.getOpposite()};
+        if (fromDir == facing || fromDir == facing.getOpposite()) {
+            return new Direction[]{fromDir.getOpposite()};
+        }
         return new Direction[0];
     }
 
@@ -123,10 +131,12 @@ public class MiningPortBlockEntity extends BlockEntity implements RotationalNode
         super.load(tag);
         inventory.deserializeNBT(tag.getCompound("Inventory"));
     }
+
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
+
     private void sync() {
         if (level != null && !level.isClientSide) {
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);

@@ -32,7 +32,8 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private long speed = 0;
     private long torque = 0;
-
+    private long lastBreakTick = 0;
+    private static final int BREAK_COOLDOWN = 20; // тиков между блоками (1 секунда)
     private RotationSource cachedSource;
     private long cacheTimestamp;
     private static final long CACHE_LIFETIME = 10;
@@ -115,6 +116,8 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
             be.handleClientAnimation();
             return;
         }
+
+        // 1. Обновляем энергию вращения
         long currentTime = level.getGameTime();
         if (!be.isCacheValid(currentTime)) {
             RotationSource source = RotationNetworkHelper.findSource(be, null);
@@ -122,19 +125,51 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
         }
 
         RotationSource src = be.getCachedSource();
-        long newSpeed = (src != null) ? src.speed() : 0;
-        long newTorque = (src != null) ? src.torque() : 0;
-        if (be.speed != newSpeed || be.torque != newTorque) {
-            be.speed = newSpeed;
-            be.torque = newTorque;
-            be.setChanged();
-            be.sync();
-            be.invalidateNeighborCaches();
+        be.speed = (src != null) ? src.speed() : 0;
+        be.torque = (src != null) ? src.torque() : 0;
+
+        // 2. Бурение: только если есть скорость и прошел кулдаун
+        if (be.speed > 0 && level.getGameTime() - be.lastBreakTick >= BREAK_COOLDOWN) {
+            if (be.tryBreakBlock(level, pos, state)) {
+                be.lastBreakTick = level.getGameTime();
+                // 3. Если блок сломан и есть разместитель — двигаемся вперед
+                if (be.placerPos != null && level.getBlockEntity(be.placerPos) instanceof ShaftPlacerBlockEntity) {
+                    be.moveForward(level, pos, state);
+                }
+            }
+        }
+    }
+
+    private boolean tryBreakBlock(Level level, BlockPos pos, BlockState state) {
+        Direction facing = state.getValue(DrillHeadBlock.FACING);
+        BlockPos breakPos = pos.relative(facing);
+        BlockState targetState = level.getBlockState(breakPos);
+
+        if (targetState.isAir() || targetState.getDestroySpeed(level, breakPos) < 0 || targetState.getDestroySpeed(level, breakPos) > 50)
+            return false;
+
+        List<ItemStack> drops = Block.getDrops(targetState, (ServerLevel) level, breakPos, level.getBlockEntity(breakPos));
+        level.destroyBlock(breakPos, false);
+
+        // Логика сбора лута в MiningPort через Placer
+        boolean collected = false;
+        if (placerPos != null && level.getBlockEntity(placerPos) instanceof ShaftPlacerBlockEntity placer) {
+            BlockPos portPos = placer.getMiningPortPos();
+            if (portPos != null && level.getBlockEntity(portPos) instanceof MiningPortBlockEntity port) {
+                for (ItemStack stack : drops) {
+                    ItemStack remainder = port.addItem(stack);
+                    if (!remainder.isEmpty()) {
+                        Containers.dropItemStack(level, breakPos.getX(), breakPos.getY(), breakPos.getZ(), remainder);
+                    }
+                }
+                collected = true;
+            }
         }
 
-        if (be.speed > 0) {
-            be.tryBreakBlock(level, pos, state);
+        if (!collected) {
+            drops.forEach(stack -> Containers.dropItemStack(level, breakPos.getX(), breakPos.getY(), breakPos.getZ(), stack));
         }
+        return true;
     }
 
     private void handleClientAnimation() {
@@ -148,44 +183,6 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
                 ticksWithoutPower++;
                 if (ticksWithoutPower > STOP_DELAY_TICKS) currentAnimationSpeed = Math.max(currentAnimationSpeed - DECELERATION, 0f);
             } else ticksWithoutPower = 0;
-        }
-    }
-
-    private void tryBreakBlock(Level level, BlockPos pos, BlockState state) {
-        Direction facing = state.getValue(DrillHeadBlock.FACING);
-        BlockPos breakPos = pos.relative(facing);
-        BlockState targetState = level.getBlockState(breakPos);
-
-        if (targetState.isAir() || targetState.canBeReplaced()) return;
-
-        float hardness = targetState.getDestroySpeed(level, breakPos);
-        if (hardness < 0 || hardness > 50) return;
-
-        if (!level.isClientSide) {
-            List<ItemStack> drops = Block.getDrops(targetState, (ServerLevel) level, breakPos, level.getBlockEntity(breakPos));
-            level.destroyBlock(breakPos, false);
-
-            boolean inserted = false;
-            if (placerPos != null && level.getBlockEntity(placerPos) instanceof ShaftPlacerBlockEntity placer) {
-                BlockPos portPos = placer.getMiningPortPos();
-                if (portPos != null && level.getBlockEntity(portPos) instanceof MiningPortBlockEntity port) {
-                    for (ItemStack stack : drops) {
-                        ItemStack remainder = port.addItem(stack);
-                        if (!remainder.isEmpty()) {
-                            Containers.dropItemStack(level, breakPos.getX() + 0.5, breakPos.getY() + 0.5, breakPos.getZ() + 0.5, remainder);
-                        }
-                    }
-                    inserted = true;
-                }
-            }
-            if (!inserted) {
-                for (ItemStack stack : drops) {
-                    Containers.dropItemStack(level, breakPos.getX() + 0.5, breakPos.getY() + 0.5, breakPos.getZ() + 0.5, stack);
-                }
-            }
-
-            // Перемещаем головку вперёд
-            moveForward(level, pos, state);
         }
     }
 
@@ -211,9 +208,9 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
             newDrill.setPlacerPos(currentPlacerPos);
         }
 
-        // Сообщаем разместителю поставить вал на старую позицию
+        // Сообщаем разместителю о перемещении
         if (currentPlacerPos != null && level.getBlockEntity(currentPlacerPos) instanceof ShaftPlacerBlockEntity placer) {
-            placer.placeShaftAt(oldPos, facing.getOpposite());
+            placer.handleHeadMoved(oldPos, newPos);
         }
     }
 

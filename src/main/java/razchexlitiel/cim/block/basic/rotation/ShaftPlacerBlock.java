@@ -85,8 +85,11 @@ public class ShaftPlacerBlock extends BaseEntityBlock {
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof ShaftPlacerBlockEntity be) {
             be.invalidateCache();
+            be.onNeighborChange(); // добавлено
         }
     }
+
+
 
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {

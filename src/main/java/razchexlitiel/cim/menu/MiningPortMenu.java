@@ -29,12 +29,16 @@ public class MiningPortMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
 
         // Слоты буфера (3x3)
+        // Page 43: Исправленные координаты слотов
+// Слоты буфера (3x3)
         IItemHandler handler = blockEntity.getInventory();
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 3; ++col) {
-                this.addSlot(new SlotItemHandler(handler, col + row * 3, 62 + col * 18, 29 + row * 18));
+                // 62 и 17 — стандартные отступы. Убедись, что y увеличивается на row * 18
+                this.addSlot(new SlotItemHandler(handler, col + row * 3, 62 + col * 18, 17 + row * 18));
             }
         }
+
     }
 
     public BlockPos getPos() { return blockEntity.getBlockPos(); }
