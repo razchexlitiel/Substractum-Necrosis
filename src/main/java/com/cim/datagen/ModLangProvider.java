@@ -51,7 +51,7 @@ public class ModLangProvider extends LanguageProvider {
         add(ModBlocks.SEQUOIA_DOOR.get(), "Дверь из секвои");
         add(ModBlocks.SEQUOIA_BIOME_MOSS.get(), "Тёмный мох");
         add(ModBlocks.SEQUOIA_LEAVES.get(), "Листва секвои");
-        
+
 
         // Вкладка креатива
         add("creativetab.snm_weapons_tab", "Substractum: Арсенал");
