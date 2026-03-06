@@ -1,97 +1,127 @@
-<div align="right">
-  <a href="#english">English</a> | <a href="#russian">Русский</a>
-</div>
+# Crustal Incursion 
 
-<a name="english"></a>
-# Crustal Incursion
+**Crustal Incursion** - это технический мод для Minecraft 1.20.1 (Forge), который полностью переосмысляет механики шахт и добычи ресурсов. Забудь о скучных туннелях и легкодоступных ресурсах: здесь глубина превращается в живой, враждебный организм, требующий серьёзной технологической подготовки.
 
-> "You are not a god here. You are prey."
-
-**Crustal Incursion** is a global technical mod for Minecraft 1.20.1 (Forge) that reimagines mining mechanics. Forget endless tunnels and easy resources. Here, the depth is a living, hostile organism.
-
-⚠️ **PROJECT STATUS:** Early Development (Pre-Alpha). Currently, the mod is a set of experimental mechanics and prototypes.
+⚠️ **Статус проекта:** Ранняя разработка (Pre-Alpha). В текущей версии представлены экспериментальные механики и заготовки. Многие функции могут быть нестабильны или отсутствовать.
 
 ---
 
-## 💀 Concept: Descent into the Abyss
-The world below bedrock (-64) is now divided into **8 layers of Necrosis**. Each layer is isolated by an ancient membrane. To go deeper, you'll have to "break through," facing an ecosystem that isn't happy to see guests.
+## 📖 Концепция: Спуск в Бездну
 
-### 🌌 Dimension: Necrosis
-To avoid overloading the overworld, the entire ecosystem is moved to a **separate dimension**.
-*   **Entry:** Breaking the final membrane under the Overworld bedrock (-64) opens a passage to the first layer of Necrosis.
-*   **Isolation:** Each layer within the dimension is a self-contained location with its own generation rules, monsters, and physics (temperature, air density).
-*   **Optimization:** Monsters of lower layers do not exist until you "crack" the passage to them. This keeps FPS stable even with a complex ecosystem.
-
-### 🏗️ Modular Drilling
-Forget the pickaxe. Deep rocks have colossal density.
-*   **Complex Machines:** You'll need modular drilling rigs with customizable heads, frames, and modules.
-*   **Heat Management:** The denser the layer, the more the drill heats up. Build radiator systems and active cooling, or your equipment will turn into a pile of scrap metal.
-*   **Noise and Vibrations:** Heavy machinery attracts attention. Silence is your only ally.
-
-### 💎 Veins instead of Blocks
-Ore is no longer a single-use block.
-*   Resources are presented as **massive deposits**.
-*   Extraction takes in-game days. You'll have to set up camp and build fortifications around your drilling site.
-
-### 🐜 Hive Ecosystem
-There are few enemies, but they work as a single mechanism.
-*   **Intelligence:** Local parasites adapt to your actions.
-*   **Noise Attraction:** Loud machines are guaranteed to call "guests" from the depths.
-*   **Perimeter Defense:** Your task is not just to dig, but to survive while the machines are running.
-
----
-
-## 🛠️ Current State (Dev Mechanics)
-Currently implemented/being tested in the dev version:
-*   **Depth Worm & Nest:** A system of nests and defender worms with a collective mind (Hive Network).
-*   **Capability System:** Base architecture for connecting hive nodes.
-*   **Blocks:** First prototypes of dense rock and nest blocks.
-
-## 🚀 Development Roadmap
-1. Refinement of the **Density** system to limit digging speed.
-2. Implementation of **Membranes** between layers.
-3. **Modular Drill** system (customization via GUI).
-4. **Noise and Heat** mechanics.
-
----
-
-<a name="russian"></a>
-# Crustal Incursion (RU)
-
-> "Ты здесь не бог. Ты - добыча."
-
-**Crustal Incursion** — это глобальный технический мод для Minecraft 1.20.1 (Forge), переосмысляющий механику шахты. Забудь о бесконечных туннелях и легких ресурсах. Здесь глубина — это живой, враждебный организм.
-
-⚠️ **СТАТУС ПРОЕКТА:** Ранняя разработка (Pre-Alpha). Сейчас мод является набором экспериментальных механик и заготовок.
-
----
-
-## 💀 Концепция: Спуск в Бездну
-Мир под бедроком (-64) теперь разделен на **8 слоев Некроза**. Каждый слой изолирован древней мембраной. Чтобы пройти глубже, тебе придется "пробить" путь, столкнувшись с экосистемой, которая не рада гостям.
+Мир под бедроком (ниже -64) теперь разделён на **4 слоя Некроза**. Каждый слой изолирован древней мембраной. Чтобы проникнуть глубже, тебе придётся «пробивать» путь, сталкиваясь с уникальной экосистемой, которая не рада гостям.
 
 ### 🌌 Измерение: Некроз
-Чтобы не нагружать обычный мир, вся экосистема вынесена в **отдельное измерение**.
-* **Вход:** Пробитие финальной мембраны под бедроком Overworld (-64) открывает проход в первый слой Некроза.
-* **Изоляция:** Каждый слой внутри измерения — это замкнутая локация со своими правилами генерации, монстрами и физикой (температура, плотность воздуха).
-* **Оптимизация:** Монстры нижних слоев не существуют, пока ты не "вскрыл" проход к ним. Это позволяет держать FPS стабильным даже при сложной экосистеме.
-
-### 🏗️ Модульное Бурение
-Забудь про кирку. Глубинные породы обладают колоссальной плотностью.
-* **Сложные машины:** Тебе понадобятся модульные буровые установки с настраиваемыми головками, каркасами и модулями.
-* **Менеджмент тепла:** Чем плотнее слой, тем сильнее греется бур. Строй системы радиаторов и активного охлаждения, иначе твоя техника превратится в груду металла.
-* **Шум и вибрации:** Тяжелая техника привлекает внимание. Тишина — твой единственный союзник.
-
-### 💎 Жилы вместо блоков
-Руда больше не одноразовый блок.
-* Ресурсы представлены в виде **массивных залежей**.
-* Добыча занимает игровые дни. Тебе придется разбивать лагерь и строить фортификации вокруг своей буровой площадки.
+Чтобы не перегружать обычный мир, вся подземная экосистема вынесена в **отдельное измерение**.
+- **Вход:** Пробитие финальной мембраны под бедроком в Owerworld (-64) открывает портал в первый слой Некроза.
+- **Изоляция слоёв:** Каждый слой внутри измерения - замкнутая локация со своими правилами генерации, мобами и физическими условиями (температура, плотность воздуха).
+- **Оптимизация:** Монстры глубинных слоёв не существуют, пока ты не «вскроешь» проход к ним. Это сохраняет высокий FPS даже при такой сложной экосистеме.
 
 ---
 
-## 🛠️ Текущие механики
-На данный момент в dev-версии реализованы/тестируются:
-* **Depth Worm & Nest:** Система гнезд и червей-защитников (Hive Network).
-* **Capability System:** Архитектура связи узлов улья.
-* **Блоки:** Прототипы плотной породы и гнезд.
+## ⛏️ Механики добычи
 
-**Разработчик:** razchexlitiel
+### 🏗️ Модульное бурение
+Забудь про кирку. Глубинные породы обладают колоссальной плотностью.
+- **Сборка буров:** Тебе понадобятся модульные буровые установки со сменными головками, каркасами и вспомогательными модулями.
+- **Тепловой менеджмент:** Чем плотнее слой, тем сильнее греется оборудование. Строй системы радиаторов и активного охлаждения, иначе техника выйдет из строя.
+- **Шум и вибрации:** Тяжёлая техника привлекает внимание подземных обитателей. Тишина - твой главный союзник.
+
+### 💎 Жилы вместо блоков
+Руды и ресурсы не выпадают из одиночных блоков.
+- Ресурсы представлены в виде **массивных залежей**, добыча которых занимает игровые дни.
+- Тебе придётся разбивать лагерь и строить фортификации вокруг своей буровой площадки, чтобы защитить её от нападений.
+
+---
+
+## 🛠️ Ключевые технологические системы (Custom APIs)
+
+Мод построен на трёх независимых, но интегрированных друг с другом API:
+
+### ⚡ Energy API
+Собственная высокопроизводительная система передачи энергии.
+- **Графовая оптимизация:** Использование сетевых узлов (`Nodes`) вместо ежетиковой проверки соседей.
+- **High-Tier Readiness:** Поддержка значений типа `long` для работы с колоссальными мощностями.
+- **Bridge Support:** Полная совместимость с Forge Energy (FE) через кастомные обёртки.
+
+### ⚙️ Rotation API
+Система передачи механической энергии (крутящего момента).
+- **Кинетическая сеть:** Передача вращения через валы, редукторы, сумматоры и многое другое.
+- **Электромеханика:** Конвертация электрической энергии в механическую через кастомные двигатели и конвертеры.
+- **Промышленное применение:** Механические буры и установки для добычи ресурсов в глубинных слоях Некроза.
+
+### 🧠 Hive Network API (Система Улья)
+Уникальный движок для управления коллективным разумом мобов.
+- **Nest Logic:** Мобы (например, **Глубинные черви**) привязаны к гнёздам и действуют сообща.
+- **Expansion:** Улей способен изменять ландшафт и почву вокруг себя.
+- **Advanced AI:** У всех мобов есть продвинутый интеллект, превращающий любые стычки в уникальные бои.
+
+---
+
+## 🛡️ Военные технологии и баллистика
+**В моде уже реализованы первая боевая турель и огнестрельное оружие**
+- **Real-time Ballistics:** Турели используют сложный вычислитель для расчёта упреждения цели и траектории полёта снаряда.
+- **Universal Ammo Registry:** Единый реестр калибров. Одни и те же боеприпасы используются как в ручном огнестрельном оружии, так и в автоматизированных турелях. 
+
+---
+
+## 🧱 Зависимости
+
+Для работы мода требуются следующие библиотеки (они подключатся автоматически, если ты используешь менеджер зависимостей, например, при сборке через Gradle):
+
+*   **GeckoLib** (версия 4.8.2 для 1.20.1) - для анимаций существ и механизмов.
+*   **TerraBlender** (версия `1.20.1-3.0.0.169`) - для генерации биомов.
+*   **Mixin** (встроен в Forge) - используется для модификации кода игры.
+
+**Опционально:**
+*   **JEI (Just Enough Items)** (версия 15.3.0.4) - для отображения рецептов (включён в `runtimeOnly` в сборочных скриптах).
+
+---
+
+## 🧪 Сборка из исходников
+
+Если ты хочешь собрать мод самостоятельно (например, чтобы протестировать последние изменения), выполни следующие шаги:
+
+1.  **Клонируй репозиторий:**
+    ```bash
+    git clone https://github.com/TONG-Industries/Crustal-Incursion.git
+    cd Crustal-Incursion
+    ```
+2.  **Убедись, что у тебя установлена Java 17** и переменная `JAVA_HOME` указывает на неё.
+3.  **Собери проект** с помощью Gradle:
+    *   Для Linux/macOS:
+        ```bash
+        ./gradlew build
+        ```
+    *   Для Windows:
+        ```bash
+        gradlew.bat build
+        ```
+4.  **Найди готовый `.jar` файл** в папке `build/libs/`. Он будет называться `cim-<версия>.jar`.
+
+---
+
+## 📋 Технические требования (для разработчиков)
+
+Информация из `gradle.properties` и `build.gradle`:
+
+*   **Minecraft Version:** 1.20.1
+*   **Minecraft Version Range:** `[1.20.1,1.21)`
+*   **Forge Version:** 47.2.0 (рекомендуемая), диапазон: `[47,)`
+*   **Mappings:** Official (`official`) для версии 1.20.1
+*   **Mod ID:** `cim`
+*   **Mod Group:** `com.cim`
+*   **Текущая версия мода:** `0.0.1-alpha
+
+---
+
+## 🤝 Вклад в разработку
+
+Проект находится в активной разработке. Если ты хочешь помочь (кодом, идеями, артами, текстурами), создавай **issue** или **pull request** в [репозитории на GitHub](https://github.com/TONG-Industries/Crustal-Incursion). Будем рады любой помощи!
+
+---
+
+## 📬 Контакты
+
+*   **GitHub:** [TONG-Industries/Crustal-Incursion](https://github.com/TONG-Industries/Crustal-Incursion)
+*   **Discord:** *https://discord.gg/fnRfYfry7F*
+---
