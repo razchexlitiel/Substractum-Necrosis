@@ -103,21 +103,17 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
         return worldPosition.relative(facing, totalChainLength + 1);
     }
 
-    // Добавить метод проверки возможности установки
     public boolean canPlaceNext() {
         if (!isSwitchedOn) return false;
-        if (totalChainLength >= 25) return false; // лимит
-
+        // Лимит убран
         Direction facing = getBlockState().getValue(ShaftPlacerBlock.FACING);
         BlockPos nextPos = getNextPlacePos();
         if (!level.isEmptyBlock(nextPos) && !level.getBlockState(nextPos).canBeReplaced()) {
             return false; // место занято
         }
-
         boolean needPort = (shaftsAfterLastPort >= 5);
         int slotIndex = needPort ? findPortSlot() : findShaftSlot();
         if (slotIndex == -1) return false;
-
         long energyCost = needPort ? ENERGY_PER_PORT : ENERGY_PER_SHAFT;
         return energyStored >= energyCost;
     }
@@ -319,7 +315,7 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
         boolean foundDrill = false;
         BlockPos lastHeadPos = null;
 
-        while (length < 25) {
+        while (length < 9999) {
             BlockState state = level.getBlockState(currentPos);
             Block block = state.getBlock();
 
@@ -369,7 +365,7 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
 
         // Найти конец существующей цепочки (пропускаем уже учтённые блоки)
         int existingLength = 0;
-        while (existingLength < 25) {
+        while (existingLength < 9999) {
             BlockState state = level.getBlockState(currentPos);
             Block block = state.getBlock();
 
@@ -392,7 +388,7 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
             }
         }
 
-        if (existingLength >= 25) return;
+        if (existingLength >= 9999) return; // ← вот эту строку заменили
 
         BlockPos placePos = currentPos;
         if (!level.isEmptyBlock(placePos) && !level.getBlockState(placePos).canBeReplaced()) {
@@ -545,6 +541,8 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
             headPos = null;
         }
     }
+
+
     @Override
     public void onLoad() {
         super.onLoad();

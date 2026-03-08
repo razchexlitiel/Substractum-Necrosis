@@ -25,7 +25,9 @@ import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity, RotationalNode {
 
@@ -139,33 +141,86 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
         }
     }
 
+    private List<BlockPos> getBlocksToBreak(BlockPos pos, Direction facing) {
+        List<BlockPos> targets = new ArrayList<>();
+        // Базовый блок перед головкой
+        BlockPos front = pos.relative(facing);
+
+        // Определяем две оси, перпендикулярные направлению
+        Direction.Axis axis = facing.getAxis();
+        Direction[] horizontals;
+        if (axis == Direction.Axis.X) {
+            horizontals = new Direction[]{Direction.NORTH, Direction.SOUTH};
+        } else if (axis == Direction.Axis.Z) {
+            horizontals = new Direction[]{Direction.WEST, Direction.EAST};
+        } else { // вертикальное направление (вверх/вниз) – тогда ширина и высота задаются по горизонтали
+            horizontals = new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
+        }
+
+        // Для горизонтальных направлений: высота = Y, Y+1; ширина = 3 блока по горизонтали
+        if (axis.isHorizontal()) {
+            for (int yOffset = 0; yOffset <= 1; yOffset++) {
+                for (Direction horizontal : horizontals) {
+                    targets.add(front.relative(horizontal, -1).above(yOffset));
+                    targets.add(front.above(yOffset));
+                    targets.add(front.relative(horizontal, 1).above(yOffset));
+                }
+            }
+        } else { // вертикальное направление – тогда "ширина" и "высота" меняются ролями
+            // Например, при движении вверх/вниз копаем область 3x2 по горизонтали
+            for (int xOffset = -1; xOffset <= 1; xOffset++) {
+                for (int zOffset = -1; zOffset <= 1; zOffset++) {
+                    // Только 2 блока в высоту? Но здесь высота – это ось Y, а мы уже движемся по Y.
+                    // Упростим: копаем 3x3 по горизонтали и 2 по вертикали (включая целевой уровень и выше/ниже)
+                    // Для вертикали нужно уточнить, но пока оставим как есть – область 3x3x1 перед головкой.
+                    // Лучше пропустить, так как вертикальное бурение редкость.
+                    targets.add(front.offset(xOffset, 0, zOffset));
+                    targets.add(front.offset(xOffset, 1, zOffset)); // и выше
+                }
+            }
+        }
+        // Убираем дубликаты (на случай если сетка пересекается)
+        return targets.stream().distinct().collect(Collectors.toList());
+    }
+
     private boolean tryBreakBlock(Level level, BlockPos pos, BlockState state) {
         Direction facing = state.getValue(DrillHeadBlock.FACING);
-        BlockPos breakPos = pos.relative(facing);
-        BlockState targetState = level.getBlockState(breakPos);
+        List<BlockPos> breakPositions = getBlocksToBreak(pos, facing);
 
-        if (targetState.isAir() || targetState.getDestroySpeed(level, breakPos) < 0 || targetState.getDestroySpeed(level, breakPos) > 50)
-            return false;
-
-        // Проверяем, может ли разместитель построить следующий блок
+        // Проверяем, может ли разместитель построить следующий блок (хотя бы один сломаем)
         if (placerPos != null && level.getBlockEntity(placerPos) instanceof ShaftPlacerBlockEntity placer) {
             if (!placer.hasResourcesForNext()) {
                 return false; // не хватает ресурсов – не бурим
             }
         }
 
-        List<ItemStack> drops = Block.getDrops(targetState, (ServerLevel) level, breakPos, level.getBlockEntity(breakPos));
-        level.destroyBlock(breakPos, false);
+        boolean anyBroken = false;
+        List<ItemStack> allDrops = new ArrayList<>();
+
+        for (BlockPos breakPos : breakPositions) {
+            BlockState targetState = level.getBlockState(breakPos);
+            if (targetState.isAir()) continue;
+            float destroySpeed = targetState.getDestroySpeed(level, breakPos);
+            if (destroySpeed < 0 || destroySpeed > 50) continue; // неломаемые или слишком крепкие
+
+            // Собираем дроп
+            List<ItemStack> drops = Block.getDrops(targetState, (ServerLevel) level, breakPos, level.getBlockEntity(breakPos));
+            allDrops.addAll(drops);
+            level.destroyBlock(breakPos, false);
+            anyBroken = true;
+        }
+
+        if (!anyBroken) return false;
 
         // Логика сбора лута в MiningPort через Placer
         boolean collected = false;
         if (placerPos != null && level.getBlockEntity(placerPos) instanceof ShaftPlacerBlockEntity placer) {
             BlockPos portPos = placer.getMiningPortPos();
             if (portPos != null && level.getBlockEntity(portPos) instanceof MiningPortBlockEntity port) {
-                for (ItemStack stack : drops) {
+                for (ItemStack stack : allDrops) {
                     ItemStack remainder = port.addItem(stack);
                     if (!remainder.isEmpty()) {
-                        Containers.dropItemStack(level, breakPos.getX(), breakPos.getY(), breakPos.getZ(), remainder);
+                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), remainder);
                     }
                 }
                 collected = true;
@@ -173,8 +228,11 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
         }
 
         if (!collected) {
-            drops.forEach(stack -> Containers.dropItemStack(level, breakPos.getX(), breakPos.getY(), breakPos.getZ(), stack));
+            for (ItemStack stack : allDrops) {
+                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+            }
         }
+
         return true;
     }
 
