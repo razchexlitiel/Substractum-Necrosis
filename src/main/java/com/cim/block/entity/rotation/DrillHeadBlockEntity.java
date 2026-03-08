@@ -149,7 +149,7 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
 
         // Проверяем, может ли разместитель построить следующий блок
         if (placerPos != null && level.getBlockEntity(placerPos) instanceof ShaftPlacerBlockEntity placer) {
-            if (!placer.canPlaceNext()) {
+            if (!placer.hasResourcesForNext()) {
                 return false; // не хватает ресурсов – не бурим
             }
         }

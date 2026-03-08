@@ -1,5 +1,6 @@
 package com.cim.block.basic.rotation;
 
+import com.cim.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -71,7 +72,7 @@ public class MiningPortBlock extends BaseEntityBlock {
             if (be instanceof MiningPortBlockEntity port) {
                 NetworkHooks.openScreen((ServerPlayer) player,
                         new SimpleMenuProvider(
-                                (id, inv, p) -> new MiningPortMenu(id, inv, port),
+                                (id, inv, p) -> new MiningPortMenu(id, inv, port, port.getDataAccess()),
                                 Component.translatable("container.mining_port")
                         ), pos);
             }
@@ -83,6 +84,6 @@ public class MiningPortBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return null;
+        return createTickerHelper(type, ModBlockEntities.MINING_PORT_BE.get(), MiningPortBlockEntity::tick);
     }
 }
