@@ -56,6 +56,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
         cubeAllWithItem(ModBlocks.NECROSIS_TEST4);
         cubeAllWithItem(ModBlocks.NECROSIS_PORTAL);
 
+        cubeAllWithItem(ModBlocks.DECO_STEEL);
+        cubeAllWithItem(ModBlocks.DECO_STEEL_DARK);
+        cubeAllWithItem(ModBlocks.DECO_STEEL_SMOG);
+        cubeAllWithItem(ModBlocks.DECO_LEAD);
+
         cubeAllWithItem(ModBlocks.DIRT_ROUGH);
         cubeAllWithItem(ModBlocks.BASALT_ROUGH);
 

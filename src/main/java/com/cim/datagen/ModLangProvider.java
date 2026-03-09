@@ -125,12 +125,6 @@ add(ModItems.DEPTH_WORM_SPAWN_EGG.get(), "Depth worm spawn egg");
     add(ModItems.MACHINEGUN.get(), "Machine gun");
     add(ModItems.TURRET_CHIP.get(), "Turret chip");
     add(ModItems.TURRET_LIGHT_PORTATIVE_PLACER.get(), "Portable light turret");
-    add(ModItems.TURRET_LIGHT_PLACER_ITEM.get(), "Light turret block");
-    add(ModItems.MOTOR_ELECTRO_ITEM.get(), "Electric motor");
-    add(ModItems.WIND_GEN_FLUGER.get(), "Wind generator vane");
-    add(ModItems.SHAFT_IRON_ITEM.get(), "Iron shaft");
-    add(ModItems.SHAFT_WOODEN_ITEM.get(), "Wooden shaft");
-    add(ModItems.DRILL_HEAD_ITEM.get(), "Drill head");
     add(ModItems.AMMO_TURRET.get(), "Turret ammo");
     add(ModItems.AMMO_TURRET_PIERCING.get(), "Armor-Piercing turret ammo");
     add(ModItems.AMMO_TURRET_HOLLOW.get(), "Hollow-Point turret ammo");
@@ -232,7 +226,6 @@ add(ModItems.DEPTH_WORM_SPAWN_EGG.get(), "Depth worm spawn egg");
     // Валы
     add(ModBlocks.DRILL_HEAD.get(), "Головка бура");
     add(ModBlocks.MOTOR_ELECTRO.get(), "Электромотор");
-    add(ModBlocks.WIND_GEN_FLUGER.get(), "Ветрогенераторный флюгер");
     add(ModBlocks.SHAFT_IRON.get(), "Железный вал");
     add(ModBlocks.SHAFT_WOODEN.get(), "Деревянный вал");
     add(ModBlocks.GEAR_PORT.get(), "Порт редуктора");
@@ -255,13 +248,7 @@ add(ModItems.DEPTH_WORM_SPAWN_EGG.get(), "Яйцо призыва глубинн
     add(ModItems.MACHINEGUN.get(), "Пулемёт");
     add(ModItems.TURRET_CHIP.get(), "Чип турели");
     add(ModItems.TURRET_LIGHT_PORTATIVE_PLACER.get(), "Портативная лёгкая турель");
-    add(ModItems.TURRET_LIGHT_PLACER_ITEM.get(), "Блок лёгкой турели");
-    add(ModItems.MOTOR_ELECTRO_ITEM.get(), "Электромотор");
     add(ModItems.WIND_GEN_FLUGER.get(), "Флюгер ветрогенератора");
-    add(ModItems.SHAFT_IRON_ITEM.get(), "Железный вал");
-    add(ModItems.SHAFT_WOODEN_ITEM.get(), "Деревянный вал");
-    add(ModItems.DRILL_HEAD_ITEM.get(), "Головка бура");
-    add(ModItems.AMMO_TURRET.get(), "Патроны для турели");
     add(ModItems.AMMO_TURRET_PIERCING.get(), "Бронебойные боеприпасы для турели");
     add(ModItems.AMMO_TURRET_HOLLOW.get(), "Пустые патроны для турели");
     add(ModItems.AMMO_TURRET_FIRE.get(), "Зажигательные патроны для турели");
@@ -381,10 +368,6 @@ add(ModItems.DEPTH_WORM_SPAWN_EGG.get(), "Яйцо призыва глубинн
         add(ModBlocks.DRILL_HEAD.get(), "Бурова головка");
         add(ModBlocks.MOTOR_ELECTRO.get(), "Електромотор");
         add(ModItems.WIND_GEN_FLUGER.get(), "Флюгер вітрогенератора");
-        add(ModItems.SHAFT_IRON_ITEM.get(), "Залізний вал");
-        add(ModItems.SHAFT_WOODEN_ITEM.get(), "Дерев'яний вал");
-        add(ModItems.DRILL_HEAD_ITEM.get(), "Бурова головка");
-        add(ModItems.AMMO_TURRET.get(), "Набої для турелі");
         add(ModItems.AMMO_TURRET_PIERCING.get(), "Бронебійні набої для турелі");
         add(ModItems.AMMO_TURRET_HOLLOW.get(), "Експансивні набої для турелі");
         add(ModItems.AMMO_TURRET_FIRE.get(), "Запальні набої для турелі");
@@ -399,7 +382,16 @@ add(ModItems.DEPTH_WORM_SPAWN_EGG.get(), "Яйцо призыва глубинн
         add(ModItems.GRENADE_IF_SLIME.get(), "Слизова ударна граната");
         add(ModItems.GRENADE_IF_FIRE.get(), "Запальна ударна граната");
         add(ModItems.GRENADE_NUC.get(), "Ядерна граната");
-        
+        add(ModBlocks.SHAFT_IRON.get(), "Залізний вал");
+        add(ModBlocks.SHAFT_WOODEN.get(), "Дерев'яний вал");
+        add(ModBlocks.GEAR_PORT.get(), "Редукторний порт");
+        add(ModBlocks.STOPPER.get(), "Стопор");
+        add(ModBlocks.ADDER.get(), "Суматор");
+        add(ModBlocks.TACHOMETER.get(), "Тахометр");
+        add(ModBlocks.ROTATION_METER.get(), "Датчик обертання");
+        add(ModBlocks.RCONVERTER.get(), "Обертальний перетворювач");
+        add(ModBlocks.SHAFT_PLACER.get(), "Розміщувач валів");
+        add(ModBlocks.MINING_PORT.get(), "Шахтарський порт");
         // Сутності
         add("entity.cim.turret_light", "Легка турель");
         add("entity.cim.turret_light_linked", "Зв'язана легка турель");

@@ -103,19 +103,28 @@ public class ModBlocks {
     public static final RegistryObject<Block> NECROSIS_PORTAL = registerBlock("necrosis_portal",
             () -> new NecrosisPortalBlock(BlockBehaviour.Properties.of()
                     .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
-
     public static final RegistryObject<Block> DIRT_ROUGH = registerBlock("dirt_rough",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(0.5F, 6.0F).sound(SoundType.ROOTED_DIRT).requiresCorrectToolForDrops()));
-
+   public static final RegistryObject<Block> DECO_STEEL_DARK = registerBlock("deco_steel_dark",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> DECO_STEEL = registerBlock("deco_steel",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).requiresCorrectToolForDrops()));
+     public static final RegistryObject<Block> DECO_STEEL_SMOG = registerBlock("deco_steel_smog",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).requiresCorrectToolForDrops()));
     public static final RegistryObject<Block> BASALT_ROUGH = registerBlock("basalt_rough",
             () -> new Block(BlockBehaviour.Properties.of()
                     .strength(0.5F, 6.0F).sound(SoundType.STONE).requiresCorrectToolForDrops()));
-
-
-
     public static final RegistryObject<Block> WASTE_LOG = registerBlock("waste_log",
             () -> new FullOBlock(BlockBehaviour.Properties.copy(Blocks.OAK_WOOD).sound(SoundType.WOOD)));
+
+    public static final RegistryObject<Block> DECO_LEAD = registerBlock("deco_lead",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .strength(0.5F, 6.0F).sound(SoundType.NETHERITE_BLOCK).requiresCorrectToolForDrops()));
+
 
 
     //СТУПЕНИ И ПОЛУБЛОКИ

@@ -33,6 +33,7 @@ public class DataGenerators {
         generator.addProvider(event.includeClient(), new ModBlockStateProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new ModLangProvider(packOutput, "en_us"));
         generator.addProvider(event.includeClient(), new ModLangProvider(packOutput, "ru_ru"));
+        generator.addProvider(event.includeClient(), new ModLangProvider(packOutput, "uk_ua"));
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         ModBlockTagProvider blockTags = generator.addProvider(event.includeServer(), new ModBlockTagProvider(packOutput, lookupProvider, existingFileHelper));
         generator.addProvider(event.includeServer(), new LootTableProvider(packOutput, Set.of(), List.of(new LootTableProvider.SubProviderEntry(ModBlockLootTableProvider::new, LootContextParamSets.BLOCK))));
