@@ -121,6 +121,10 @@ public class CrustalIncursionMod {
             event.accept(ModBlocks.CONCRETE_HAZARD_OLD_SLAB.get());
             event.accept(ModBlocks.CONCRETE_HAZARD_OLD_STAIRS.get());
 
+            event.accept(ModBlocks.DECO_STEEL.get());
+            event.accept(ModBlocks.DECO_STEEL_DARK.get());
+            event.accept(ModBlocks.DECO_STEEL_SMOG.get());
+            event.accept(ModBlocks.DECO_LEAD.get());
             // Другие строительные блоки
             event.accept(ModBlocks.CRATE.get());
             event.accept(ModBlocks.CRATE_AMMO.get());
@@ -220,6 +224,8 @@ public class CrustalIncursionMod {
             event.accept(ModBlocks.NECROSIS_TEST2.get());
             event.accept(ModBlocks.NECROSIS_TEST3.get());
             event.accept(ModBlocks.NECROSIS_TEST4.get());
+            event.accept(ModBlocks.DIRT_ROUGH.get());
+            event.accept(ModBlocks.BASALT_ROUGH.get());
             event.accept(ModItems.DEPTH_WORM_SPAWN_EGG);
             event.accept(ModBlocks.DEPTH_WORM_NEST);
             event.accept(ModBlocks.HIVE_SOIL);
