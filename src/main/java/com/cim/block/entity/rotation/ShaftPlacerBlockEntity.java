@@ -13,6 +13,7 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -38,7 +39,8 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
     private final long ENERGY_PER_SHAFT = 1500;
     private final long ENERGY_PER_PORT = 5000;
     private final long RECEIVE_SPEED = 1000;
-
+    private final long ENERGY_PER_CHAIN = 250;
+    private static final int MAX_CHAIN_LENGTH = 20;
     private boolean isSwitchedOn = false;
     private int shaftsAfterLastPort = 0;
     private int totalChainLength = 0;
@@ -50,7 +52,7 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
     private long cacheTimestamp;
     private static final long CACHE_LIFETIME = 10;
 
-    private final ItemStackHandler inventory = new ItemStackHandler(9) {
+    private final ItemStackHandler inventory = new ItemStackHandler(18) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -96,6 +98,71 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
         }
         @Override public int getCount() { return 7; }
     };
+
+    public boolean isSwitchedOn() {
+        return isSwitchedOn;
+    }
+
+    private int findChainSlot() {
+        for (int i = 0; i < inventory.getSlots(); i++) {
+            ItemStack stack = inventory.getStackInSlot(i);
+            if (!stack.isEmpty() && stack.getItem() == Blocks.CHAIN.asItem()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void tryAttachChain(Level level, BlockPos portPos) {
+        // Ищем твёрдый блок сверху в пределах MAX_CHAIN_LENGTH
+        BlockPos chainStart = portPos.above();
+        BlockPos solidBlockPos = null;
+        int chainLength = 0;
+        for (int i = 1; i <= MAX_CHAIN_LENGTH; i++) {
+            BlockPos checkPos = portPos.above(i);
+            BlockState state = level.getBlockState(checkPos);
+            if (!state.isAir()) {
+                solidBlockPos = checkPos;
+                chainLength = i - 1;
+                break;
+            }
+        }
+        if (solidBlockPos == null) return; // нет твёрдого блока сверху
+
+        // Проверяем ресурсы на всю длину цепи (цепь ставится каждый блок)
+        int chainSlots = 0;
+        long energyNeeded = 0;
+        for (int i = 0; i < chainLength; i++) {
+            int slot = findChainSlot();
+            if (slot == -1) return; // не хватает цепей
+            if (energyStored < ENERGY_PER_CHAIN) return; // не хватает энергии
+            chainSlots = slot; // запоминаем последний слот (можно списать все сразу)
+            energyNeeded += ENERGY_PER_CHAIN;
+        }
+
+        // Если все проверки пройдены, списываем ресурсы и ставим цепь
+        for (int i = 0; i < chainLength; i++) {
+            BlockPos chainPos = portPos.above(i + 1);
+            level.setBlock(chainPos, Blocks.CHAIN.defaultBlockState(), 3);
+        }
+
+        // Списание ресурсов (энергия и предметы)
+        energyStored -= energyNeeded;
+        for (int i = 0; i < chainLength; i++) {
+            int slot = findChainSlot(); // каждый раз находим, но можно оптимизировать
+            inventory.extractItem(slot, 1, false);
+        }
+
+        setChanged();
+        sync();
+    }
+
+    public boolean hasResourcesForChain() {
+        if (!isSwitchedOn) return false;
+        int slotIndex = findChainSlot();
+        if (slotIndex == -1) return false;
+        return energyStored >= ENERGY_PER_CHAIN;
+    }
 
     // Добавить метод получения следующей позиции
     private BlockPos getNextPlacePos() {
@@ -408,9 +475,11 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
             BlockEntity be = level.getBlockEntity(placePos);
             if (be instanceof GearPortBlockEntity gear) {
                 gear.setupPorts(facing.getOpposite(), facing);
+                tryAttachChain(level, placePos);
             }
-            updateMiningPortPos(level); // добавить эту строку
-        } else {
+
+        }
+        else {
             BlockState shaftState = ModBlocks.SHAFT_IRON.get().defaultBlockState()
                     .setValue(ShaftBlock.FACING, facing);
             level.setBlock(placePos, shaftState, 3);
@@ -586,6 +655,7 @@ public class ShaftPlacerBlockEntity extends BlockEntity implements RotationalNod
             BlockEntity be = level.getBlockEntity(oldHeadPos);
             if (be instanceof GearPortBlockEntity gear) {
                 gear.setupPorts(facing.getOpposite(), facing);
+                tryAttachChain(level, oldHeadPos);
             }
             shaftsAfterLastPort = 0;
             updateMiningPortPos(level);

@@ -129,13 +129,24 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
         be.speed = (src != null) ? src.speed() : 0;
         be.torque = (src != null) ? src.torque() : 0;
 
-        // 2. Бурение: только если есть скорость и прошел кулдаун
+        // 2. Бурение и движение
         if (be.speed > 0 && level.getGameTime() - be.lastBreakTick >= BREAK_COOLDOWN) {
-            if (be.tryBreakBlock(level, pos, state)) {
-                be.lastBreakTick = level.getGameTime();
-                // 3. Если блок сломан и есть разместитель — двигаемся вперед
-                if (be.placerPos != null && level.getBlockEntity(be.placerPos) instanceof ShaftPlacerBlockEntity) {
-                    be.moveForward(level, pos, state);
+            if (be.placerPos != null && level.getBlockEntity(be.placerPos) instanceof ShaftPlacerBlockEntity placer && placer.isSwitchedOn()) {
+                Direction facing = state.getValue(DrillHeadBlock.FACING);
+                BlockPos frontPos = pos.relative(facing);
+                BlockState frontState = level.getBlockState(frontPos);
+
+                if (frontState.isAir() || frontState.canBeReplaced()) {
+                    // Пусто — двигаемся, если есть ресурсы
+                    if (placer.hasResourcesForNext()) {
+                        be.moveForward(level, pos, state);
+                        be.lastBreakTick = level.getGameTime();
+                    }
+                } else {
+                    // Есть блок — пробуем сломать
+                    if (be.tryBreakBlock(level, pos, state)) {
+                        be.lastBreakTick = level.getGameTime();
+                    }
                 }
             }
         }
@@ -143,44 +154,30 @@ public class DrillHeadBlockEntity extends BlockEntity implements GeoBlockEntity,
 
     private List<BlockPos> getBlocksToBreak(BlockPos pos, Direction facing) {
         List<BlockPos> targets = new ArrayList<>();
-        // Базовый блок перед головкой
         BlockPos front = pos.relative(facing);
-
-        // Определяем две оси, перпендикулярные направлению
         Direction.Axis axis = facing.getAxis();
-        Direction[] horizontals;
-        if (axis == Direction.Axis.X) {
-            horizontals = new Direction[]{Direction.NORTH, Direction.SOUTH};
-        } else if (axis == Direction.Axis.Z) {
-            horizontals = new Direction[]{Direction.WEST, Direction.EAST};
-        } else { // вертикальное направление (вверх/вниз) – тогда ширина и высота задаются по горизонтали
-            horizontals = new Direction[]{Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST};
-        }
 
-        // Для горизонтальных направлений: высота = Y, Y+1; ширина = 3 блока по горизонтали
-        if (axis.isHorizontal()) {
-            for (int yOffset = 0; yOffset <= 1; yOffset++) {
-                for (Direction horizontal : horizontals) {
-                    targets.add(front.relative(horizontal, -1).above(yOffset));
-                    targets.add(front.above(yOffset));
-                    targets.add(front.relative(horizontal, 1).above(yOffset));
-                }
-            }
-        } else { // вертикальное направление – тогда "ширина" и "высота" меняются ролями
-            // Например, при движении вверх/вниз копаем область 3x2 по горизонтали
-            for (int xOffset = -1; xOffset <= 1; xOffset++) {
-                for (int zOffset = -1; zOffset <= 1; zOffset++) {
-                    // Только 2 блока в высоту? Но здесь высота – это ось Y, а мы уже движемся по Y.
-                    // Упростим: копаем 3x3 по горизонтали и 2 по вертикали (включая целевой уровень и выше/ниже)
-                    // Для вертикали нужно уточнить, но пока оставим как есть – область 3x3x1 перед головкой.
-                    // Лучше пропустить, так как вертикальное бурение редкость.
-                    targets.add(front.offset(xOffset, 0, zOffset));
-                    targets.add(front.offset(xOffset, 1, zOffset)); // и выше
-                }
+        // Получаем два направления, перпендикулярных направлению движения
+        Direction[] perp = getPerpendicularDirections(facing);
+        Direction dirA = perp[0];
+        Direction dirB = perp[1];
+
+        for (int a = -1; a <= 1; a++) {
+            for (int b = -1; b <= 1; b++) {
+                targets.add(front.relative(dirA, a).relative(dirB, b));
             }
         }
-        // Убираем дубликаты (на случай если сетка пересекается)
-        return targets.stream().distinct().collect(Collectors.toList());
+        return targets;
+    }
+
+    private Direction[] getPerpendicularDirections(Direction facing) {
+        if (facing.getAxis() == Direction.Axis.X) {
+            return new Direction[]{Direction.UP, Direction.NORTH};
+        } else if (facing.getAxis() == Direction.Axis.Y) {
+            return new Direction[]{Direction.NORTH, Direction.EAST};
+        } else { // Z
+            return new Direction[]{Direction.UP, Direction.EAST};
+        }
     }
 
     private boolean tryBreakBlock(Level level, BlockPos pos, BlockState state) {

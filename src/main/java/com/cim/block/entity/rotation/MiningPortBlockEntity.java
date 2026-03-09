@@ -33,7 +33,7 @@ public class MiningPortBlockEntity extends BlockEntity implements RotationalNode
     private long cacheTimestamp;
     private static final long CACHE_LIFETIME = 10;
 
-    private final ItemStackHandler inventory = new ItemStackHandler(9) {
+    private final ItemStackHandler inventory = new ItemStackHandler(27) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();

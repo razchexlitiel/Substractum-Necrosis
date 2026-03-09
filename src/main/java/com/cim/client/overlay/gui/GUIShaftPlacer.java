@@ -28,29 +28,29 @@ public class GUIShaftPlacer extends AbstractContainerScreen<ShaftPlacerMenu> {
 
         guiGraphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
-        // Энергобар (без изменений)
+        // Энергобар
         int energy = menu.getEnergy();
         int maxEnergy = menu.getMaxEnergy();
         if (maxEnergy > 0) {
             int barHeight = 52;
             int filledHeight = (int) ((long) energy * barHeight / maxEnergy);
             guiGraphics.blit(TEXTURE,
-                    x + 120, y + 28 + (barHeight - filledHeight),
+                    x + 142, y + 28 + (barHeight - filledHeight),  // x + 142
                     177, 33 + (barHeight - filledHeight),
                     16, filledHeight);
         }
 
         // Кнопка включения
         if (menu.isSwitchedOn()) {
-            guiGraphics.blit(TEXTURE, x + 45, y + 43, 177, 0, 10, 32);
+            guiGraphics.blit(TEXTURE, x + 13, y + 43, 177, 0, 10, 32);
         }
 
         // Светодиоды
         if (menu.canPlaceNext()) {
-            guiGraphics.blit(TEXTURE, x + 64, y + 34, 177, 86, 6, 6);
+            guiGraphics.blit(TEXTURE, x + 32, y + 34, 177, 86, 6, 6);
         }
         if (menu.hasDrillHead()) {
-            guiGraphics.blit(TEXTURE, x + 72, y + 34, 177, 86, 6, 6);
+            guiGraphics.blit(TEXTURE, x + 40, y + 34, 177, 86, 6, 6);
         }
     }
 
@@ -59,8 +59,8 @@ public class GUIShaftPlacer extends AbstractContainerScreen<ShaftPlacerMenu> {
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
 
-        // Тултип энергии
-        if (isHovering(120, 28, 16, 52, mouseX, mouseY)) {
+        // Тултип энергии – новая позиция x = 142
+        if (isHovering(142, 28, 16, 52, mouseX, mouseY)) {
             guiGraphics.renderTooltip(this.font, Component.literal(menu.getEnergy() + " / " + menu.getMaxEnergy() + " HE"), mouseX, mouseY);
         }
 
@@ -80,8 +80,9 @@ public class GUIShaftPlacer extends AbstractContainerScreen<ShaftPlacerMenu> {
             double relX = mouseX - x;
             double relY = mouseY - y;
 
-            // Клик по кнопке питания (x45, y43, размер 10x32)
-            if (relX >= 45 && relX < 55 && relY >= 43 && relY < 75) {
+
+            // Клик по кнопке питания (x13, y43, размер 10x32)
+            if (relX >= 13 && relX < 23 && relY >= 43 && relY < 75) {
                 playClickSound();
                 ModPacketHandler.INSTANCE.sendToServer(new PacketToggleShaftPlacer(menu.getPos()));
                 return true;
