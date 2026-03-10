@@ -4,6 +4,7 @@ import com.cim.entity.ModEntities;
 import com.cim.entity.weapons.grenades.GrenadeIfType;
 import com.cim.entity.weapons.grenades.GrenadeType;
 import com.cim.item.energy.EnergyCellItem;
+import com.cim.item.energy.WireCoilItem;
 import com.cim.item.rotation.*;
 import com.cim.item.weapons.grenades.GrenadeIfItem;
 import com.cim.item.weapons.grenades.GrenadeItem;
@@ -47,6 +48,9 @@ public class ModItems {
             () -> new MultiDetonatorItem(new Item.Properties()));
     public static final RegistryObject<Item> DETONATOR = ITEMS.register("detonator",
             () -> new DetonatorItem(new Item.Properties()));
+
+    public static final RegistryObject<Item> WIRE_COIL = ITEMS.register("wire_coil",
+            () -> new WireCoilItem(new Item.Properties().stacksTo(64)));
 
     //ОРУЖИЕ
     public static final RegistryObject<Item> MACHINEGUN = ITEMS.register("machinegun",

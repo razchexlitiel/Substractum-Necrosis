@@ -1,5 +1,6 @@
 package com.cim.client;
 
+import com.cim.client.gecko.block.energy.ConnectorRenderer;
 import com.cim.client.gecko.block.energy.MachineBatteryRenderer;
 import com.cim.client.overlay.gui.*;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -29,7 +30,6 @@ import com.cim.client.gecko.entity.mobs.DepthWormRenderer;
 import com.cim.client.gecko.entity.turrets.TurretLightLinkedRenderer;
 import com.cim.client.gecko.entity.turrets.TurretLightRenderer;
 import com.cim.client.loader.ProceduralWireLoader;
-import com.cim.client.overlay.gui.*;
 import com.cim.client.overlay.hud.OverlayAmmoHud;
 import com.cim.client.renderer.ClientRenderHandler;
 import com.cim.entity.ModEntities;
@@ -67,6 +67,7 @@ public class ClientModEvents {
         BlockEntityRenderers.register(ModBlockEntities.TURRET_LIGHT_PLACER_BE.get(), TurretLightPlacerRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.DRILL_HEAD_BE.get(), DrillHeadRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.MACHINE_BATTERY_BE.get(), MachineBatteryRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.CONNECTOR_BE.get(), ConnectorRenderer::new);
 
 
         ModEntities.GRENADE_NUC_PROJECTILE.ifPresent(entityType ->

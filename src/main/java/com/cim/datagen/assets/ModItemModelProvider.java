@@ -1,5 +1,6 @@
 package com.cim.datagen.assets;
 
+import com.cim.block.basic.ModBlocks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -53,6 +54,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.BATTERY_ADVANCED);
         simpleItem(ModItems.BATTERY_LITHIUM);
         simpleItem(ModItems.BATTERY_TRIXITE);
+        simpleItem(ModItems.WIRE_COIL);
+
+
 
         simpleItem(ModItems.TURRET_CHIP);
         simpleItem(ModItems.TURRET_LIGHT_PORTATIVE_PLACER);
@@ -68,6 +72,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         simpleItem(ModItems.GRENADE_IF_FIRE);
         simpleItem(ModItems.GRENADE_IF_SLIME);
         simpleItem(ModItems.GRENADE_IF);
+
+        simpleBlockItem(ModBlocks.CONNECTOR);
+
 
         // Пример регистрации блоков как предметов (если это обычный куб)
         // complexBlockItem(ModBlocks.NECROTIC_ORE);

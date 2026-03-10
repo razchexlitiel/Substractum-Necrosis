@@ -1,5 +1,6 @@
 package com.cim.api.energy;
 
+import com.cim.block.entity.energy.ConnectorBlockEntity;
 import com.cim.capability.ModCapabilities;
 import com.google.common.collect.Sets;
 import com.mojang.logging.LogUtils;
@@ -96,6 +97,20 @@ public class EnergyNetworkManager extends SavedData {
                         queue.add(neighbor);
                     }
                 }
+
+                if (level.isLoaded(currentNode.getPos())) {
+                    BlockEntity be = level.getBlockEntity(currentNode.getPos());
+                    if (be instanceof ConnectorBlockEntity connector && connector.isConnected()) {
+                        BlockPos linkedPos = connector.getConnectedTo();
+                        if (linkedPos != null) {
+                            EnergyNode linkedNeighbor = allNodes.get(linkedPos.asLong());
+                            if (linkedNeighbor != null && !processedNodes.contains(linkedNeighbor)) {
+                                processedNodes.add(linkedNeighbor);
+                                queue.add(linkedNeighbor);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -139,7 +154,7 @@ public class EnergyNetworkManager extends SavedData {
         if (allNodes.containsKey(posLong)) {
             EnergyNode existingNode = allNodes.get(posLong);
             if (existingNode != null && existingNode.getNetwork() != null) {
-                return; // Узел уже есть и он в порядке
+                return;
             }
         }
 
@@ -170,9 +185,8 @@ public class EnergyNetworkManager extends SavedData {
                             be.getCapability(ModCapabilities.ENERGY_CONNECTOR).isPresent();
 
                     if (isEnergyBlock) {
-                        // Вместо рекурсивного addNode() — кладём в очередь
                         pendingNodes.add(new AddNodeRequest(neighborPos, null));
-                        continue; // Сосед будет обработан на следующей итерации
+                        continue;
                     }
                 }
             }
@@ -184,6 +198,38 @@ public class EnergyNetworkManager extends SavedData {
                 }
             }
         }
+
+        // ============================================================
+        // 4.5 [НОВОЕ] P2P-ПРОВОД: виртуальный сосед через коннектор
+        // ============================================================
+        // Если этот блок — коннектор с P2P-проводом, то его "пара"
+        // тоже считается соседом, даже если она в 30 блоках от нас.
+        if (level.isLoaded(pos)) {
+            BlockEntity be = level.getBlockEntity(pos);
+            if (be instanceof ConnectorBlockEntity connector && connector.isConnected()) {
+                BlockPos linkedPos = connector.getConnectedTo();
+
+                if (linkedPos != null && level.isLoaded(linkedPos)) {
+                    long linkedLong = linkedPos.asLong();
+                    EnergyNode linkedNeighbor = allNodes.get(linkedLong);
+
+                    if (linkedNeighbor == null) {
+                        // Пара ещё не в сети — добавляем в очередь
+                        // (та же авто-починка, но для P2P)
+                        BlockEntity linkedBe = level.getBlockEntity(linkedPos);
+                        if (linkedBe instanceof ConnectorBlockEntity) {
+                            pendingNodes.add(new AddNodeRequest(linkedPos, null));
+                        }
+                    } else if (linkedNeighbor.getNetwork() != null) {
+                        // Пара уже в сети — соединяем сети
+                        if (linkedNeighbor.getNetwork() != networkToAvoid) {
+                            adjacentNetworks.add(linkedNeighbor.getNetwork());
+                        }
+                    }
+                }
+            }
+        }
+        // ============================================================
 
         // 5. Слияние или создание сети
         if (adjacentNetworks.isEmpty()) {
@@ -249,4 +295,7 @@ public class EnergyNetworkManager extends SavedData {
     public EnergyNode getNode(BlockPos pos) { return allNodes.get(pos.asLong()); }
     void addNetwork(EnergyNetwork network) { networks.add(network); }
     void removeNetwork(EnergyNetwork network) { networks.remove(network); }
+    public ServerLevel getLevel() {
+        return this.level;
+    }
 }

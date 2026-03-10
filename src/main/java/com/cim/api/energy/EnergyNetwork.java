@@ -1,5 +1,6 @@
 package com.cim.api.energy;
 
+import com.cim.block.entity.energy.ConnectorBlockEntity;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
@@ -24,6 +25,8 @@ public class EnergyNetwork {
     private final EnergyNetworkManager manager;
     private final Set<EnergyNode> nodes = new HashSet<>();
     private final UUID id = UUID.randomUUID();
+
+
 
     public EnergyNetwork(EnergyNetworkManager manager) {
         this.manager = manager;
@@ -426,6 +429,9 @@ public class EnergyNetwork {
     }
 
     private void verifyConnectivity() {
+
+        ServerLevel level = manager.getLevel();
+
         if (nodes.isEmpty()) return;
         Set<EnergyNode> allReachableNodes = new HashSet<>();
         Queue<EnergyNode> queue = new LinkedList<>();
@@ -439,6 +445,20 @@ public class EnergyNetwork {
                 EnergyNode neighbor = manager.getNode(current.getPos().relative(dir));
                 if (neighbor != null && nodes.contains(neighbor) && allReachableNodes.add(neighbor)) {
                     queue.add(neighbor);
+                }
+            }
+
+            if (level != null && level.isLoaded(current.getPos())) {
+                BlockEntity be = level.getBlockEntity(current.getPos());
+                if (be instanceof ConnectorBlockEntity connector && connector.isConnected()) {
+                    BlockPos linkedPos = connector.getConnectedTo();
+                    if (linkedPos != null) {
+                        EnergyNode linkedNeighbor = manager.getNode(linkedPos);
+                        if (linkedNeighbor != null && nodes.contains(linkedNeighbor)
+                                && allReachableNodes.add(linkedNeighbor)) {
+                            queue.add(linkedNeighbor);
+                        }
+                    }
                 }
             }
         }
@@ -477,4 +497,6 @@ public class EnergyNetwork {
     }
 
     public UUID getId() { return id; }
+
+
 }

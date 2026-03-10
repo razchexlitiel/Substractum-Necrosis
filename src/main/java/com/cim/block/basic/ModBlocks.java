@@ -1,5 +1,6 @@
 package com.cim.block.basic;
 
+import com.cim.block.basic.energy.*;
 import com.cim.block.basic.rotation.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -15,10 +16,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import com.cim.block.basic.direction.FullOBlock;
-import com.cim.block.basic.energy.ConverterBlock;
-import com.cim.block.basic.energy.MachineBatteryBlock;
-import com.cim.block.basic.energy.SwitchBlock;
-import com.cim.block.basic.energy.WireBlock;
 import com.cim.block.basic.explosives.DetMinerBlock;
 import com.cim.block.basic.necrosis.NecrosisPortalBlock;
 import com.cim.block.basic.necrosis.hive.DepthWormNestBlock;
@@ -47,6 +44,10 @@ public class ModBlocks {
             () -> new WireBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion()));
     public static final RegistryObject<Block> SWITCH = registerBlock("switch",
             () -> new SwitchBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)));
+
+    public static final RegistryObject<Block> CONNECTOR = registerBlock("connector",
+            () -> new ConnectorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .strength(3.0f, 4.0f).noOcclusion()));
 
     //ВЗРЫВЧАТКА
     public static final RegistryObject<Block> DET_MINER = registerBlock("det_miner",
