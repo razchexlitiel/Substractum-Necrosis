@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -37,6 +38,7 @@ public class DepthWormEntity extends Monster implements GeoEntity {
 
     private static final EntityDataAccessor<Boolean> IS_ATTACKING = SynchedEntityData.defineId(DepthWormEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> IS_FLYING = SynchedEntityData.defineId(DepthWormEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> KILLS = SynchedEntityData.defineId(DepthWormEntity.class, EntityDataSerializers.INT);
 
     public int ignoreFallDamageTicks = 0;
     public BlockPos nestPos;
@@ -53,6 +55,7 @@ public class DepthWormEntity extends Monster implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("Kills", this.getKills()); // ДОБАВИТЬ
         if (homePos != null) {
             tag.putLong("HomePos", homePos.asLong());
         }
@@ -61,6 +64,7 @@ public class DepthWormEntity extends Monster implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.entityData.set(KILLS, tag.getInt("Kills")); // ДОБАВИТЬ
         if (tag.contains("HomePos")) {
             homePos = BlockPos.of(tag.getLong("HomePos"));
         } else {
@@ -95,6 +99,7 @@ public class DepthWormEntity extends Monster implements GeoEntity {
         this.entityData.define(IS_ATTACKING, false);
         this.entityData.define(IS_FLYING, false);
         this.entityData.define(IS_ANGRY, false);
+        this.entityData.define(KILLS, 0);
     }
 
     public void setAttacking(boolean attacking) {
@@ -106,6 +111,21 @@ public class DepthWormEntity extends Monster implements GeoEntity {
 
     public void setFlying(boolean flying) { this.entityData.set(IS_FLYING, flying); }
     public boolean isFlying() { return this.entityData.get(IS_FLYING); }
+
+    public void addKill() {
+        this.entityData.set(KILLS, this.getKills() + 1);
+    }
+
+    public int getKills() {
+        return this.entityData.get(KILLS);
+    }
+
+    // Чтобы червь засчитывал убийство
+    @Override
+    public void awardKillScore(Entity killed, int score, DamageSource damageSource) {
+        super.awardKillScore(killed, score, damageSource);
+        this.addKill();
+    }
 
     @Override
     public void aiStep() {

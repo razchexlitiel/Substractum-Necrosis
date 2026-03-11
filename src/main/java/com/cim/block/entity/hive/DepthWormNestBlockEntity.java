@@ -2,8 +2,10 @@ package com.cim.block.entity.hive;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -96,6 +98,32 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
         }
     }
 
+    public int getStoredWormsCount() {
+        return this.storedWorms.size(); // Либо твой список тегов червей
+    }
+
+    public boolean hasInjuredWorms() {
+        // Проверяем, есть ли хоть один червь с HP < Max
+        return this.storedWorms.stream().anyMatch(tag -> tag.getFloat("Health") < 20.0f);
+    }
+
+    public boolean healOneWorm() {
+        boolean healed = false;
+        for (CompoundTag wormTag : this.storedWorms) {
+            float health = wormTag.getFloat("Health");
+            if (health < 15.0F) { // 15.0 - макс хп из твоих атрибутов
+                wormTag.putFloat("Health", 15.0F);
+                healed = true;
+                break; // Лечим только одного за раз за 1 очко
+            }
+        }
+        if (healed) setChanged();
+        return healed;
+    }
+
+    public List<CompoundTag> getStoredWorms() {
+        return this.storedWorms;
+    }
     public void releaseWormsAndNotify() {
         int count = storedWorms.size();
         if (!level.isClientSide && networkId != null) {
@@ -140,6 +168,10 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
         if (this.level == null || this.level.isClientSide) return;
         String entityId = "cim:depth_worm";
 
+        // 1. Запоминаем количество ДО очистки
+        int countBefore = this.storedWorms.size();
+        if (countBefore == 0) return; // Нет смысла тикать, если пусто
+
         for (CompoundTag wormTag : this.storedWorms) {
             wormTag.putString("id", entityId);
             wormTag.remove("UUID");
@@ -161,14 +193,28 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
                 return e;
             });
 
+            // ВОТ ЭТУ СТРОЧКУ ТЫ ПОТЕРЯЛ:
             if (entity != null) {
                 level.addFreshEntity(entity);
+                // Добавим немного пыли для красоты выхода
+                ((ServerLevel)level).sendParticles(ParticleTypes.POOF,
+                        entity.getX(), entity.getY(), entity.getZ(), 5, 0.2, 0.2, 0.2, 0.02);
             }
         }
+
+        // 2. Очищаем список
         this.storedWorms.clear();
         this.setChanged();
-    }
 
+        // 3. Синхронизируем с "Мозгом"
+        if (this.networkId != null) {
+            HiveNetworkManager manager = HiveNetworkManager.get(this.level);
+            if (manager != null) {
+                manager.updateWormCount(this.networkId, this.worldPosition, -countBefore);
+                System.out.println("[Hive] Гнездо в " + this.worldPosition + " опустело. Выпущено: " + countBefore);
+            }
+        }
+    }
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);

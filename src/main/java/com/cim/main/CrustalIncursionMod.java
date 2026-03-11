@@ -1,6 +1,7 @@
 package com.cim.main;
 
 
+import com.cim.api.hive.HiveNetworkManager;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -57,7 +58,7 @@ public class CrustalIncursionMod {
 
         ModCreativeTabs.register(modEventBus);
         GeckoLib.initialize();
-
+        this.registerCapabilities(modEventBus);
         ModBlocks.register(modEventBus); // 1. Сначала блоки
         ModItems.ITEMS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
@@ -69,7 +70,6 @@ public class CrustalIncursionMod {
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
-        registerCapabilities(modEventBus);
         ModTrunkPlacerTypes.register(modEventBus);
         ModFoliagePlacerTypes.register(modEventBus);
 
@@ -229,6 +229,8 @@ public class CrustalIncursionMod {
             event.accept(ModItems.DEPTH_WORM_SPAWN_EGG);
             event.accept(ModBlocks.DEPTH_WORM_NEST);
             event.accept(ModBlocks.HIVE_SOIL);
+            event.accept(ModBlocks.DEPTH_WORM_NEST_DEAD);
+            event.accept(ModBlocks.HIVE_SOIL_DEAD);
         }
     }
 
@@ -253,12 +255,22 @@ public class CrustalIncursionMod {
         }
     }
     @SubscribeEvent
-    public void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
-        // Проверка, чтобы не прикрепить дважды
+    public void onAttachCapabilities(AttachCapabilitiesEvent<Level> event) {
         if (!event.getObject().isClientSide) {
             event.addCapability(new ResourceLocation("cim", "hive_network_manager"),
                     new HiveNetworkManagerProvider());
+            System.out.println("DEBUG: Capability Attached to Level!");
         }
     }
+
+
+    @SubscribeEvent
+    public static void onWorldTick(TickEvent.LevelTickEvent event) {
+        // Тикаем один раз в конце игрового такта на сервере
+        if (event.phase == TickEvent.Phase.END && event.level instanceof ServerLevel serverLevel) {
+            HiveNetworkManager.get(serverLevel).tick(serverLevel);
+        }
+    }
+
 
 }

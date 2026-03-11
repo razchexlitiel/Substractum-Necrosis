@@ -1,6 +1,7 @@
 package com.cim.block.basic.necrosis.hive;
 
 
+import com.cim.block.basic.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -31,31 +32,34 @@ public class HiveSoilBlock extends Block implements EntityBlock {
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (level.isClientSide) return;
 
-        BlockEntity be = level.getBlockEntity(pos);
-        if (be instanceof HiveNetworkMember currentBlock) {
-            for (Direction dir : Direction.values()) {
-                BlockEntity neighbor = level.getBlockEntity(pos.relative(dir));
-                if (neighbor instanceof HiveNetworkMember other && other.getNetworkId() != null) {
+        UUID finalNetId = null;
+        HiveNetworkManager manager = HiveNetworkManager.get(level);
 
-                    if (currentBlock.getNetworkId() == null) {
-                        // Если мы "пустые", просто примыкаем
-                        currentBlock.setNetworkId(other.getNetworkId());
-                        HiveNetworkManager.get(level).addNode(other.getNetworkId(), pos);
-                    } else {
-                        // Если у нас УЖЕ есть сеть, и мы коснулись ДРУГОЙ — объединяем!
-                        // Мастер-сетью станет та, чью почву мы коснулись сейчас
-                        HiveNetworkManager.get(level).mergeNetworks(other.getNetworkId(), currentBlock.getNetworkId(), level);
-                    }
+        for (Direction dir : Direction.values()) {
+            BlockEntity neighbor = level.getBlockEntity(pos.relative(dir));
+            if (neighbor instanceof HiveNetworkMember member) {
+                UUID neighborId = member.getNetworkId();
+                if (neighborId == null) continue;
+
+                if (finalNetId == null) {
+                    finalNetId = neighborId; // Первый найденный ID станет основным
+                } else if (!finalNetId.equals(neighborId)) {
+                    // Мы нашли ВТОРУЮ сеть — сливаем её с основной!
+                    manager.mergeNetworks(finalNetId, neighborId, level);
                 }
             }
-            // Если это Ядро и оно все еще пустое (не коснулось никого)
-            if (currentBlock instanceof DepthWormNestBlockEntity nest && nest.getNetworkId() == null) {
-                nest.setNetworkId(UUID.randomUUID());
-                HiveNetworkManager.get(level).addNode(nest.getNetworkId(), pos);
-            }
-            be.setChanged();
+        }
+
+        if (finalNetId == null) finalNetId = UUID.randomUUID();
+
+        // Привязываем текущий блок
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof HiveNetworkMember member) {
+            member.setNetworkId(finalNetId);
+            manager.addNode(finalNetId, pos);
         }
     }
+
 
 
     @Override
