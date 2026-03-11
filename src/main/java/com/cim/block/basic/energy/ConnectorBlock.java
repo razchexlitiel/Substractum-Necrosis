@@ -1,7 +1,6 @@
 package com.cim.block.basic.energy;
 
 import com.cim.block.entity.energy.ConnectorBlockEntity;
-import com.cim.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -25,14 +24,12 @@ public class ConnectorBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     // Коллизии 4x4x6 пикселей для каждого facing.
-    // facing = направление, КУДА смотрит верхушка (куда растёт от грани)
-    // Коннектор на верхней грани блока земли → facing=UP → растёт вверх
-    private static final VoxelShape SHAPE_UP    = Block.box(6, 0, 6, 10, 6, 10);    // на полу, растёт вверх
-    private static final VoxelShape SHAPE_DOWN  = Block.box(6, 10, 6, 10, 16, 10);  // на потолке, растёт вниз
-    private static final VoxelShape SHAPE_NORTH = Block.box(6, 6, 10, 10, 10, 16);  // на южной стене, растёт на север
-    private static final VoxelShape SHAPE_SOUTH = Block.box(6, 6, 0, 10, 10, 6);    // на северной стене, растёт на юг
-    private static final VoxelShape SHAPE_WEST  = Block.box(10, 6, 6, 16, 10, 10);  // на восточной стене, растёт на запад
-    private static final VoxelShape SHAPE_EAST  = Block.box(0, 6, 6, 6, 10, 10);    // на западной стене, растёт на восток
+    private static final VoxelShape SHAPE_UP    = Block.box(6, 0, 6, 10, 6, 10);
+    private static final VoxelShape SHAPE_DOWN  = Block.box(6, 10, 6, 10, 16, 10);
+    private static final VoxelShape SHAPE_NORTH = Block.box(6, 6, 10, 10, 10, 16);
+    private static final VoxelShape SHAPE_SOUTH = Block.box(6, 6, 0, 10, 10, 6);
+    private static final VoxelShape SHAPE_WEST  = Block.box(10, 6, 6, 16, 10, 10);
+    private static final VoxelShape SHAPE_EAST  = Block.box(0, 6, 6, 6, 10, 10);
 
     public ConnectorBlock(Properties properties) {
         super(properties);
@@ -46,7 +43,7 @@ public class ConnectorBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        // facing = направление ОТ грани наружу (куда смотрит верхушка)
+        // Коннектор всегда "растет" от той грани, на которую мы кликнули
         return this.defaultBlockState().setValue(FACING, context.getClickedFace());
     }
 
@@ -64,7 +61,8 @@ public class ConnectorBlock extends BaseEntityBlock {
 
     @Override
     public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED; // GeckoLib!
+        // ВАЖНО: Теперь это обычная модель, а не энтити!
+        return RenderShape.MODEL;
     }
 
     @Nullable

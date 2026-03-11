@@ -1,26 +1,21 @@
-package com.cim.client.gecko.block.energy;
+package com.cim.client.renderer;
 
-import com.cim.block.basic.energy.ConnectorBlock;
 import com.cim.block.entity.energy.ConnectorBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.renderer.GeoBlockRenderer;
-import net.minecraft.world.level.block.entity.BlockEntity;  // ← этот нужен
 
-public class ConnectorRenderer extends GeoBlockRenderer<ConnectorBlockEntity> {
+public class ConnectorRenderer implements BlockEntityRenderer<ConnectorBlockEntity> {
 
     private static final int SEGMENTS = 16;
     private static final float WIRE_RADIUS = 0.03125f;
@@ -28,55 +23,13 @@ public class ConnectorRenderer extends GeoBlockRenderer<ConnectorBlockEntity> {
     private static final float R = 0.12f, G = 0.12f, B = 0.12f, A = 1.0f;
 
     public ConnectorRenderer(BlockEntityRendererProvider.Context context) {
-        super(new ConnectorModel());
     }
 
-    // ========== ПОВОРОТ GECKOLIB МОДЕЛИ ==========
-
     @Override
-    public void preRender(PoseStack poseStack, ConnectorBlockEntity animatable,
-                          BakedGeoModel model, MultiBufferSource bufferSource,
-                          VertexConsumer buffer, boolean isReRender, float partialTick,
-                          int packedLight, int packedOverlay, float red, float green,
-                          float blue, float alpha) {
+    public void render(ConnectorBlockEntity animatable, float partialTick, PoseStack poseStack,
+                       MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
 
-        Direction facing = animatable.getBlockState().getValue(ConnectorBlock.FACING);
-
-        // GeckoLib по умолчанию сдвигает центр рендера на (0.5, 0, 0.5)
-        // Поднимаем пивот в центр блока для правильного вращения по осям
-        poseStack.translate(0.0f, 0.5f, 0.0f);
-
-        switch (facing) {
-            case UP -> {} // Смотрит вверх
-            case DOWN -> poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(180));
-            case NORTH -> poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90));
-            case SOUTH -> poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90));
-            case WEST -> poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90));
-            case EAST -> poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90));
-        }
-
-        // Опускаем обратно
-        poseStack.translate(0.0f, -0.5f, 0.0f);
-
-        super.preRender(poseStack, animatable, model, bufferSource, buffer,
-                isReRender, partialTick, packedLight, packedOverlay,
-                red, green, blue, alpha);
-    }
-
-    // ========== РЕНДЕР ПРОВОДА В POST-RENDER ==========
-
-    @Override
-    public void postRender(PoseStack poseStack, ConnectorBlockEntity animatable,
-                           BakedGeoModel model, MultiBufferSource bufferSource,
-                           VertexConsumer buffer, boolean isReRender, float partialTick,
-                           int packedLight, int packedOverlay, float red, float green,
-                           float blue, float alpha) {
-
-        super.postRender(poseStack, animatable, model, bufferSource, buffer,
-                isReRender, partialTick, packedLight, packedOverlay,
-                red, green, blue, alpha);
-
-        if (isReRender || !animatable.isConnected()) return;
+        if (!animatable.isConnected()) return;
 
         BlockPos otherPos = animatable.getConnectedTo();
         if (otherPos == null || animatable.getBlockPos().compareTo(otherPos) > 0) return;
@@ -90,48 +43,19 @@ public class ConnectorRenderer extends GeoBlockRenderer<ConnectorBlockEntity> {
         Vec3 startWorld = animatable.getWireAttachmentPoint();
         Vec3 endWorld = otherConnector.getWireAttachmentPoint();
 
+        // Переводим из глобальных координат мира в локальные координаты рендера
         Vec3 renderOrigin = Vec3.atLowerCornerOf(animatable.getBlockPos());
         Vec3 start = startWorld.subtract(renderOrigin);
         Vec3 end = endWorld.subtract(renderOrigin);
 
         poseStack.pushPose();
-
-        // --- МАГИЯ ОТКАТА МАТРИЦ ---
-        Direction facing = animatable.getBlockState().getValue(ConnectorBlock.FACING);
-
-        // 1. Отменяем сдвиг вниз из preRender (знак инвертирован)
-        poseStack.translate(0.0f, 0.5f, 0.0f);
-
-        // 2. Отменяем повороты из preRender (УГЛЫ ИНВЕРТИРОВАНЫ!)
-        switch (facing) {
-            case UP -> {}
-            case DOWN -> poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-180));
-            case NORTH -> poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(90));
-            case SOUTH -> poseStack.mulPose(com.mojang.math.Axis.XP.rotationDegrees(-90));
-            case WEST -> poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(-90)); // Был 90
-            case EAST -> poseStack.mulPose(com.mojang.math.Axis.ZP.rotationDegrees(90));  // Был -90
-        }
-
-        // 3. Отменяем сдвиг вверх из preRender (знак инвертирован)
-        poseStack.translate(0.0f, -0.5f, 0.0f);
-
-        // 4. Отменяем базовый сдвиг самого GeckoLib (GeckoLib делает translate(0.5, 0, 0.5) перед рендером)
-        poseStack.translate(-0.5f, 0.0f, -0.5f);
-        // ---------------------------
-
-        // Теперь PoseStack чист как слеза. Точка (0,0,0) = нижний северо-западный угол блока.
         renderWire(poseStack, bufferSource, start, end, packedLight, packedOverlay);
         poseStack.popPose();
     }
 
-
-    // ========== ПОСЛЕ РЕНДЕРА МОДЕЛИ — РИСУЕМ ПРОВОД ==========
-
-
-
     @Override
     public boolean shouldRenderOffScreen(ConnectorBlockEntity be) {
-        return true;
+        return true; // Чтобы провод не исчезал, когда сам блок за спиной игрока
     }
 
     @Override
@@ -139,7 +63,7 @@ public class ConnectorRenderer extends GeoBlockRenderer<ConnectorBlockEntity> {
         return 128;
     }
 
-    // ========== CATENARY ==========
+    // ========== CATENARY (Формула провисания) ==========
 
     private record CatenaryData(boolean isVertical, double offsetX, double offsetY,
                                 double scale, Vec3 delta, double horLength, Vec3 vecA) {

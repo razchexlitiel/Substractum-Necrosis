@@ -18,16 +18,11 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
-import software.bernie.geckolib.animatable.GeoBlockEntity;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
-public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnector, GeoBlockEntity {
+public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnector {
 
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final LazyOptional<IEnergyConnector> connectorCap = LazyOptional.of(() -> this);
 
     @Nullable
@@ -72,15 +67,10 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
 
     // ========== ТОЧКА КРЕПЛЕНИЯ ПРОВОДА ==========
 
-    /**
-     * Возвращает мировую позицию верхушки коннектора.
-     * Модель 4x4x6 пикселей, верхушка на 6px от грани наружу.
-     */
     public Vec3 getWireAttachmentPoint() {
         Direction facing = getBlockState().getValue(ConnectorBlock.FACING);
 
-        // Модель имеет высоту 6 пикселей (6/16 = 0.375).
-        // Формула ниже точно вычисляет центр верхушки коннектора в зависимости от грани.
+        // Математически идеальный центр верхушки коннектора (6/16 от основания)
         double lx = 0.5 - 0.125 * facing.getStepX();
         double ly = 0.5 - 0.125 * facing.getStepY();
         double lz = 0.5 - 0.125 * facing.getStepZ();
@@ -156,22 +146,9 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
         }
     }
 
-    // ========== GeckoLib ==========
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        // Статичная модель — нет анимаций
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return cache;
-    }
-
     @Override
     public void onLoad() {
         super.onLoad();
-        // Регистрируем в энергосети при загрузке
         if (level != null && !level.isClientSide) {
             com.cim.api.energy.EnergyNetworkManager.get(
                     (net.minecraft.server.level.ServerLevel) level).addNode(worldPosition);

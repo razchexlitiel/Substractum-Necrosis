@@ -1,8 +1,8 @@
 package com.cim.client;
 
-import com.cim.client.gecko.block.energy.ConnectorRenderer;
 import com.cim.client.gecko.block.energy.MachineBatteryRenderer;
 import com.cim.client.overlay.gui.*;
+import com.cim.client.renderer.ConnectorRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
