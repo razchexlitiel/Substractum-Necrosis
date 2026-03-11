@@ -78,14 +78,17 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
      */
     public Vec3 getWireAttachmentPoint() {
         Direction facing = getBlockState().getValue(ConnectorBlock.FACING);
-        double cx = getBlockPos().getX() + 0.5;
-        double cy = getBlockPos().getY() + 0.5;
-        double cz = getBlockPos().getZ() + 0.5;
-        double offset = 0.375; // 6/16
+
+        // Модель имеет высоту 6 пикселей (6/16 = 0.375).
+        // Формула ниже точно вычисляет центр верхушки коннектора в зависимости от грани.
+        double lx = 0.5 - 0.125 * facing.getStepX();
+        double ly = 0.5 - 0.125 * facing.getStepY();
+        double lz = 0.5 - 0.125 * facing.getStepZ();
+
         return new Vec3(
-                cx + facing.getStepX() * offset,
-                cy + facing.getStepY() * offset,
-                cz + facing.getStepZ() * offset
+                worldPosition.getX() + lx,
+                worldPosition.getY() + ly,
+                worldPosition.getZ() + lz
         );
     }
 
@@ -163,5 +166,24 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
+    }
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        // Регистрируем в энергосети при загрузке
+        if (level != null && !level.isClientSide) {
+            com.cim.api.energy.EnergyNetworkManager.get(
+                    (net.minecraft.server.level.ServerLevel) level).addNode(worldPosition);
+        }
+    }
+
+    @Override
+    public void setRemoved() {
+        super.setRemoved();
+        if (level != null && !level.isClientSide) {
+            com.cim.api.energy.EnergyNetworkManager.get(
+                    (net.minecraft.server.level.ServerLevel) level).removeNode(worldPosition);
+        }
     }
 }

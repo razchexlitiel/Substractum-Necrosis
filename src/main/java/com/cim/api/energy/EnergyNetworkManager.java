@@ -98,9 +98,11 @@ public class EnergyNetworkManager extends SavedData {
                     }
                 }
 
+                // P2P-сосед через провод
                 if (level.isLoaded(currentNode.getPos())) {
                     BlockEntity be = level.getBlockEntity(currentNode.getPos());
-                    if (be instanceof ConnectorBlockEntity connector && connector.isConnected()) {
+                    if (be instanceof com.cim.block.entity.energy.ConnectorBlockEntity connector
+                            && connector.isConnected()) {
                         BlockPos linkedPos = connector.getConnectedTo();
                         if (linkedPos != null) {
                             EnergyNode linkedNeighbor = allNodes.get(linkedPos.asLong());
@@ -206,22 +208,19 @@ public class EnergyNetworkManager extends SavedData {
         // тоже считается соседом, даже если она в 30 блоках от нас.
         if (level.isLoaded(pos)) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof ConnectorBlockEntity connector && connector.isConnected()) {
+            if (be instanceof com.cim.block.entity.energy.ConnectorBlockEntity connector
+                    && connector.isConnected()) {
                 BlockPos linkedPos = connector.getConnectedTo();
-
                 if (linkedPos != null && level.isLoaded(linkedPos)) {
                     long linkedLong = linkedPos.asLong();
                     EnergyNode linkedNeighbor = allNodes.get(linkedLong);
 
                     if (linkedNeighbor == null) {
-                        // Пара ещё не в сети — добавляем в очередь
-                        // (та же авто-починка, но для P2P)
                         BlockEntity linkedBe = level.getBlockEntity(linkedPos);
-                        if (linkedBe instanceof ConnectorBlockEntity) {
+                        if (linkedBe instanceof com.cim.block.entity.energy.ConnectorBlockEntity) {
                             pendingNodes.add(new AddNodeRequest(linkedPos, null));
                         }
                     } else if (linkedNeighbor.getNetwork() != null) {
-                        // Пара уже в сети — соединяем сети
                         if (linkedNeighbor.getNetwork() != networkToAvoid) {
                             adjacentNetworks.add(linkedNeighbor.getNetwork());
                         }
