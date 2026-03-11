@@ -163,4 +163,19 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
                     (net.minecraft.server.level.ServerLevel) level).removeNode(worldPosition);
         }
     }
+
+    // ========== ИСПРАВЛЕНИЕ ИСЧЕЗНОВЕНИЯ ПРОВОДА ==========
+
+    @Override
+    public net.minecraft.world.phys.AABB getRenderBoundingBox() {
+        if (connectedTo != null) {
+            // Создаем огромную невидимую коробку рендера, которая охватывает оба коннектора.
+            // Теперь игра не перестанет рендерить провод, пока мы смотрим хотя бы на один из блоков
+            // или на сам провод между ними.
+            return new net.minecraft.world.phys.AABB(worldPosition, connectedTo).inflate(1.0);
+        }
+
+        // Если провода нет, возвращаем стандартный размер 1x1x1
+        return super.getRenderBoundingBox();
+    }
 }
