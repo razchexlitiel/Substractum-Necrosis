@@ -119,11 +119,13 @@ public class ModBlockEntities {
                             ModBlocks.SHAFT_WOODEN.get() // и все другие валы
                     ).build(null));
 
-    // В ModBlockEntities.java:
     public static final RegistryObject<BlockEntityType<ConnectorBlockEntity>> CONNECTOR_BE =
-            BLOCK_ENTITIES.register("connector_be",
-                    () -> BlockEntityType.Builder.of(ConnectorBlockEntity::new,
-                            ModBlocks.CONNECTOR.get()).build(null));
+            BLOCK_ENTITIES.register("connector", () ->
+                    BlockEntityType.Builder.of(ConnectorBlockEntity::new,
+                            ModBlocks.CONNECTOR.get(),         // Твой маленький коннектор
+                            ModBlocks.MEDIUM_CONNECTOR.get(),  // ДОБАВИТЬ ЭТО!
+                            ModBlocks.LARGE_CONNECTOR.get()    // ДОБАВИТЬ ЭТО!
+                    ).build(null));
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITIES.register(eventBus);
     }

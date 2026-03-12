@@ -98,17 +98,17 @@ public class EnergyNetworkManager extends SavedData {
                     }
                 }
 
-                // P2P-сосед через провод
+                // P2P-сосед через провод (ИСПРАВЛЕНО ДЛЯ МНОЖЕСТВА ПОДКЛЮЧЕНИЙ)
                 if (level.isLoaded(currentNode.getPos())) {
                     BlockEntity be = level.getBlockEntity(currentNode.getPos());
-                    if (be instanceof com.cim.block.entity.energy.ConnectorBlockEntity connector
-                            && connector.isConnected()) {
-                        BlockPos linkedPos = connector.getConnectedTo();
-                        if (linkedPos != null) {
-                            EnergyNode linkedNeighbor = allNodes.get(linkedPos.asLong());
-                            if (linkedNeighbor != null && !processedNodes.contains(linkedNeighbor)) {
-                                processedNodes.add(linkedNeighbor);
-                                queue.add(linkedNeighbor);
+                    if (be instanceof com.cim.block.entity.energy.ConnectorBlockEntity connector) {
+                        for (BlockPos linkedPos : connector.getConnections()) {
+                            if (linkedPos != null) {
+                                EnergyNode linkedNeighbor = allNodes.get(linkedPos.asLong());
+                                if (linkedNeighbor != null && !processedNodes.contains(linkedNeighbor)) {
+                                    processedNodes.add(linkedNeighbor);
+                                    queue.add(linkedNeighbor);
+                                }
                             }
                         }
                     }
@@ -144,6 +144,10 @@ public class EnergyNetworkManager extends SavedData {
         }
     }
 
+    /**
+     * Внутренний метод добавления одного узла.
+     * Найденных "потерянных" соседей складывает в pendingNodes вместо рекурсии.
+     */
     /**
      * Внутренний метод добавления одного узла.
      * Найденных "потерянных" соседей складывает в pendingNodes вместо рекурсии.
@@ -202,27 +206,25 @@ public class EnergyNetworkManager extends SavedData {
         }
 
         // ============================================================
-        // 4.5 [НОВОЕ] P2P-ПРОВОД: виртуальный сосед через коннектор
+        // 4.5 [НОВОЕ] P2P-ПРОВОД: виртуальный сосед через коннектор (ИСПРАВЛЕНО ДЛЯ МНОЖЕСТВА ПОДКЛЮЧЕНИЙ)
         // ============================================================
-        // Если этот блок — коннектор с P2P-проводом, то его "пара"
-        // тоже считается соседом, даже если она в 30 блоках от нас.
         if (level.isLoaded(pos)) {
             BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof com.cim.block.entity.energy.ConnectorBlockEntity connector
-                    && connector.isConnected()) {
-                BlockPos linkedPos = connector.getConnectedTo();
-                if (linkedPos != null && level.isLoaded(linkedPos)) {
-                    long linkedLong = linkedPos.asLong();
-                    EnergyNode linkedNeighbor = allNodes.get(linkedLong);
+            if (be instanceof com.cim.block.entity.energy.ConnectorBlockEntity connector) {
+                for (BlockPos linkedPos : connector.getConnections()) {
+                    if (linkedPos != null && level.isLoaded(linkedPos)) {
+                        long linkedLong = linkedPos.asLong();
+                        EnergyNode linkedNeighbor = allNodes.get(linkedLong);
 
-                    if (linkedNeighbor == null) {
-                        BlockEntity linkedBe = level.getBlockEntity(linkedPos);
-                        if (linkedBe instanceof com.cim.block.entity.energy.ConnectorBlockEntity) {
-                            pendingNodes.add(new AddNodeRequest(linkedPos, null));
-                        }
-                    } else if (linkedNeighbor.getNetwork() != null) {
-                        if (linkedNeighbor.getNetwork() != networkToAvoid) {
-                            adjacentNetworks.add(linkedNeighbor.getNetwork());
+                        if (linkedNeighbor == null) {
+                            BlockEntity linkedBe = level.getBlockEntity(linkedPos);
+                            if (linkedBe instanceof com.cim.block.entity.energy.ConnectorBlockEntity) {
+                                pendingNodes.add(new AddNodeRequest(linkedPos, null));
+                            }
+                        } else if (linkedNeighbor.getNetwork() != null) {
+                            if (linkedNeighbor.getNetwork() != networkToAvoid) {
+                                adjacentNetworks.add(linkedNeighbor.getNetwork());
+                            }
                         }
                     }
                 }

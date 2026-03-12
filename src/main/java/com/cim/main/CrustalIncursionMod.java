@@ -156,6 +156,8 @@ public class CrustalIncursionMod {
 
             event.accept(ModItems.WIRE_COIL);
             event.accept(ModBlocks.CONNECTOR);
+            event.accept(ModBlocks.MEDIUM_CONNECTOR);
+            event.accept(ModBlocks.LARGE_CONNECTOR);
 
 
 

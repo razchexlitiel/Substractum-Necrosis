@@ -29,27 +29,32 @@ public class ConnectorRenderer implements BlockEntityRenderer<ConnectorBlockEnti
     public void render(ConnectorBlockEntity animatable, float partialTick, PoseStack poseStack,
                        MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
 
-        if (!animatable.isConnected()) return;
-
-        BlockPos otherPos = animatable.getConnectedTo();
-        if (otherPos == null || animatable.getBlockPos().compareTo(otherPos) > 0) return;
+        if (animatable.getConnections().isEmpty()) return;
 
         Level level = animatable.getLevel();
         if (level == null) return;
 
-        BlockEntity otherBe = level.getBlockEntity(otherPos);
-        if (!(otherBe instanceof ConnectorBlockEntity otherConnector)) return;
-
         Vec3 startWorld = animatable.getWireAttachmentPoint();
-        Vec3 endWorld = otherConnector.getWireAttachmentPoint();
-
-        // Переводим из глобальных координат мира в локальные координаты рендера
         Vec3 renderOrigin = Vec3.atLowerCornerOf(animatable.getBlockPos());
         Vec3 start = startWorld.subtract(renderOrigin);
-        Vec3 end = endWorld.subtract(renderOrigin);
 
         poseStack.pushPose();
-        renderWire(poseStack, bufferSource, start, end, packedLight, packedOverlay);
+
+        // Рисуем провод для каждого подключения
+        for (BlockPos otherPos : animatable.getConnections()) {
+            // Чтобы провод не рисовался дважды (туда и обратно), рисуем только от блока с меньшими координатами
+            if (animatable.getBlockPos().compareTo(otherPos) > 0) continue;
+
+            BlockEntity otherBe = level.getBlockEntity(otherPos);
+            if (!(otherBe instanceof ConnectorBlockEntity otherConnector)) continue;
+
+            Vec3 endWorld = otherConnector.getWireAttachmentPoint();
+            Vec3 end = endWorld.subtract(renderOrigin);
+
+            // Передаем радиус из настроек блока
+            renderWire(poseStack, bufferSource, start, end, packedLight, packedOverlay, animatable.getTier().wireRadius());
+        }
+
         poseStack.popPose();
     }
 
@@ -116,7 +121,7 @@ public class ConnectorRenderer implements BlockEntityRenderer<ConnectorBlockEnti
     // ========== РЕНДЕР ПРОВОДА ==========
 
     private void renderWire(PoseStack poseStack, MultiBufferSource bufferSource,
-                            Vec3 start, Vec3 end, int light, int overlay) {
+                            Vec3 start, Vec3 end, int light, int overlay, float wireRadius) {
 
         CatenaryData catenary = computeCatenary(start, end);
 

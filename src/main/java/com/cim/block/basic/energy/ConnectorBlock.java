@@ -1,5 +1,6 @@
 package com.cim.block.basic.energy;
 
+import com.cim.api.energy.ConnectorTier;
 import com.cim.block.entity.energy.ConnectorBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,22 +19,33 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 public class ConnectorBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public final ConnectorTier tier;
+    private final Map<Direction, VoxelShape> shapes;
 
-    // Коллизии 4x4x6 пикселей для каждого facing.
-    private static final VoxelShape SHAPE_UP    = Block.box(6, 0, 6, 10, 6, 10);
-    private static final VoxelShape SHAPE_DOWN  = Block.box(6, 10, 6, 10, 16, 10);
-    private static final VoxelShape SHAPE_NORTH = Block.box(6, 6, 10, 10, 10, 16);
-    private static final VoxelShape SHAPE_SOUTH = Block.box(6, 6, 0, 10, 10, 6);
-    private static final VoxelShape SHAPE_WEST  = Block.box(10, 6, 6, 16, 10, 10);
-    private static final VoxelShape SHAPE_EAST  = Block.box(0, 6, 6, 6, 10, 10);
-
-    public ConnectorBlock(Properties properties) {
+    public ConnectorBlock(Properties properties, ConnectorTier tier) {
         super(properties);
+        this.tier = tier;
+        this.shapes = generateShapes(tier.width(), tier.height());
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.UP));
+    }
+
+    // Динамическая генерация коллизий на основе ширины и высоты
+    private Map<Direction, VoxelShape> generateShapes(double w, double h) {
+        double min = (16.0 - w) / 2.0; // Центрируем по ширине
+        double max = min + w;
+        return Map.of(
+                Direction.UP,    Block.box(min, 0, min, max, h, max),
+                Direction.DOWN,  Block.box(min, 16 - h, min, max, 16, max),
+                Direction.NORTH, Block.box(min, min, 16 - h, max, max, 16),
+                Direction.SOUTH, Block.box(min, min, 0, max, max, h),
+                Direction.WEST,  Block.box(16 - h, min, min, 16, max, max),
+                Direction.EAST,  Block.box(0, min, min, h, max, max)
+        );
     }
 
     @Override
@@ -43,25 +55,16 @@ public class ConnectorBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        // Коннектор всегда "растет" от той грани, на которую мы кликнули
         return this.defaultBlockState().setValue(FACING, context.getClickedFace());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case UP    -> SHAPE_UP;
-            case DOWN  -> SHAPE_DOWN;
-            case NORTH -> SHAPE_NORTH;
-            case SOUTH -> SHAPE_SOUTH;
-            case WEST  -> SHAPE_WEST;
-            case EAST  -> SHAPE_EAST;
-        };
+        return shapes.get(state.getValue(FACING));
     }
 
     @Override
     public RenderShape getRenderShape(BlockState state) {
-        // ВАЖНО: Теперь это обычная модель, а не энтити!
         return RenderShape.MODEL;
     }
 

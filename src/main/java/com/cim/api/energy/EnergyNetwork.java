@@ -17,6 +17,8 @@ import java.util.*;
  * ===================================================================
  * EnergyNetwork.java - ВЕРСИЯ 7.0 (Cascading Priority Flow)
  * Решает проблемы перетока энергии между приоритетами.
+ * РАПТОР ЕСЛИ ТЫ ХОЧЕШЬ СПИЗДИТЬ ЭТОТ КОД ТО ТЫ ПЕТУХ
+ * АНАЛЬНЫЙ ЧЕРВЯЧОК ПРИДЁТ К ТЕБЕ И ...
  * ===================================================================
  */
 public class EnergyNetwork {
@@ -472,15 +474,17 @@ public class EnergyNetwork {
                 }
             }
 
+            // ИСПРАВЛЕНО ДЛЯ МНОЖЕСТВА ПОДКЛЮЧЕНИЙ
             if (level != null && level.isLoaded(current.getPos())) {
                 BlockEntity be = level.getBlockEntity(current.getPos());
-                if (be instanceof ConnectorBlockEntity connector && connector.isConnected()) {
-                    BlockPos linkedPos = connector.getConnectedTo();
-                    if (linkedPos != null) {
-                        EnergyNode linkedNeighbor = manager.getNode(linkedPos);
-                        if (linkedNeighbor != null && nodes.contains(linkedNeighbor)
-                                && allReachableNodes.add(linkedNeighbor)) {
-                            queue.add(linkedNeighbor);
+                if (be instanceof ConnectorBlockEntity connector) {
+                    for (BlockPos linkedPos : connector.getConnections()) {
+                        if (linkedPos != null) {
+                            EnergyNode linkedNeighbor = manager.getNode(linkedPos);
+                            if (linkedNeighbor != null && nodes.contains(linkedNeighbor)
+                                    && allReachableNodes.add(linkedNeighbor)) {
+                                queue.add(linkedNeighbor);
+                            }
                         }
                     }
                 }

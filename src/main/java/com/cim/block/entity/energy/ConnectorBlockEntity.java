@@ -1,5 +1,6 @@
 package com.cim.block.entity.energy;
 
+import com.cim.api.energy.ConnectorTier;
 import com.cim.api.energy.IEnergyConnector;
 import com.cim.block.basic.energy.ConnectorBlock;
 import com.cim.block.entity.ModBlockEntities;
@@ -7,53 +8,57 @@ import com.cim.capability.ModCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnector {
 
     private final LazyOptional<IEnergyConnector> connectorCap = LazyOptional.of(() -> this);
-
-    @Nullable
-    private BlockPos connectedTo = null;
+    private final Set<BlockPos> connections = new HashSet<>();
 
     public ConnectorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.CONNECTOR_BE.get(), pos, state);
     }
 
-    // ========== P2P СОЕДИНЕНИЕ ==========
-
-    public boolean isConnected() {
-        return connectedTo != null;
+    public ConnectorTier getTier() {
+        if (getBlockState().getBlock() instanceof ConnectorBlock cb) return cb.tier;
+        // Резервный вариант, если что-то пошло не так
+        return new ConnectorTier(16, 1, 0.03125f, 4, 6);
     }
 
-    @Nullable
-    public BlockPos getConnectedTo() {
-        return connectedTo;
+    // ========== МНОЖЕСТВЕННЫЕ СОЕДИНЕНИЯ ==========
+
+    public Set<BlockPos> getConnections() {
+        return Collections.unmodifiableSet(connections);
     }
 
-    // ========== P2P СОЕДИНЕНИЕ ==========
+    public boolean canConnect(BlockPos other) {
+        if (connections.contains(other)) return false; // Уже подключен
+        return connections.size() < getTier().maxConnections();
+    }
 
     public void connectTo(BlockPos other) {
-        this.connectedTo = other;
+        if (!canConnect(other)) return;
+        this.connections.add(other);
         setChanged();
         syncToClient();
 
-        // === ИСПРАВЛЕНИЕ ===
-        // Уведомляем менеджер сетей, что появилась новая связь.
-        // Удаляем и заново добавляем узел. Менеджер увидит P2P-связь
-        // и автоматически объединит две раздельные сети в одну.
         if (level != null && !level.isClientSide) {
             com.cim.api.energy.EnergyNetworkManager manager = com.cim.api.energy.EnergyNetworkManager.get((net.minecraft.server.level.ServerLevel) level);
             manager.removeNode(worldPosition);
@@ -61,35 +66,33 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
         }
     }
 
-    public void disconnect() {
-        BlockPos oldConnection = this.connectedTo;
-        this.connectedTo = null;
-        setChanged();
-        syncToClient();
+    public void disconnect(BlockPos other) {
+        if (this.connections.remove(other)) {
+            setChanged();
+            syncToClient();
 
-        // === ИСПРАВЛЕНИЕ ===
-        // Уведомляем менеджер о разрыве провода.
-        if (level != null && !level.isClientSide && oldConnection != null) {
-            com.cim.api.energy.EnergyNetworkManager manager = com.cim.api.energy.EnergyNetworkManager.get((net.minecraft.server.level.ServerLevel) level);
+            if (level != null && !level.isClientSide) {
+                com.cim.api.energy.EnergyNetworkManager manager = com.cim.api.energy.EnergyNetworkManager.get((net.minecraft.server.level.ServerLevel) level);
+                manager.removeNode(worldPosition);
+                manager.addNode(worldPosition);
 
-            // "Передергиваем" текущий коннектор. Из-за этого сеть вызовет verifyConnectivity()
-            // и, если связь реально прервалась, аккуратно разделит одну сеть на две.
-            manager.removeNode(worldPosition);
-            manager.addNode(worldPosition);
-
-            // На всякий случай обновляем и второй конец оборванного провода
-            manager.removeNode(oldConnection);
-            manager.addNode(oldConnection);
+                manager.removeNode(other);
+                manager.addNode(other);
+            }
         }
     }
 
     public void onRemoved() {
-        if (connectedTo != null && level != null && !level.isClientSide) {
-            BlockEntity other = level.getBlockEntity(connectedTo);
-            if (other instanceof ConnectorBlockEntity otherConn) {
-                otherConn.disconnect();
+        if (level != null && !level.isClientSide) {
+            // Копируем сет, чтобы избежать ConcurrentModificationException
+            Set<BlockPos> copies = new HashSet<>(connections);
+            for (BlockPos otherPos : copies) {
+                BlockEntity otherBe = level.getBlockEntity(otherPos);
+                if (otherBe instanceof ConnectorBlockEntity otherConn) {
+                    otherConn.disconnect(this.worldPosition); // Отключаем тот конец от нас
+                }
             }
-            connectedTo = null;
+            connections.clear();
         }
     }
 
@@ -98,10 +101,13 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
     public Vec3 getWireAttachmentPoint() {
         Direction facing = getBlockState().getValue(ConnectorBlock.FACING);
 
-        // Математически идеальный центр верхушки коннектора (6/16 от основания)
-        double lx = 0.5 - 0.125 * facing.getStepX();
-        double ly = 0.5 - 0.125 * facing.getStepY();
-        double lz = 0.5 - 0.125 * facing.getStepZ();
+        // Динамический расчет высоты крепления в зависимости от Tier
+        double heightOffset = getTier().height() / 16.0;
+        double offsetFromCenter = 0.5 - heightOffset;
+
+        double lx = 0.5 - offsetFromCenter * facing.getStepX();
+        double ly = 0.5 - offsetFromCenter * facing.getStepY();
+        double lz = 0.5 - offsetFromCenter * facing.getStepZ();
 
         return new Vec3(
                 worldPosition.getX() + lx,
@@ -134,24 +140,40 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
         connectorCap.invalidate();
     }
 
-    // ========== NBT ==========
+    // ========== NBT & RenderBox ==========
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        if (connectedTo != null) {
-            tag.put("ConnectedTo", NbtUtils.writeBlockPos(connectedTo));
+        ListTag list = new ListTag();
+        for (BlockPos pos : connections) {
+            list.add(NbtUtils.writeBlockPos(pos));
         }
+        tag.put("Connections", list);
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        if (tag.contains("ConnectedTo")) {
-            connectedTo = NbtUtils.readBlockPos(tag.getCompound("ConnectedTo"));
-        } else {
-            connectedTo = null;
+        connections.clear();
+        if (tag.contains("Connections", Tag.TAG_LIST)) {
+            ListTag list = tag.getList("Connections", Tag.TAG_COMPOUND);
+            for (int i = 0; i < list.size(); i++) {
+                connections.add(NbtUtils.readBlockPos(list.getCompound(i)));
+            }
         }
+    }
+
+    @Override
+    public AABB getRenderBoundingBox() {
+        if (!connections.isEmpty()) {
+            AABB box = new AABB(worldPosition);
+            for (BlockPos pos : connections) {
+                box = box.minmax(new AABB(pos));
+            }
+            return box.inflate(1.0);
+        }
+        return super.getRenderBoundingBox();
     }
 
     // ========== Синхронизация с клиентом ==========
@@ -174,6 +196,8 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
         }
     }
 
+    // ========== Интеграция с сетью ==========
+
     @Override
     public void onLoad() {
         super.onLoad();
@@ -190,20 +214,5 @@ public class ConnectorBlockEntity extends BlockEntity implements IEnergyConnecto
             com.cim.api.energy.EnergyNetworkManager.get(
                     (net.minecraft.server.level.ServerLevel) level).removeNode(worldPosition);
         }
-    }
-
-    // ========== ИСПРАВЛЕНИЕ ИСЧЕЗНОВЕНИЯ ПРОВОДА ==========
-
-    @Override
-    public net.minecraft.world.phys.AABB getRenderBoundingBox() {
-        if (connectedTo != null) {
-            // Создаем огромную невидимую коробку рендера, которая охватывает оба коннектора.
-            // Теперь игра не перестанет рендерить провод, пока мы смотрим хотя бы на один из блоков
-            // или на сам провод между ними.
-            return new net.minecraft.world.phys.AABB(worldPosition, connectedTo).inflate(1.0);
-        }
-
-        // Если провода нет, возвращаем стандартный размер 1x1x1
-        return super.getRenderBoundingBox();
     }
 }
