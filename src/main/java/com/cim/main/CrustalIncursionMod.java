@@ -72,6 +72,7 @@ public class CrustalIncursionMod {
         modEventBus.addListener(this::addCreative);
         ModTrunkPlacerTypes.register(modEventBus);
         ModFoliagePlacerTypes.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(new HiveEventHandler());
 
     }
     private void registerCapabilities(IEventBus modEventBus) {
@@ -264,13 +265,18 @@ public class CrustalIncursionMod {
     }
 
 
-    @SubscribeEvent
-    public static void onWorldTick(TickEvent.LevelTickEvent event) {
-        // Тикаем один раз в конце игрового такта на сервере
-        if (event.phase == TickEvent.Phase.END && event.level instanceof ServerLevel serverLevel) {
-            HiveNetworkManager.get(serverLevel).tick(serverLevel);
+    @Mod.EventBusSubscriber(modid = "cim", bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public class HiveEventHandler {
+        @SubscribeEvent
+        public static void onWorldTick(TickEvent.LevelTickEvent event) {
+            // Обязательно проверяем сторону (Server) и фазу (END)
+            if (event.phase == TickEvent.Phase.END && event.level instanceof ServerLevel serverLevel) {
+                HiveNetworkManager manager = HiveNetworkManager.get(serverLevel);
+                if (manager != null) {
+                    manager.tick(serverLevel);
+                }
+            }
         }
     }
-
 
 }

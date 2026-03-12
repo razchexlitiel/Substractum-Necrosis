@@ -10,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
 import java.util.UUID;
@@ -98,48 +99,61 @@ public class ReturnToHiveGoal extends Goal {
         if (targetPos == null) return;
 
         double targetX = targetPos.getX() + 0.5;
-        double targetY = targetPos.getY();
+        double targetY = targetPos.getY() + 0.2; // Целимся чуть ниже центра блока для веса
         double targetZ = targetPos.getZ() + 0.5;
-
-        worm.getNavigation().moveTo(targetX, targetY, targetZ, 1.2D);
-        worm.getLookControl().setLookAt(targetX, targetY + 0.5, targetZ);
 
         double distSq = worm.distanceToSqr(targetX, targetY, targetZ);
 
-        // ВХОД В УЛЕЙ
-        if (distSq < 2.5D) {
-            // "Всасывание" червя в центр блока для красоты
-            worm.setDeltaMovement(worm.getDeltaMovement().add(
-                    (targetX - worm.getX()) * 0.2,
-                    (targetY - worm.getY()) * 0.2,
-                    (targetZ - worm.getZ()) * 0.2
-            ));
+        // 1. ЛОГИКА ПРИБЛИЖЕНИЯ И "ВСАСЫВАНИЯ"
+        if (distSq < 4.0D) { // Если в радиусе 2 блоков
+            // Останавливаем обычную ходьбу, чтобы ИИ не пытался уйти в сторону
+            worm.getNavigation().stop();
 
+            // Вычисляем вектор тяги к центру гнезда
+            Vec3 pull = new Vec3(targetX - worm.getX(), targetY - worm.getY(), targetZ - worm.getZ())
+                    .normalize()
+                    .scale(0.15); // Сила всасывания
+
+            worm.setDeltaMovement(worm.getDeltaMovement().add(pull));
+            worm.getLookControl().setLookAt(targetX, targetY, targetZ, 30.0F, 30.0F);
+        } else {
+            // Если еще далеко — просто бежим к цели
+            worm.getNavigation().moveTo(targetX, targetY, targetZ, 1.2D);
+            worm.getLookControl().setLookAt(targetX, targetY + 0.5, targetZ);
+        }
+
+        // 2. ЛОГИКА ВХОДА В УЛЕЙ
+        if (distSq < 1.5D) {
             HiveNetworkManager manager = HiveNetworkManager.get(worm.level());
-            BlockEntity be = worm.level().getBlockEntity(targetPos);
+            if (manager == null) return;
 
+            BlockEntity be = worm.level().getBlockEntity(targetPos);
             if (be instanceof DepthWormNestBlockEntity nest) {
                 UUID netId = nest.getNetworkId();
                 if (netId != null) {
                     HiveNetwork network = manager.getNetwork(netId);
+                    if (network != null) {
+                        // Начисление очков (максимум 50)
+                        int kills = worm.getKills();
+                        network.killsPool = Math.min(50, network.killsPool + kills);
 
-                    // Начисление очков
-                    int kills = worm.getKills();
-                    network.killsPool = Math.min(50, network.killsPool + kills);
+                        System.out.println("[Hive] Червь успешно вошел. Очков в сети: " + network.killsPool);
 
-                    System.out.println("[Hive] Червь вошел. Очков в сети: " + network.killsPool);
+                        // Подготовка данных для сохранения
+                        CompoundTag tag = new CompoundTag();
+                        worm.saveWithoutId(tag);
+                        tag.putInt("Kills", 0); // Обнуляем киллы внутри NBT
 
-                    CompoundTag tag = new CompoundTag();
-                    worm.saveWithoutId(tag);
-                    tag.putInt("Kills", 0); // Чистим перед сохранением в BE
-
-                    if (manager.addWormToNetwork(netId, tag, targetPos, worm.level())) {
-                        worm.discard();
+                        // Попытка добавить в сеть
+                        if (manager.addWormToNetwork(netId, tag, targetPos, worm.level())) {
+                            worm.discard(); // Удаляем сущность из мира
+                        }
                     }
                 }
             }
         }
     }
+
 
     @Override
     public boolean canContinueToUse() {

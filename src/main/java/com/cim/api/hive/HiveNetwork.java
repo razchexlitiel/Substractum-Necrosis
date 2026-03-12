@@ -2,6 +2,7 @@ package com.cim.api.hive;
 
 
 import com.cim.block.basic.ModBlocks;
+import com.cim.block.entity.hive.HiveSoilBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -78,69 +79,73 @@ public class HiveNetwork {
     }
 
     public void update(Level level) {
-        if (lastFedTime == 0) lastFedTime = level.getGameTime();
+        if (level.isClientSide) return;
 
-        // 1. Потребление (раз в 24000 тиков)
-        if (level.getGameTime() - lastFedTime >= 24000) {
-            if (killsPool > 0) {
-                killsPool--;
-                lastFedTime = level.getGameTime();
-                System.out.println("[Hive] Налог уплачен. Остаток: " + killsPool);
-            } else {
-                die(level);
-                return;
+        // Сделаем проверку чаще (раз в 2 секунды) для теста
+        if (level.getGameTime() % 40 == 0) {
+            // ЛОГ №1: Видим ли мы вообще тики?
+            System.out.println("[Hive Tick] Проверка сети " + this.id + " | Очки: " + killsPool + " | Узлов: " + members.size());
+
+            if (members.isEmpty()) {
+                System.out.println("[Hive Tick] ОШИБКА: Список узлов пуст! Улей не знает, где он находится.");
             }
-        }
 
-        // 2. Принятие решений (каждые 5 секунд / 100 тиков)
-        // Убрал проверку % 200, чтобы он чаще проверял возможность развития
-        if (level.getGameTime() % 100 == 0 && killsPool > 0) {
             makeDecisions(level);
         }
     }
 
+
     private void makeDecisions(Level level) {
-        if (this.members == null || this.members.isEmpty()) {
-            System.out.println("[Hive Error] Сеть " + id + " не видит своих блоков! Траты невозможны.");
-            return;
-        }
+        if (killsPool <= 0 || members.isEmpty()) return;
 
         List<BlockPos> nodes = new ArrayList<>(this.members);
         Collections.shuffle(nodes);
 
         for (BlockPos pos : nodes) {
+            if (!level.isLoaded(pos)) continue;
             BlockEntity be = level.getBlockEntity(pos);
-            if (!(be instanceof DepthWormNestBlockEntity nest)) continue;
 
-            // ЛОГИКА 1: Рождение (Приоритет, если червей мало)
-            if (killsPool >= 10 && nest.getStoredWormsCount() < 3) {
-                spawnNewWorm(nest, pos);
-                return; // Одно действие за цикл
-            }
-
-            // ЛОГИКА 2: Лечение (Если есть раненые)
-            if (killsPool >= 1 && nest.hasInjuredWorms()) {
-                if (nest.healOneWorm()) {
-                    killsPool--;
+            // --- ЛОГИКА ГНЕЗДА ---
+            if (be instanceof DepthWormNestBlockEntity nest) {
+                // 1. Хил (1 очко)
+                if (killsPool >= 1 && nest.hasInjuredWorms()) {
+                    if (nest.healOneWorm()) {
+                        this.killsPool -= 1;
+                        System.out.println("[Hive] Вылечен червь в " + pos);
+                        return;
+                    }
+                }
+                // 2. Рождение (10 очков)
+                if (killsPool >= 10 && nest.getStoredWormsCount() < 3) {
+                    spawnNewWorm(nest, pos);
+                    this.killsPool -= 10;
+                    System.out.println("[Hive] Рожден новый червь в " + pos);
                     return;
                 }
             }
 
-            // ЛОГИКА 3: Экспансия (Почва)
-            // Улей строит почву, только если у него больше 15 очков (заначка)
-            if (killsPool > 15) {
+            // --- ЛОГИКА ЭКСПАНСИИ (Для любого узла сети) ---
+            if (killsPool >= 5) {
                 for (Direction dir : Direction.values()) {
-                    BlockPos target = pos.relative(dir);
-                    if (level.isEmptyBlock(target)) {
+                    BlockPos target = pos.relative(dir); // ТА САМАЯ СТРОЧКА
+                    BlockState state = level.getBlockState(target);
+
+                    // Проверяем: не бедрок, не воздух, не само гнездо и не почва
+                    if (!state.isAir() &&
+                            !state.is(ModBlocks.HIVE_SOIL.get()) &&
+                            !state.is(ModBlocks.DEPTH_WORM_NEST.get()) &&
+                            state.getDestroySpeed(level, target) >= 0) {
+
                         level.setBlockAndUpdate(target, ModBlocks.HIVE_SOIL.get().defaultBlockState());
-                        killsPool -= 2;
-                        System.out.println("[Hive] Укрепление структуры в " + target);
+                        this.killsPool -= 5;
+                        System.out.println("[Hive] Экспансия: почва захватила " + target);
                         return;
                     }
                 }
             }
         }
     }
+
 
 
     // Вспомогательный метод для чистоты кода
@@ -151,7 +156,7 @@ public class HiveNetwork {
         nest.addWormTag(newWorm);
         this.updateWormCount(pos, 1);
         this.killsPool -= 10;
-        System.out.println("[Hive] Рожден новый червь в " + pos + ". Остаток очков: " + this.killsPool);
+        System.out.println("[Hive] Рожден новый червь в " + pos + ". Остаток очков: " + killsPool);
     }
 
 

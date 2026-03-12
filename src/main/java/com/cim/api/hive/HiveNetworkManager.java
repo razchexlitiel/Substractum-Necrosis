@@ -25,12 +25,15 @@ public class HiveNetworkManager {
     }
     public void tick(Level level) {
         if (networks.isEmpty()) return;
-        // Используем итератор, чтобы избежать ошибки при удалении сети во время смерти
-        Iterator<HiveNetwork> it = networks.values().iterator();
-        while (it.hasNext()) {
-            it.next().update(level);
+
+        // Создаем копию значений, чтобы избежать ConcurrentModificationException
+        List<HiveNetwork> safeCopy = new ArrayList<>(networks.values());
+
+        for (HiveNetwork network : safeCopy) {
+            network.update(level);
         }
     }
+
     public static HiveNetworkManager get(Level level) {
         return level.getCapability(HiveNetworkManagerProvider.HIVE_NETWORK_MANAGER).orElse(null);
     }
@@ -43,16 +46,11 @@ public class HiveNetworkManager {
         return networks.computeIfAbsent(id, HiveNetwork::new);
     }
 
-    public void addNode(UUID networkId, BlockPos pos) {
-        // Получаем (или создаем) объект сети
+    public void addNode(UUID networkId, BlockPos pos, boolean isNest) {
         HiveNetwork network = getNetwork(networkId);
-
-        // Добавляем блок в список members САМОЙ СЕТИ
-        if (!network.members.contains(pos)) {
-            network.members.add(pos.immutable());
-            System.out.println("[Hive] Блок " + pos + " успешно привязан к сети " + networkId);
-        }
+        network.addMember(pos, isNest); // Используй существующий метод из HiveNetwork (стр. 1)
     }
+
 
 
 
@@ -84,11 +82,10 @@ public class HiveNetworkManager {
 
 
     public void removeNode(UUID networkId, BlockPos pos, Level level) {
-        Set<BlockPos> nodes = networkNodes.get(networkId);
-        if (nodes != null) {
-            nodes.remove(pos);
-            if (nodes.isEmpty()) {
-                networkNodes.remove(networkId);
+        HiveNetwork network = networks.get(networkId);
+        if (network != null) {
+            network.removeMember(pos); // Удаляем из самой сети
+            if (network.members.isEmpty()) {
                 networks.remove(networkId);
             } else {
                 validateNetwork(networkId, level);
@@ -98,22 +95,22 @@ public class HiveNetworkManager {
     }
 
     public void validateNetwork(UUID networkId, Level level) {
-        if (level == null) return;
-        Set<BlockPos> nodes = networkNodes.get(networkId);
-        if (nodes == null) return;
+        HiveNetwork network = networks.get(networkId);
+        if (network == null || level == null) return;
 
-        boolean hasNest = nodes.stream()
+        // Проверяем, осталось ли хоть одно гнездо в сети
+        boolean hasNest = network.members.stream()
                 .anyMatch(p -> level.getBlockEntity(p) instanceof DepthWormNestBlockEntity);
 
         if (!hasNest) {
-            for (BlockPos p : nodes) {
+            // Если гнезд нет, распускаем сеть (блоки становятся обычными)
+            for (BlockPos p : new HashSet<>(network.members)) {
                 BlockEntity be = level.getBlockEntity(p);
                 if (be instanceof HiveNetworkMember member) {
                     member.setNetworkId(null);
                     be.setChanged();
                 }
             }
-            networkNodes.remove(networkId);
             networks.remove(networkId);
         }
     }

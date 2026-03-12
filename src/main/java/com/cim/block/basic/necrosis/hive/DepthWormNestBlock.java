@@ -87,12 +87,14 @@ public class DepthWormNestBlock extends BaseEntityBlock {
 
         if (finalNetId == null) finalNetId = UUID.randomUUID();
 
-        // Привязываем текущий блок
+        // Привязываем текущий блок ядра
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof HiveNetworkMember member) {
             member.setNetworkId(finalNetId);
-            manager.addNode(finalNetId, pos);
+            // Добавляем TRUE, так как это гнездо
+            manager.addNode(finalNetId, pos, true);
         }
+
     }
 
 

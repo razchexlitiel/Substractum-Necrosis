@@ -98,28 +98,8 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
         }
     }
 
-    public int getStoredWormsCount() {
-        return this.storedWorms.size(); // Либо твой список тегов червей
-    }
 
-    public boolean hasInjuredWorms() {
-        // Проверяем, есть ли хоть один червь с HP < Max
-        return this.storedWorms.stream().anyMatch(tag -> tag.getFloat("Health") < 20.0f);
-    }
 
-    public boolean healOneWorm() {
-        boolean healed = false;
-        for (CompoundTag wormTag : this.storedWorms) {
-            float health = wormTag.getFloat("Health");
-            if (health < 15.0F) { // 15.0 - макс хп из твоих атрибутов
-                wormTag.putFloat("Health", 15.0F);
-                healed = true;
-                break; // Лечим только одного за раз за 1 очко
-            }
-        }
-        if (healed) setChanged();
-        return healed;
-    }
 
     public List<CompoundTag> getStoredWorms() {
         return this.storedWorms;
@@ -232,7 +212,32 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
                 this.networkId = UUID.randomUUID();
                 this.setChanged();
             }
-            HiveNetworkManager.get(this.level).addNode(this.networkId, this.worldPosition);
+            HiveNetworkManager.get(this.level).addNode(this.networkId, this.worldPosition, true); // true, так как это гнездо
         }
     }
+    public int getStoredWormsCount() {
+        return this.storedWorms.size();
+    }
+
+    public boolean hasInjuredWorms() {
+        for (CompoundTag tag : storedWorms) {
+            // Проверяем здоровье. Если тега нет - считаем 20.0
+            float h = tag.contains("Health") ? tag.getFloat("Health") : 20.0f;
+            if (h < 19.0f) return true;
+        }
+        return false;
+    }
+
+    public boolean healOneWorm() {
+        for (CompoundTag tag : storedWorms) {
+            float h = tag.contains("Health") ? tag.getFloat("Health") : 20.0f;
+            if (h < 20.0f) {
+                tag.putFloat("Health", Math.min(20.0f, h + 2.0f));
+                this.setChanged(); // Важно для сохранения в NBT
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

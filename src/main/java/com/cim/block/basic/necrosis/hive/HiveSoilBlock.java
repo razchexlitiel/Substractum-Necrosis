@@ -52,12 +52,14 @@ public class HiveSoilBlock extends Block implements EntityBlock {
 
         if (finalNetId == null) finalNetId = UUID.randomUUID();
 
-        // Привязываем текущий блок
+        // Привязываем текущий блок почвы
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof HiveNetworkMember member) {
             member.setNetworkId(finalNetId);
-            manager.addNode(finalNetId, pos);
+            // Добавляем FALSE, так как почва — не гнездо
+            manager.addNode(finalNetId, pos, false);
         }
+
     }
 
 

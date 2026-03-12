@@ -53,6 +53,12 @@ public class DepthWormEntity extends Monster implements GeoEntity {
     }
 
     @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayerSq) {
+        return false; // Запрещаем деспавн
+    }
+
+
+    @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putInt("Kills", this.getKills()); // ДОБАВИТЬ
