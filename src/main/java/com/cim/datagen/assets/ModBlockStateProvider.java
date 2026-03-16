@@ -1,9 +1,12 @@
 package com.cim.datagen.assets;
 
+import com.cim.block.basic.necrosis.hive.HiveRootsBlock;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -43,6 +46,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         cubeAllWithItem(ModBlocks.DEPTH_WORM_NEST);
         cubeAllWithItem(ModBlocks.HIVE_SOIL);
+        cubeAllWithItem(ModBlocks.HIVE_SOIL_DEAD);
+        cubeAllWithItem(ModBlocks.DEPTH_WORM_NEST_DEAD);
         cubeAllWithItem(ModBlocks.SWITCH);
         cubeAllWithItem(ModBlocks.CONVERTER_BLOCK);
         cubeAllWithItem(ModBlocks.GEAR_PORT);
@@ -71,7 +76,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
         cubeAllWithItem(ModBlocks.CRATE_AMMO);
         simpleBlockWithItem(ModBlocks.WIRE_COATED.get(), models().getExistingFile(modLoc("block/wire_coated")));
 
-
+        hiveRootsBlock(ModBlocks.HIVE_ROOTS);
 
         //СТАТИЧНИЫЕ БЛОКИ У КОТОРЫХ РАЗНОЕ ДНО/ВЕРХ, ПРИМЕР:
        columnBlockWithItem(ModBlocks.WASTE_LOG,
@@ -92,7 +97,11 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 modLoc("block/det_miner_top"),
                 modLoc("block/det_miner_top")
         );
-
+        columnBlockWithItem(ModBlocks.DECO_BEAM,
+                modLoc("block/deco_beam_side"),
+                modLoc("block/deco_beam_top"),
+                modLoc("block/deco_beam_top")
+        );
 
 
         //ПОВОРОТ ДЛЯ 3Д МОДЕЛИ, ПРИМЕР:
@@ -115,6 +124,17 @@ public class ModBlockStateProvider extends BlockStateProvider {
         stairsAndSlabs(ModBlocks.CONCRETE_HAZARD_OLD.get(), ModBlocks.CONCRETE_HAZARD_OLD_STAIRS.get(), ModBlocks.CONCRETE_HAZARD_OLD_SLAB.get());
 
     }
+
+
+    public void hiveRootsBlock(RegistryObject<Block> block) {
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            String suffix = state.getValue(HiveRootsBlock.HALF) == DoubleBlockHalf.LOWER ? "" : "_top";
+            return ConfiguredModel.builder()
+                    .modelFile(models().cross(block.getId().getPath() + suffix, modLoc("block/" + block.getId().getPath() + suffix)))
+                    .build();
+        });
+    }
+
 
     private void resourceBlockWithItem(RegistryObject<Block> blockObject) {
         String registrationName = blockObject.getId().getPath();
