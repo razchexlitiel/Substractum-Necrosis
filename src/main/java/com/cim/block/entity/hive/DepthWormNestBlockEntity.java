@@ -199,4 +199,24 @@ public class DepthWormNestBlockEntity extends BlockEntity implements HiveNetwork
             HiveNetworkManager.get(this.level).addNode(this.networkId, this.worldPosition, true);
         }
     }
+
+    public boolean hasInjuredWorms() {
+        for (CompoundTag tag : storedWorms) {
+            float h = tag.contains("Health") ? tag.getFloat("Health") : 15.0f;
+            if (h < 15.0f) return true; // Максимальное здоровье червя - 15.0
+        }
+        return false;
+    }
+
+    public boolean healOneWorm() {
+        for (CompoundTag tag : storedWorms) {
+            float h = tag.contains("Health") ? tag.getFloat("Health") : 15.0f;
+            if (h < 15.0f) {
+                tag.putFloat("Health", 15.0f); // 1 очко = полное исцеление червя
+                this.setChanged();
+                return true;
+            }
+        }
+        return false;
+    }
 }

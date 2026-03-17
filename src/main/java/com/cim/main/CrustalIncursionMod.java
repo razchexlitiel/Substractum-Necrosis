@@ -208,7 +208,6 @@ public class CrustalIncursionMod {
             event.accept(ModItems.GRENADE_IF_FIRE);
             event.accept(ModItems.GRENADE_NUC);
             event.accept(ModItems.ENERGY_CELL_BASIC);
-            event.accept(ModItems.MORY_LAH);
         }
 
         if (event.getTab() == ModCreativeTabs.CIM_TOOLS_TAB.get()) {
@@ -217,12 +216,13 @@ public class CrustalIncursionMod {
             event.accept(ModItems.BEAM_PLACER.get());
             event.accept(ModItems.CROWBAR.get());
             event.accept(ModItems.WIRE_COIL);
-
+            event.accept(ModItems.MORY_LAH);
             event.accept(ModItems.TURRET_CHIP);
 
             event.accept(ModItems.DETONATOR);
             event.accept(ModItems.MULTI_DETONATOR);
             event.accept(ModItems.RANGE_DETONATOR);
+
 
         }
 

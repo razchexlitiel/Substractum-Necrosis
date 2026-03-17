@@ -51,7 +51,8 @@ public class HiveNetworkManager {
         HiveNetwork secondNet = networks.get(secondId);
         if (secondNet == null) return;
 
-        mainNet.killsPool = Math.min(50, mainNet.killsPool + secondNet.killsPool);
+        // ⭐ ИСПРАВЛЕНО: Сложение очков с учетом нового динамического максимума
+        mainNet.killsPool = Math.min(mainNet.getMaxPoints(), mainNet.killsPool + secondNet.killsPool);
 
         for (BlockPos pos : new HashSet<>(secondNet.members)) {
             BlockEntity be = level.getBlockEntity(pos);
@@ -64,7 +65,6 @@ public class HiveNetworkManager {
             mainNet.members.add(pos);
         }
 
-        // ⭐ ИСПРАВЛЕНО: Просто складываем активных червей при слиянии
         mainNet.activeWorms += secondNet.activeWorms;
 
         networks.remove(secondId);

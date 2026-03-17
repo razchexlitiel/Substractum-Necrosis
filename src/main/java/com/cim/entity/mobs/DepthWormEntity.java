@@ -176,15 +176,7 @@ public class DepthWormEntity extends Monster implements GeoEntity {
         this.entityData.set(KILLS, this.getKills() + 1);
     }
 
-    public int getKills() {
-        return this.entityData.get(KILLS);
-    }
 
-    @Override
-    public void awardKillScore(Entity killed, int score, DamageSource damageSource) {
-        super.awardKillScore(killed, score, damageSource);
-        this.addKill();
-    }
 
     @Override
     public void aiStep() {
@@ -267,7 +259,32 @@ public class DepthWormEntity extends Monster implements GeoEntity {
     public boolean canAttack(LivingEntity target) {
         return !(target instanceof DepthWormEntity) && super.canAttack(target);
     }
+    public void addKillPoints(Entity victim) {
+        int points = 1; // По умолчанию (мирные мобы, животные)
 
+        if (victim instanceof Player) {
+            points = 30; // Игрок
+        } else if (victim instanceof net.minecraft.world.entity.monster.Enemy) {
+            // Враждебный моб
+            if (victim instanceof LivingEntity le && le.getMaxHealth() >= 50.0F) {
+                points = 10; // Очень опасный моб/Босс (Варден, Иссушитель, Раваджер и т.д.)
+            } else {
+                points = 3; // Средний моб (Зомби, Скелет)
+            }
+        }
+
+        this.entityData.set(KILLS, this.getKills() + points);
+    }
+
+    public int getKills() { // Возвращает накопленные очки
+        return this.entityData.get(KILLS);
+    }
+
+    @Override
+    public void awardKillScore(Entity killed, int score, DamageSource damageSource) {
+        super.awardKillScore(killed, score, damageSource);
+        this.addKillPoints(killed); // Вычисляем и добавляем очки
+    }
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 2, this::predicate));
