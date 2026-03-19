@@ -3,11 +3,14 @@ package com.cim.block.basic;
 import com.cim.api.energy.ConnectorTier;
 import com.cim.block.basic.deco.BeamBlock;
 import com.cim.block.basic.deco.BeamCollisionBlock;
-import com.cim.block.basic.direction.SideOBlock;
 import com.cim.block.basic.energy.*;
 import com.cim.block.basic.fluids.FluidBarrelBlock;
 import com.cim.block.basic.necrosis.hive.HiveRootsBlock;
 import com.cim.block.basic.rotation.*;
+import com.cim.multiblock.industrial.HeaterBlock;
+
+
+import com.cim.multiblock.system.part.MultiblockPartBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
@@ -312,7 +315,26 @@ public class ModBlocks {
                     .strength(0.5F, 6.0F).sound(SoundType.WOOD).requiresCorrectToolForDrops()));
 
 
+    //МУЛЬТИБЛОКИ
+    public static final RegistryObject<Block> HEATER = registerBlockWithoutItem("heater",
+            () -> new HeaterBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .strength(3f)
+                    .requiresCorrectToolForDrops()));
 
+    public static final RegistryObject<Block> MULTIBLOCK_PART = registerBlockOnly("multiblock_part",
+            () -> new MultiblockPartBlock(BlockBehaviour.Properties.of()
+                    .strength(1.0f, 6.0f) // Нормальная прочность, будет переопределена динамически
+                    .noOcclusion()
+                    .noLootTable()
+                    .isRedstoneConductor((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)
+            ));
+
+    // Вспомогательный метод регистрации без предмета
+    private static <T extends Block> RegistryObject<T> registerBlockOnly(String name, Supplier<T> block) {
+        return BLOCKS.register(name, block);
+    }
 
     // Вспомогательный метод: регистрирует блок И предмет для него
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
@@ -326,7 +348,9 @@ public class ModBlocks {
         return ModItems.ITEMS.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
-
+    private static <T extends Block> RegistryObject<T> registerBlockWithoutItem(String name, Supplier<T> block) {
+        return BLOCKS.register(name, block);
+    }
 
     private static RegistryObject<Block> registerBattery(String name) {
         RegistryObject<Block> batteryBlock = BLOCKS.register(name,

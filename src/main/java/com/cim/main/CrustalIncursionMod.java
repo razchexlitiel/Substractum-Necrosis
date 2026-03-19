@@ -3,6 +3,7 @@ package com.cim.main;
 
 import com.cim.api.fluids.ModFluids;
 import com.cim.api.hive.HiveNetworkManager;
+import com.cim.multiblock.system.MultiblockEventHandler;
 import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +16,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.MobSpawnEvent;
-import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +23,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
-import com.cim.api.energy.EnergyNetworkManager;
 import com.cim.api.hive.HiveNetworkManagerProvider;
 import com.cim.block.basic.ModBlocks;
 import com.cim.block.entity.ModBlockEntities;
@@ -68,6 +67,7 @@ public class CrustalIncursionMod {
         ModSounds.register(modEventBus);
         ModMenuTypes.MENUS.register(modEventBus);
         modEventBus.addListener(this::entityAttributeEvent);
+        MinecraftForge.EVENT_BUS.register(new MultiblockEventHandler());
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
@@ -157,8 +157,6 @@ public class CrustalIncursionMod {
             event.accept(ModBlocks.SHAFT_PLACER);
             event.accept(ModBlocks.MINING_PORT);
 
-            event.accept(ModBlocks.FLUID_BARREL);
-
             event.accept(ModBlocks.CONNECTOR);
             event.accept(ModBlocks.MEDIUM_CONNECTOR);
             event.accept(ModBlocks.LARGE_CONNECTOR);
@@ -185,6 +183,10 @@ public class CrustalIncursionMod {
                     event.accept(chargedStack);
                 }
             }
+
+            event.accept(ModBlocks.FLUID_BARREL);
+
+            event.accept(ModItems.HEATER_ITEM);
         }
 
 
@@ -303,5 +305,4 @@ public class CrustalIncursionMod {
             }
         }
     }
-
 }
