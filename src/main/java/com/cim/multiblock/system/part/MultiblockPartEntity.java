@@ -1,4 +1,4 @@
-package com.cim.multiblock.part;
+package com.cim.multiblock.system.part;
 
 import com.cim.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;

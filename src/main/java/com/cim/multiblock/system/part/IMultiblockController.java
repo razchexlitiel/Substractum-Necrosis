@@ -1,4 +1,4 @@
-package com.cim.multiblock.part;
+package com.cim.multiblock.system.part;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

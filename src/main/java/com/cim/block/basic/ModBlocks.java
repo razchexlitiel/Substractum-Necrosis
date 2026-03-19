@@ -3,13 +3,12 @@ package com.cim.block.basic;
 import com.cim.api.energy.ConnectorTier;
 import com.cim.block.basic.deco.BeamBlock;
 import com.cim.block.basic.deco.BeamCollisionBlock;
-import com.cim.block.basic.direction.SideOBlock;
 import com.cim.block.basic.energy.*;
 import com.cim.block.basic.fluids.FluidBarrelBlock;
 import com.cim.block.basic.necrosis.hive.HiveRootsBlock;
 import com.cim.block.basic.rotation.*;
 import com.cim.multiblock.industrial.HeaterBlock;
-import com.cim.multiblock.part.MultiblockPartBlock;
+import com.cim.multiblock.system.part.MultiblockPartBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
@@ -322,7 +321,7 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> MULTIBLOCK_PART = registerBlockOnly("multiblock_part",
             () -> new MultiblockPartBlock(BlockBehaviour.Properties.of()
-                    .strength(-1.0f, 3600000.0f)
+                    .strength(1.0f, 6.0f) // Нормальная прочность, будет переопределена динамически
                     .noOcclusion()
                     .noLootTable()
                     .isRedstoneConductor((state, level, pos) -> false)

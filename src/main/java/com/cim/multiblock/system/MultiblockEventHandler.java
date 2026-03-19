@@ -1,4 +1,4 @@
-package com.cim.multiblock;
+package com.cim.multiblock.system;
 
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;

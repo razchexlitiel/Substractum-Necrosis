@@ -1,4 +1,4 @@
-package com.cim.multiblock.part;
+package com.cim.multiblock.system.part;
 
 import com.cim.block.basic.ModBlocks;
 import com.cim.multiblock.industrial.HeaterBlockEntity;
@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -26,7 +27,29 @@ import java.util.List;
 public class MultiblockPartBlock extends Block implements EntityBlock {
 
     public MultiblockPartBlock(Properties properties) {
-        super(properties);
+        // Используем нормальную прочность, но будем переопределять скорость ломания
+        super(properties.strength(1.0f, 6.0f)); // Временные значения, переопределим ниже
+    }
+
+    // Динамическая прочность — берём из контроллера
+    @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof MultiblockPartEntity part) {
+            BlockPos controllerPos = part.getControllerPos();
+            if (controllerPos != null) {
+                BlockState controllerState = level.getBlockState(controllerPos);
+                // Делегируем прочность контроллеру
+                return controllerState.getDestroyProgress(player, level, controllerPos);
+            }
+        }
+        return super.getDestroyProgress(state, player, level, pos);
+    }
+
+    // Запрещаем толкание поршнем
+    @Override
+    public PushReaction getPistonPushReaction(BlockState state) {
+        return PushReaction.BLOCK;
     }
 
     @Override
@@ -59,6 +82,13 @@ public class MultiblockPartBlock extends Block implements EntityBlock {
         return List.of();
     }
 
+    // Частицы ломания на конкретной позиции
+    @Override
+    public void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
+        // Не вызываем super — частицы спавним сами на нужной позиции
+        // Они спавнятся автоматически на pos, который передан в метод
+    }
+
     @Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide) {
@@ -68,9 +98,7 @@ public class MultiblockPartBlock extends Block implements EntityBlock {
                 if (controllerPos != null) {
                     BlockEntity controllerBe = level.getBlockEntity(controllerPos);
                     if (controllerBe instanceof HeaterBlockEntity controller && !controller.isDestroying()) {
-                        // Дропаем предмет контроллера здесь
                         Block.popResource(level, pos, new ItemStack(ModBlocks.HEATER.get().asItem()));
-                        // Уничтожаем весь мультиблок
                         controller.destroyMultiblockFromPart(pos);
                         return;
                     }

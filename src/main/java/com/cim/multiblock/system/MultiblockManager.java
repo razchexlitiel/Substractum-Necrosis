@@ -1,4 +1,4 @@
-package com.cim.multiblock;
+package com.cim.multiblock.system;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -41,8 +41,6 @@ public class MultiblockManager {
             }
         }
 
-        // Пытаемся найти валидный мультиблок с origin вокруг clickedPos
-        // Для 3x1x3 origin может быть от -2 до 0 по x и z
         for (int dx = -2; dx <= 0; dx++) {
             for (int dz = -2; dz <= 0; dz++) {
                 BlockPos candidateOrigin = clickedPos.offset(dx, 0, dz);

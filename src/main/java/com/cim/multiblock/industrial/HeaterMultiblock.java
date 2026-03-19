@@ -1,7 +1,7 @@
 package com.cim.multiblock.industrial;
 
-import com.cim.multiblock.MultiblockController;
-import com.cim.multiblock.MultiblockPattern;
+import com.cim.multiblock.system.MultiblockController;
+import com.cim.multiblock.system.MultiblockPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

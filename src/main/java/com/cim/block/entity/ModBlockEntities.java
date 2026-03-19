@@ -5,7 +5,7 @@ import com.cim.block.entity.energy.*;
 import com.cim.block.entity.fluids.FluidBarrelBlockEntity;
 import com.cim.block.entity.rotation.*;
 import com.cim.multiblock.industrial.HeaterBlockEntity;
-import com.cim.multiblock.part.MultiblockPartEntity;
+import com.cim.multiblock.system.part.MultiblockPartEntity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;

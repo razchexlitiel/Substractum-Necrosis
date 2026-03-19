@@ -2,10 +2,10 @@ package com.cim.multiblock.industrial;
 
 import com.cim.block.basic.ModBlocks;
 import com.cim.block.entity.ModBlockEntities;
-import com.cim.multiblock.MultiblockPattern;
-import com.cim.multiblock.part.IMultiblockController;
-import com.cim.multiblock.part.MultiblockPartBlock;
-import com.cim.multiblock.part.MultiblockPartEntity;
+import com.cim.multiblock.system.MultiblockPattern;
+import com.cim.multiblock.system.part.IMultiblockController;
+import com.cim.multiblock.system.part.MultiblockPartBlock;
+import com.cim.multiblock.system.part.MultiblockPartEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -30,9 +30,10 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
     private HeaterMultiblock controller;
     private List<BlockPos> partPositions = new ArrayList<>();
     private boolean isDestroying = false;
-    private BlockPos minPos; // Минимальная позиция мультиблока (origin)
-    private BlockPos maxPos; // Максимальная позиция мультиблока
-    private BlockPos controllerPos; // Позиция контроллера (может отличаться от origin)
+    private boolean isFormed = false; // Флаг что мультиблок собран
+    private BlockPos minPos;
+    private BlockPos maxPos;
+    private BlockPos controllerPos;
 
     public HeaterBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.HEATER_BE.get(), pos, state);
@@ -43,7 +44,6 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
         this.controller = new HeaterMultiblock(level, origin);
         MultiblockPattern pattern = controller.getPattern();
 
-        // Вычисляем границы для коллизии
         minPos = origin;
         maxPos = origin.offset(pattern.getWidth() - 1, pattern.getHeight() - 1, pattern.getDepth() - 1);
 
@@ -52,7 +52,6 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
                 for (int z = 0; z < pattern.getDepth(); z++) {
                     BlockPos partPos = origin.offset(x, y, z);
 
-                    // Пропускаем позицию контроллера — там уже стоит HeaterBlock
                     if (partPos.equals(controllerPosition)) continue;
 
                     MultiblockPattern.PatternEntry entry = pattern.getEntry(x, y, z);
@@ -63,27 +62,32 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
                     level.setBlock(partPos, ModBlocks.MULTIBLOCK_PART.get().defaultBlockState(), 3);
                     BlockEntity be = level.getBlockEntity(partPos);
                     if (be instanceof MultiblockPartEntity part) {
-                        part.setControllerPos(controllerPosition); // Важно: сохраняем позицию контроллера, не origin!
+                        part.setControllerPos(controllerPosition);
                     }
                     partPositions.add(partPos);
                 }
             }
         }
-        controller.validate();
+
+        isFormed = controller.validate();
         setChanged();
+    }
+
+    public boolean isFormed() {
+        return isFormed && controller != null && controller.isValid();
     }
 
     @Override
     public void destroyMultiblock() {
         if (isDestroying || level == null) return;
         isDestroying = true;
+        isFormed = false;
 
         for (BlockPos pos : partPositions) {
             if (level.getBlockState(pos).getBlock() instanceof MultiblockPartBlock) {
                 level.removeBlock(pos, false);
             }
         }
-        // Не удаляем контроллер здесь — он удаляется вызывающим кодом или остаётся для пересоздания
 
         if (controller != null) {
             controller.onBreak();
@@ -94,15 +98,14 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
     public void destroyMultiblockFromPart(BlockPos brokenPartPos) {
         if (isDestroying || level == null) return;
         isDestroying = true;
+        isFormed = false;
 
-        // Удаляем все части кроме сломанной (она уже удаляется)
         for (BlockPos pos : partPositions) {
             if (!pos.equals(brokenPartPos) && level.getBlockState(pos).getBlock() instanceof MultiblockPartBlock) {
                 level.removeBlock(pos, false);
             }
         }
 
-        // Удаляем контроллер — дроп будет в onRemove HeaterBlock
         level.removeBlock(worldPosition, false);
 
         if (controller != null) {
@@ -116,16 +119,13 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
         return Shapes.block();
     }
 
-    // Альтернативный метод для получения полной формы мультиблока
     public VoxelShape getFullMultiblockShape(BlockPos relativePos) {
         if (minPos == null || maxPos == null) return Shapes.block();
 
-        // Вычисляем смещение относительно minPos
         int relX = relativePos.getX() - minPos.getX();
         int relY = relativePos.getY() - minPos.getY();
         int relZ = relativePos.getZ() - minPos.getZ();
 
-        // Возвращаем форму, которая охватывает весь мультиблок относительно текущей позиции
         double x1 = -relX;
         double y1 = -relY;
         double z1 = -relZ;
@@ -152,6 +152,10 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
     public void tick(Level level, BlockPos pos, BlockState state, HeaterBlockEntity be) {
         if (controller != null && !isDestroying) {
             controller.tick();
+            // Проверяем валидность периодически
+            if (level.getGameTime() % 20 == 0) {
+                isFormed = controller.validate();
+            }
         }
     }
 
@@ -164,6 +168,7 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
             tag.put("Controller", controllerTag);
         }
         tag.putLongArray("Parts", partPositions.stream().mapToLong(BlockPos::asLong).toArray());
+        tag.putBoolean("IsFormed", isFormed);
         if (minPos != null) tag.putLong("MinPos", minPos.asLong());
         if (maxPos != null) tag.putLong("MaxPos", maxPos.asLong());
         if (controllerPos != null) tag.putLong("ControllerPos", controllerPos.asLong());
@@ -173,7 +178,6 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
     public void load(CompoundTag tag) {
         super.load(tag);
         if (tag.contains("Controller") && level != null) {
-            // Восстанавливаем origin из сохранённых данных
             BlockPos savedOrigin = tag.contains("MinPos") ? BlockPos.of(tag.getLong("MinPos")) : worldPosition;
             controller = new HeaterMultiblock(level, savedOrigin);
             controller.load(tag.getCompound("Controller"));
@@ -182,6 +186,7 @@ public class HeaterBlockEntity extends BlockEntity implements IMultiblockControl
         for (long l : tag.getLongArray("Parts")) {
             partPositions.add(BlockPos.of(l));
         }
+        isFormed = tag.getBoolean("IsFormed");
         if (tag.contains("MinPos")) minPos = BlockPos.of(tag.getLong("MinPos"));
         if (tag.contains("MaxPos")) maxPos = BlockPos.of(tag.getLong("MaxPos"));
         if (tag.contains("ControllerPos")) controllerPos = BlockPos.of(tag.getLong("ControllerPos"));
