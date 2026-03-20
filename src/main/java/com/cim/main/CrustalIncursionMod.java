@@ -229,6 +229,7 @@ public class CrustalIncursionMod {
             event.accept(ModItems.PROTECTOR_STEEL);
             event.accept(ModItems.PROTECTOR_LEAD);
             event.accept(ModItems.PROTECTOR_TUNGSTEN);
+            event.accept(ModItems.INFINITE_FLUID_BARREL);
 
 
             event.accept(ModItems.TURRET_CHIP);
