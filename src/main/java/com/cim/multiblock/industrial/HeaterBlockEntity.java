@@ -21,8 +21,11 @@ public class HeaterBlockEntity extends BlockEntity {
     public static void serverTick(Level level, BlockPos pos, BlockState state, HeaterBlockEntity be) {
         if (be.heatLevel < MAX_HEAT) {
             be.heatLevel++;
+
+            // Каждую секунду обновляем данные и отправляем клиенту!
             if (level.getGameTime() % 20 == 0) {
                 be.setChanged();
+                level.sendBlockUpdated(pos, state, state, 3);
             }
         }
     }
@@ -45,4 +48,18 @@ public class HeaterBlockEntity extends BlockEntity {
         super.load(tag);
         heatLevel = tag.getInt("Heat");
     }
+
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public net.minecraft.network.protocol.Packet<net.minecraft.network.protocol.game.ClientGamePacketListener> getUpdatePacket() {
+        return net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return saveWithoutMetadata();
+    }
+
+    public int getHeatLevel() { return heatLevel; }
+    public int getMaxHeat() { return MAX_HEAT; }
 }
