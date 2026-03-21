@@ -126,6 +126,10 @@ public class CrustalIncursionMod {
             event.accept(ModBlocks.FIREBRICK_SLAB.get());
             event.accept(ModBlocks.FIREBRICK_STAIRS.get());
 
+            event.accept(ModBlocks.REINFORCEDBRICK_BLOCK.get());
+            event.accept(ModBlocks.REINFORCEDBRICK_SLAB.get());
+            event.accept(ModBlocks.REINFORCEDBRICK_STAIRS.get());
+
             event.accept(ModBlocks.MORY_BLOCK);
             event.accept(ModBlocks.ANTON_CHIGUR);
 
@@ -190,6 +194,7 @@ public class CrustalIncursionMod {
             event.accept(ModBlocks.FLUID_BARREL);
 
             event.accept(ModItems.HEATER_ITEM);
+            event.accept(ModBlocks.SMELTER);
         }
 
 
@@ -237,6 +242,7 @@ public class CrustalIncursionMod {
             event.accept(ModItems.MULTI_DETONATOR);
             event.accept(ModItems.RANGE_DETONATOR);
             event.accept(ModItems.FIREBRICK.get());
+            event.accept(ModItems.REINFORCEDBRICK.get());
             event.accept(ModItems.MORY_FOOD.get());
             event.accept(ModItems.COFFEE.get());
         }

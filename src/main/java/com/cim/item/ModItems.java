@@ -66,6 +66,8 @@ public class ModItems {
 
     public static final RegistryObject<Item> FIREBRICK = ITEMS.register("firebrick",
             () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> REINFORCEDBRICK = ITEMS.register("reinforcedbrick",
+            () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> WIRE_COIL = ITEMS.register("wire_coil",
             () -> new WireCoilItem(new Item.Properties().stacksTo(1)));
